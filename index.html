@@ -1,0 +1,4116 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Live Interativa TikTok</title>
+  <link rel="icon" type="image/png" href="favicon.png" />
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" href="favicon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-main: #07090e;
+      --bg-card: rgba(18, 24, 38, 0.65);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --primary: #00d2ff;
+      --primary-glow: rgba(0, 210, 255, 0.35);
+      --secondary: #9d4edd;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent-green: #10b981;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    html {
+      overflow-x: clip;
+      max-width: 100vw;
+      width: 100%;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      min-height: 100vh;
+      overflow-x: clip;
+      max-width: 100vw;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      padding-top: 75px;
+    }
+
+    /* Iluminação de fundo (Glows / Grid) */
+    .ambient-glow-1 {
+      position: absolute;
+      top: -120px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: min(750px, 100vw);
+      height: 420px;
+      background: radial-gradient(circle, rgba(0, 210, 255, 0.15) 0%, rgba(157, 78, 221, 0.08) 50%, transparent 70%);
+      filter: blur(80px);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .ambient-glow-2 {
+      position: absolute;
+      top: 30%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: min(600px, 100vw);
+      height: 300px;
+      background: radial-gradient(circle, rgba(0, 210, 255, 0.1) 0%, transparent 70%);
+      filter: blur(100px);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .grid-overlay {
+      position: absolute;
+      inset: 0;
+      background-image: 
+        linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: radial-gradient(ellipse 60% 50% at 50% 30%, black 70%, transparent 100%);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* Header / Fixed Glass Navbar (Always Follows Screen on Scroll) */
+    .header-wrapper {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      width: 100%;
+      z-index: 99999;
+      background: rgba(7, 9, 14, 0.75);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .header-wrapper.scrolled {
+      background: rgba(7, 9, 14, 0.94);
+      border-bottom-color: rgba(0, 210, 255, 0.25);
+      box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.8), 0 0 25px rgba(0, 210, 255, 0.08);
+    }
+
+    header {
+      position: relative;
+      width: 100%;
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 0.95rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+      transition: transform 0.25s ease;
+    }
+
+    .logo:hover {
+      transform: scale(1.05);
+    }
+
+    .logo-img {
+      height: 42px;
+      width: auto;
+      object-fit: contain;
+      filter: drop-shadow(0 0 12px rgba(0, 210, 255, 0.45));
+      display: block;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.92rem;
+      font-weight: 500;
+      transition: color 0.2s ease;
+    }
+
+    .nav-links a:hover {
+      color: #fff;
+    }
+
+    .btn-nav {
+      background: #ffffff;
+      color: #07090e;
+      padding: 0.65rem 1.3rem;
+      border-radius: 999px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.25s ease;
+    }
+
+    .btn-nav:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 20px rgba(255, 255, 255, 0.25);
+    }
+
+    /* Language Switcher Pill (Matching Reference) */
+    .header-right-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+    }
+
+    .lang-switcher-wrap {
+      position: relative;
+      user-select: none;
+    }
+
+    .lang-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      background: rgba(18, 24, 38, 0.75);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #ffffff;
+      padding: 0.52rem 0.85rem;
+      border-radius: 12px;
+      font-size: 0.86rem;
+      font-weight: 800;
+      font-family: inherit;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .lang-btn:hover {
+      background: rgba(26, 35, 54, 0.95);
+      border-color: rgba(0, 210, 255, 0.4);
+      color: #00d2ff;
+      box-shadow: 0 6px 20px rgba(0, 210, 255, 0.15);
+      transform: translateY(-1px);
+    }
+
+    .lang-globe-icon {
+      stroke: currentColor;
+      flex-shrink: 0;
+      opacity: 0.9;
+    }
+
+    .lang-label {
+      letter-spacing: 0.06em;
+      font-weight: 800;
+      color: inherit;
+      line-height: 1;
+    }
+
+    .lang-dropdown {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      background: rgba(12, 17, 28, 0.96);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 14px;
+      padding: 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 155px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7), 0 0 25px rgba(0, 210, 255, 0.12);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-6px);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 100;
+    }
+
+    .lang-switcher-wrap.open .lang-dropdown {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .lang-option {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0.55rem 0.75rem;
+      background: transparent;
+      border: 1px solid transparent;
+      color: #94a3b8;
+      font-size: 0.85rem;
+      font-weight: 600;
+      font-family: inherit;
+      border-radius: 8px;
+      cursor: pointer;
+      text-align: left;
+      width: 100%;
+      transition: all 0.2s ease;
+    }
+
+    .lang-option:hover {
+      background: rgba(255, 255, 255, 0.06);
+      color: #ffffff;
+    }
+
+    .lang-option.active {
+      background: rgba(0, 210, 255, 0.12);
+      color: #00d2ff;
+      border-color: rgba(0, 210, 255, 0.25);
+    }
+
+    .lang-flag {
+      font-size: 1rem;
+      line-height: 1;
+    }
+
+    .lang-code-pill {
+      margin-left: auto;
+      font-size: 0.7rem;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    /* Hero Section */
+    .hero {
+      position: relative;
+      z-index: 1;
+      max-width: 900px;
+      margin: 3.5rem auto 0;
+      padding: 0 1.5rem;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* Badge */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      padding: 0.4rem 1rem;
+      border-radius: 999px;
+      background: rgba(16, 185, 129, 0.08);
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      color: #34d399;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin-bottom: 2rem;
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      background-color: var(--accent-green);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--accent-green);
+      animation: pulse 2s infinite ease-in-out;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.85); }
+    }
+
+    /* Títulos */
+    .hero-title {
+      font-size: clamp(2.3rem, 5.2vw, 3.8rem);
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -1.5px;
+      color: #ffffff;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-title .highlight {
+      background: linear-gradient(135deg, #38bdf8 0%, #00d2ff 60%, #818cf8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 35px rgba(0, 210, 255, 0.3);
+    }
+
+    .hero-subtitle {
+      font-size: clamp(1rem, 1.8vw, 1.15rem);
+      color: var(--text-muted);
+      line-height: 1.65;
+      max-width: 680px;
+      margin-bottom: 2.5rem;
+      font-weight: 400;
+    }
+
+    /* Ações / CTA */
+    .cta-group {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 3.5rem;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: #ffffff;
+      color: #07090e;
+      padding: 0.95rem 1.85rem;
+      border-radius: 999px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      text-decoration: none;
+      box-shadow: 0 0 25px rgba(255, 255, 255, 0.15);
+      transition: all 0.25s ease;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(0, 210, 255, 0.35);
+      background: #e2f7ff;
+    }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-main);
+      padding: 0.95rem 1.85rem;
+      border-radius: 999px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      text-decoration: none;
+      border: 1px solid var(--border-color);
+      backdrop-filter: blur(10px);
+      transition: all 0.25s ease;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
+    }
+
+    .btn-launcher {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: linear-gradient(135deg, rgba(0, 210, 255, 0.12), rgba(157, 78, 221, 0.15));
+      color: #38bdf8;
+      padding: 0.95rem 1.85rem;
+      border-radius: 999px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      text-decoration: none;
+      border: 1px solid rgba(0, 210, 255, 0.35);
+      box-shadow: 0 0 20px rgba(0, 210, 255, 0.15);
+      backdrop-filter: blur(10px);
+      transition: all 0.25s ease;
+    }
+
+    .btn-launcher:hover {
+      background: linear-gradient(135deg, rgba(0, 210, 255, 0.22), rgba(157, 78, 221, 0.25));
+      border-color: rgba(0, 210, 255, 0.7);
+      box-shadow: 0 8px 30px rgba(0, 210, 255, 0.3);
+      color: #ffffff;
+      transform: translateY(-2px);
+    }
+
+    /* Recursos / Benefícios Inferiores */
+    .features-container {
+      width: 100%;
+      border-top: 1px solid var(--border-color);
+      padding-top: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .features-list {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 2.5rem;
+      flex-wrap: wrap;
+    }
+
+    .feature-item {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      color: #cbd5e1;
+      font-size: 0.88rem;
+      font-weight: 500;
+    }
+
+    .feature-icon {
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Responsividade */
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+      }
+
+      .btn-nav {
+        display: none;
+      }
+      
+      .hero {
+        margin-top: 2rem;
+      }
+
+      .features-list {
+        flex-direction: column;
+        gap: 1.25rem;
+        align-items: flex-start;
+        display: inline-flex;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .header-right-actions {
+        gap: 0.5rem;
+      }
+      .lang-btn {
+        padding: 0.45rem 0.65rem;
+        font-size: 0.8rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="ambient-glow-1"></div>
+  <div class="ambient-glow-2"></div>
+  <div class="grid-overlay"></div>
+
+  <!-- Header Sticky Wrapper -->
+  <div class="header-wrapper" id="stickyHeader">
+    <header>
+      <a href="#" class="logo" title="Raven Games">
+        <img src="logo.png" alt="Raven Games Logo" class="logo-img">
+      </a>
+
+      <nav>
+        <ul class="nav-links">
+          <li><a href="#jogos">Jogos</a></li>
+          <li><a href="#como-funciona">Como Funciona</a></li>
+          <li><a href="#recursos">Recursos</a></li>
+          <li><a href="#planos">Planos</a></li>
+          <li><a href="#duvidas">Dúvidas</a></li>
+        </ul>
+      </nav>
+
+      <div class="header-right-actions">
+        <!-- Language Switcher Pill -->
+        <div class="lang-switcher-wrap" id="langSwitcher">
+          <button class="lang-btn" id="langToggleBtn" aria-label="Trocar Idioma">
+            <svg class="lang-globe-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="2" y1="12" x2="22" y2="12"></line>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+            </svg>
+            <span class="lang-label" id="currentLangLabel">PT</span>
+          </button>
+
+          <!-- Dropdown Menu -->
+          <div class="lang-dropdown" id="langDropdown">
+            <button class="lang-option active" data-lang="pt">
+              <span class="lang-flag">🇧🇷</span>
+              <span>Português</span>
+              <span class="lang-code-pill">PT</span>
+            </button>
+            <button class="lang-option" data-lang="en">
+              <span class="lang-flag">🇺🇸</span>
+              <span>English</span>
+              <span class="lang-code-pill">EN</span>
+            </button>
+          </div>
+        </div>
+
+        <a href="#comunidade" class="btn-nav">Entrar na comunidade</a>
+      </div>
+    </header>
+  </div>
+
+  <!-- Hero Content -->
+  <main class="hero">
+    <div class="badge">
+      <span class="status-dot"></span>
+      Comunidade ativa com mais de 2.000 streamers
+    </div>
+
+    <h1 class="hero-title">
+      Sua live de TikTok jogando <br>
+      <span class="highlight">sozinha</span>, com o chat dentro do jogo.
+    </h1>
+
+    <p class="hero-subtitle">
+      Jogos interativos com modo AFK e anti-inatividade. O chat e os presentes controlam a partida em tempo real, mantendo a transmissão viva e faturando mesmo quando você não está no teclado.
+    </p>
+
+    <div class="cta-group">
+      <a href="#comunidade" class="btn-primary">
+        Entrar na comunidade
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+          <polyline points="12 5 19 12 12 19"></polyline>
+        </svg>
+      </a>
+
+      <a href="#download" class="btn-launcher">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="7 10 12 15 17 10"></polyline>
+          <line x1="12" y1="15" x2="12" y2="3"></line>
+        </svg>
+        Baixar o Launcher
+      </a>
+
+      <a href="#jogos" class="btn-secondary">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="6" y1="12" x2="10" y2="12"></line>
+          <line x1="8" y1="10" x2="8" y2="14"></line>
+          <line x1="15" y1="13" x2="15.01" y2="13"></line>
+          <line x1="18" y1="11" x2="18.01" y2="11"></line>
+          <rect x="2" y="6" width="20" height="12" rx="2"></rect>
+        </svg>
+        Ver Jogos Disponíveis
+      </a>
+    </div>
+  </main>
+
+  <!-- ================= SEÇÃO 2: PARCEIROS E INTEGRAÇÕES ================= -->
+  <section class="partners-section">
+    <p class="partners-label">TECNOLOGIAS E PLATAFORMAS INTEGRADAS</p>
+    <div class="partners-slider-wrapper">
+      <div class="partners-track">
+        <!-- Item 1: TikTok Live -->
+        <div class="partner-card">
+          <img src="https://upload.wikimedia.org/wikipedia/en/a/a9/TikTok_logo.svg" alt="TikTok Live" class="partner-logo">
+          <span class="partner-desc">Conexão direta com chat e presentes</span>
+        </div>
+        <!-- Item 2: OBS Studio -->
+        <div class="partner-card">
+          <img src="obs.png" alt="OBS Studio" class="partner-logo partner-logo-obs-img">
+          <span class="partner-desc">Overlays e Chroma Key nativo</span>
+        </div>
+        <!-- Item 3: Roblox Studio -->
+        <div class="partner-card">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/3/3a/Roblox_player_icon_black.svg" alt="Roblox Studio" class="partner-logo">
+          <span class="partner-desc">Automação de scripts e danças</span>
+        </div>
+        <!-- Item 4: Streamlabs -->
+        <div class="partner-card">
+          <img src="streamlabs.png" alt="Streamlabs" class="partner-logo">
+          <span class="partner-desc">Alertas sonoros sincronizados</span>
+        </div>
+        <!-- Item 5: Discord -->
+        <div class="partner-card">
+          <img src="https://assets-global.website-files.com/6257adef93867e50d84d30e2/636e0a6a49cf127bf92de1e2_icon_clyde_blurple_RGB.png" alt="Discord" class="partner-logo">
+          <span class="partner-desc">Comunidade e novos mapas</span>
+        </div>
+
+        <!-- Duplicatas para rolagem infinita perfeita -->
+        <div class="partner-card">
+          <img src="https://upload.wikimedia.org/wikipedia/en/a/a9/TikTok_logo.svg" alt="TikTok Live" class="partner-logo">
+          <span class="partner-desc">Conexão direta com chat e presentes</span>
+        </div>
+        <div class="partner-card">
+          <img src="obs.png" alt="OBS Studio" class="partner-logo partner-logo-obs-img">
+          <span class="partner-desc">Overlays e Chroma Key nativo</span>
+        </div>
+        <div class="partner-card">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/3/3a/Roblox_player_icon_black.svg" alt="Roblox Studio" class="partner-logo">
+          <span class="partner-desc">Automação de scripts e danças</span>
+        </div>
+        <div class="partner-card">
+          <img src="streamlabs.png" alt="Streamlabs" class="partner-logo">
+          <span class="partner-desc">Alertas sonoros sincronizados</span>
+        </div>
+        <div class="partner-card">
+          <img src="https://assets-global.website-files.com/6257adef93867e50d84d30e2/636e0a6a49cf127bf92de1e2_icon_clyde_blurple_RGB.png" alt="Discord" class="partner-logo">
+          <span class="partner-desc">Comunidade e novos mapas</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= SEÇÃO MOCKUP TIKSPY (MACBOOK DESKTOP / PHONE MOBILE) ================= -->
+  <section class="social-proof-section" id="social-proof">
+    <div class="badge" style="margin-bottom: 1.5rem;">
+      <span class="status-dot"></span>
+      Comunidade com mais de 2.000 membros
+    </div>
+    <h2 class="section-title">
+      Fature no Piloto <br class="mobile-break" /> Automático
+    </h2>
+    <p class="section-subtitle">
+      Enquanto você dorme ou foca em outras coisas, sua live interativa recebe presentes e gera receita no piloto automático.
+    </p>
+
+    <!-- Desktop: Exact TikSpy MacBook Mockup (Visível em telas >= 1024px) -->
+    <div class="mockup-desktop-container">
+      <div class="macbook-device">
+        <!-- Screen Bezel -->
+        <div class="mac-bezel">
+          <!-- Camera Notch -->
+          <div class="mac-camera-notch">
+            <div class="mac-camera-dot"></div>
+          </div>
+
+          <!-- Inner Screen -->
+          <div class="mac-screen-inner">
+            <!-- Wallpaper -->
+            <img src="mac-wallpaper.jpg" alt="Wallpaper" class="mac-wallpaper" />
+            <div class="mac-dark-overlay"></div>
+
+            <!-- macOS Menu Bar -->
+            <div class="mac-menubar">
+              <div class="mac-menu-left">
+                <svg class="mac-apple-svg" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+                </svg>
+                <span>Finder</span>
+                <span>Arquivo</span>
+                <span>Editar</span>
+                <span>Visualizar</span>
+              </div>
+              <div class="mac-menu-right">
+                <!-- WiFi -->
+                <svg class="mac-status-svg" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 18c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm-4.24-5.76L6.34 10.8a10.93 10.93 0 0 1 11.32 0l-1.42 1.44a8.24 8.24 0 0 0-8.48 0zm-2.83-2.83L3.51 8a14.36 14.36 0 0 1 16.98 0l-1.42 1.41a12.15 12.15 0 0 0-14.14 0zm8.07 5.66-1.41 1.42a2.75 2.75 0 0 0-3.18 0L8.59 15.07a4.94 4.94 0 0 1 4.82 0z"/>
+                </svg>
+                <!-- Battery -->
+                <div class="mac-battery-wrap">
+                  <span>100%</span>
+                  <svg class="mac-battery-svg" fill="currentColor" viewBox="0 0 24 24">
+                    <rect x="2" y="6" width="18" height="12" rx="2" stroke="currentColor" stroke-width="2" fill="none"/>
+                    <rect x="4" y="8" width="14" height="8" rx="1" fill="currentColor"/>
+                    <rect x="20" y="9" width="2" height="6" rx="1" fill="currentColor"/>
+                  </svg>
+                </div>
+                <span id="macCurrentDate">qua., 19 de ago.</span>
+                <span id="macCurrentTime" class="bold">04:45</span>
+              </div>
+            </div>
+
+            <!-- Center Clock -->
+            <div class="mac-center-clock">
+              <p class="mac-clock-time" id="macDeskTime">04:45</p>
+              <p class="mac-clock-date" id="macDeskDate">qua., 19 de ago.</p>
+            </div>
+
+            <!-- Notifications Area Desktop -->
+            <div class="mac-notif-area">
+              <div class="falling-notifs-wrap desktop" id="desktopNotifs"></div>
+            </div>
+
+            <!-- macOS Dock -->
+            <div class="mac-dock-outer">
+              <div class="mac-dock-inner">
+                <div class="dock-app-icon icon-mail">
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                </div>
+                <div class="dock-app-icon icon-pages">
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+                </div>
+                <div class="dock-app-icon icon-chat">
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+                </div>
+                <div class="dock-app-icon icon-music">
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+                </div>
+                <div class="dock-sep"></div>
+                <div class="dock-app-icon icon-gear">
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- MacBook Hinge -->
+        <div class="mac-hinge"></div>
+        <!-- MacBook Base -->
+        <div class="mac-base">
+          <div class="mac-trackpad-notch"></div>
+        </div>
+        <!-- Ambient Glow -->
+        <div class="mac-reflection-glow"></div>
+      </div>
+    </div>
+
+    <!-- Mobile/Tablet: Exact TikSpy Phone Mockup (Visível em telas < 1024px) -->
+    <div class="mockup-mobile-container">
+      <div class="phone-device">
+        <div class="phone-frame">
+          <div class="phone-border-bezel"></div>
+
+          <div class="phone-screen-inner">
+            <img src="phone-wallpaper.jpg" alt="Phone Wallpaper" class="phone-wallpaper" />
+            <div class="phone-dark-overlay"></div>
+
+            <!-- Status Bar -->
+            <div class="phone-status-bar">
+              <span id="phoneTime">04:45</span>
+              <div class="phone-status-icons">
+                <svg class="phone-svg" fill="currentColor" viewBox="0 0 24 24"><path d="M2 22h2V12H2v10zm4 0h2V9H6v13zm4 0h2V6h-2v16zm4 0h2V3h-2v19zm4 0h2V1h-2v21z"/></svg>
+                <svg class="phone-svg" fill="currentColor" viewBox="0 0 24 24"><path d="M12 18c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm-4.24-5.76L6.34 10.8a10.93 10.93 0 0 1 11.32 0l-1.42 1.44a8.24 8.24 0 0 0-8.48 0zm-2.83-2.83L3.51 8a14.36 14.36 0 0 1 16.98 0l-1.42 1.41a12.15 12.15 0 0 0-14.14 0zm8.07 5.66-1.41 1.42a2.75 2.75 0 0 0-3.18 0L8.59 15.07a4.94 4.94 0 0 1 4.82 0z"/></svg>
+                <svg class="phone-svg" fill="currentColor" viewBox="0 0 24 24"><path d="M17 5H7c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 12H7V7h10v10zm-1-9H8v8h8V8zm3 4v2h2v-2h-2z"/></svg>
+              </div>
+            </div>
+
+            <!-- Dynamic Island Notch -->
+            <div class="phone-dynamic-island"></div>
+
+            <!-- Lockscreen Clock -->
+            <div class="phone-lock-clock">
+              <p class="phone-clock-digits" id="phoneLockTime">04:45</p>
+              <p class="phone-clock-text" id="phoneLockDate">quarta-feira, 19 de agosto</p>
+            </div>
+
+            <!-- Phone Notifications -->
+            <div class="phone-notif-area">
+              <div class="falling-notifs-wrap mobile" id="mobileNotifs"></div>
+            </div>
+
+            <!-- Home Indicator Bar -->
+            <div class="phone-home-indicator"></div>
+          </div>
+        </div>
+        <div class="phone-reflection-glow"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= SEÇÃO: COMO FUNCIONA (3 ETAPAS) ================= -->
+  <section class="how-it-works-section" id="como-funciona">
+    <div class="badge" style="margin-bottom: 1.5rem;">
+      <span class="status-dot"></span>
+      PASSO A PASSO SIMPLES
+    </div>
+    
+    <h2 class="section-title">
+      Como funciona
+    </h2>
+    
+    <p class="section-subtitle">
+      Três etapas entre abrir a transmissão e ver o chat participando da partida.
+    </p>
+
+    <div class="steps-grid">
+      <!-- Etapa 1 -->
+      <div class="step-card step-card-cyan">
+        <div class="step-card-glow step-glow-1"></div>
+        <div class="step-header">
+          <div class="step-number-wrap">
+            <div class="step-number">01</div>
+            <span class="step-tag-pill tag-cyan-pill">INPUT DO CHAT</span>
+          </div>
+          <div class="step-icon-wrap icon-cyan">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            </svg>
+          </div>
+        </div>
+
+        <h3 class="step-title">O espectador comenta</h3>
+        <p class="step-description">
+          Qualquer pessoa assistindo escreve no chat da sua live, como já faria normalmente.
+        </p>
+
+        <!-- Preview Interativo: Chat Realista -->
+        <div class="step-interactive-box">
+          <div class="sim-chat-container">
+            <div class="sim-chat-msg faded">
+              <div class="sim-avatar">M</div>
+              <span class="sim-user">marcos_99</span>
+              <span style="color:#64748b; font-size:0.75rem;">salve mano 🔥</span>
+            </div>
+            <div class="sim-chat-msg active">
+              <div class="sim-avatar">P</div>
+              <span class="sim-user">@pedro_gamer</span>
+              <span class="sim-cmd-pill">!jogar</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Etapa 2 -->
+      <div class="step-card step-card-purple">
+        <div class="step-card-glow step-glow-2"></div>
+        <div class="step-header">
+          <div class="step-number-wrap">
+            <div class="step-number">02</div>
+            <span class="step-tag-pill tag-purple-pill">ENGINE RUNTIME</span>
+          </div>
+          <div class="step-icon-wrap icon-purple">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+            </svg>
+          </div>
+        </div>
+
+        <h3 class="step-title">O comentário vira ação</h3>
+        <p class="step-description">
+          O jogo lê o comentário e coloca aquela pessoa dentro da partida, ao vivo, na sua tela.
+        </p>
+
+        <!-- Preview Interativo: HUD In-Game -->
+        <div class="step-interactive-box">
+          <div class="sim-hud-container">
+            <div class="sim-hud-header">
+              <span>HOOK // INTERCEPTOR</span>
+              <span>LIVE 60FPS</span>
+            </div>
+            <div class="sim-hud-row">
+              <span>TARGET:</span>
+              <span class="sim-hud-val">@pedro_gamer</span>
+            </div>
+            <div class="sim-hud-row">
+              <span>STATUS:</span>
+              <span class="sim-hud-val" style="color:#c084fc;">SPAWN_IN_ARENA</span>
+            </div>
+            <div class="sim-progress-track">
+              <div class="sim-progress-bar"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Etapa 3 -->
+      <div class="step-card step-card-emerald">
+        <div class="step-card-glow step-glow-3"></div>
+        <div class="step-header">
+          <div class="step-number-wrap">
+            <div class="step-number">03</div>
+            <span class="step-tag-pill tag-emerald-pill">RETENÇÃO & VIRAL</span>
+          </div>
+          <div class="step-icon-wrap icon-emerald">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+            </svg>
+          </div>
+        </div>
+
+        <h3 class="step-title">A live se sustenta sozinha</h3>
+        <p class="step-description">
+          Quem se vê no jogo comenta de novo, chama outras pessoas e permanece na sala por muito mais tempo.
+        </p>
+
+        <!-- Preview Interativo: Widget de Crescimento -->
+        <div class="step-interactive-box">
+          <div class="sim-growth-container">
+            <div class="sim-growth-top">
+              <div class="sim-growth-num">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+                +350%
+              </div>
+              <span class="sim-growth-label">Retenção Média</span>
+            </div>
+            <div class="sim-sparkline-wrap">
+              <svg viewBox="0 0 200 35" preserveAspectRatio="none">
+                <path d="M 0 30 Q 40 28, 70 18 T 130 14 T 170 4 L 200 2" fill="none" stroke="#34d399" stroke-width="2.5" stroke-linecap="round" />
+                <path d="M 0 30 Q 40 28, 70 18 T 130 14 T 170 4 L 200 2 L 200 35 L 0 35 Z" fill="url(#sparkGrad)" opacity="0.2" />
+                <defs>
+                  <linearGradient id="sparkGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#34d399" />
+                    <stop offset="100%" stop-color="transparent" />
+                  </linearGradient>
+                </defs>
+              </svg>
+            </div>
+            <div class="sim-growth-chips">
+              <span class="sim-chip">🔥 Booster Viral</span>
+              <span class="sim-chip gold">🎁 Presentes Turbo</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= SEÇÃO: CATÁLOGO DE JOGOS ================= -->
+  <section class="games-catalog-section" id="jogos">
+    <div class="badge" style="margin-bottom: 1.5rem;">
+      <span class="status-dot"></span>
+      CATÁLOGO EM CONSTANTE EXPANSÃO
+    </div>
+
+    <h2 class="section-title">
+      Catálogo de jogos
+    </h2>
+
+    <p class="section-subtitle">
+      Experiências prontas para transmissão, construídas especificamente para o formato de live interativa. O catálogo é ampliado continuamente.
+    </p>
+
+    <div class="games-grid">
+      <!-- Jogo 1: Flappy da Live -->
+      <div class="game-card">
+        <div class="game-card-bg" style="background-image: url('flapy bird.webp');"></div>
+        <div class="game-card-overlay"></div>
+
+        <div class="game-img-wrapper">
+          <img src="flapy bird.webp" alt="Flappy da Live" class="game-cover-img" />
+        </div>
+        <div class="game-info">
+          <div class="game-badge">VITALÍCIO</div>
+          <h3 class="game-title">Flappy da Live</h3>
+          <p class="game-desc">
+            O número sobe sozinho rumo a 1.000.000 e a sala se une para derrubar: presente vira foguete, TNT e meteoro em cima do pássaro.
+          </p>
+          <a href="#demonstracao" class="game-demo-link">
+            Ver demonstração
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Jogo 2: Tower Sky -->
+      <div class="game-card">
+        <div class="game-card-bg" style="background-image: url('tower sky.webp');"></div>
+        <div class="game-card-overlay"></div>
+
+        <div class="game-img-wrapper">
+          <img src="tower sky.webp" alt="Tower Sky" class="game-cover-img" />
+        </div>
+        <div class="game-info">
+          <div class="game-badge">VITALÍCIO</div>
+          <h3 class="game-title">Tower Sky</h3>
+          <p class="game-desc">
+            A torre sobe enquanto a audiência manda blocos. Errar o encaixe derruba tudo, e a sala inteira sente.
+          </p>
+          <a href="#demonstracao" class="game-demo-link">
+            Ver demonstração
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Jogo 3: Avatares da Live -->
+      <div class="game-card">
+        <div class="game-card-bg" style="background-image: url('avatares da live.webp');"></div>
+        <div class="game-card-overlay"></div>
+
+        <div class="game-img-wrapper">
+          <img src="avatares da live.webp" alt="Avatares da Live" class="game-cover-img" />
+        </div>
+        <div class="game-info">
+          <div class="game-badge">VITALÍCIO</div>
+          <h3 class="game-title">Avatares da Live</h3>
+          <p class="game-desc">
+            O espectador aparece no jogo com a própria identidade visual e se reconhece na tela, o que puxa novos comentários.
+          </p>
+          <a href="#demonstracao" class="game-demo-link">
+            Ver demonstração
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Banner: Novos títulos em produção (Ultra-polido) -->
+    <div class="games-production-banner">
+      <div class="banner-left-content">
+        <div class="banner-icon-box">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+          </svg>
+        </div>
+        <div class="banner-text-group">
+          <div class="banner-title-row">
+            <h3 class="banner-heading">Novos títulos em produção</h3>
+            <span class="banner-live-badge">
+              <span class="banner-badge-dot"></span>
+              PIPELINE ATIVO
+            </span>
+          </div>
+          <p class="banner-subtext">
+            O catálogo cresce de forma contínua. Lançamentos são anunciados primeiro dentro do servidor.
+          </p>
+        </div>
+      </div>
+
+      <div class="banner-right-action">
+        <a href="#discord" class="btn-discord-server">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994.021-.041.001-.09-.041-.106a13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.929 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.894.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
+          </svg>
+          <span>Acompanhar no Servidor</span>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= SEÇÃO: PROVAS SOCIAIS / DEPOIMENTOS ================= -->
+  <section class="testimonials-section" id="depoimentos">
+    <div class="badge" style="margin-bottom: 1.5rem;">
+      <span class="status-dot"></span>
+      RESULTADOS REAIS DE QUEM TRANSMITE
+    </div>
+
+    <h2 class="section-title">
+      Quem usa, domina o algoritmo
+    </h2>
+
+    <p class="section-subtitle">
+      Veja o que streamers e criadores de conteúdo ao vivo dizem sobre a retenção e monetização com nossos jogos interativos.
+    </p>
+
+    <!-- Marquee Slider Container -->
+    <div class="testimonials-marquee-wrapper group-hover-pause">
+      <div class="testimonials-marquee-track">
+        
+        <!-- Grupo 1 -->
+        <div class="testimonials-group">
+          <!-- Depoimento 1 -->
+          <div class="testimonial-card">
+            <div class="testimonial-user-row">
+              <div class="testimonial-avatar-wrap">
+                <div class="testimonial-avatar-icon icon-av-cyan">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                  </svg>
+                </div>
+                <span class="verified-dot"></span>
+              </div>
+              <div class="testimonial-user-info">
+                <h3 class="testimonial-name">Lucas Silva</h3>
+                <p class="testimonial-handle">@lucasstreamer</p>
+              </div>
+              <div class="testimonial-platform-tag">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.24 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+                Live Host
+              </div>
+            </div>
+            <p class="testimonial-text">
+              A retenção da minha live saltou de 40 para mais de 380 pessoas simultâneas no primeiro dia com o Flappy. O chat não para um segundo de mandar presente!
+            </p>
+          </div>
+
+          <!-- Depoimento 2 -->
+          <div class="testimonial-card">
+            <div class="testimonial-user-row">
+              <div class="testimonial-avatar-wrap">
+                <div class="testimonial-avatar-icon icon-av-purple">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                  </svg>
+                </div>
+                <span class="verified-dot"></span>
+              </div>
+              <div class="testimonial-user-info">
+                <h3 class="testimonial-name">David Park</h3>
+                <p class="testimonial-handle">@davidtechlive</p>
+              </div>
+              <div class="testimonial-platform-tag">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.24 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+                Live Host
+              </div>
+            </div>
+            <p class="testimonial-text">
+              O launcher é simplesmente impecável. Em menos de 2 minutos configurei tudo e abri a live. A resposta dos comandos em 60fps na tela deixa a galera maluca.
+            </p>
+          </div>
+
+          <!-- Depoimento 3 -->
+          <div class="testimonial-card">
+            <div class="testimonial-user-row">
+              <div class="testimonial-avatar-wrap">
+                <div class="testimonial-avatar-icon icon-av-pink">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                  </svg>
+                </div>
+                <span class="verified-dot"></span>
+              </div>
+              <div class="testimonial-user-info">
+                <h3 class="testimonial-name">Sofia Rodriguez</h3>
+                <p class="testimonial-handle">@sofiaml</p>
+              </div>
+              <div class="testimonial-platform-tag">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.24 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+                Live Host
+              </div>
+            </div>
+            <p class="testimonial-text">
+              O recurso dos Avatares na Live mudou completamente o engajamento da minha sala. As pessoas doam presente só pra ver o próprio boneco se movimentando!
+            </p>
+          </div>
+
+          <!-- Depoimento 4 -->
+          <div class="testimonial-card">
+            <div class="testimonial-user-row">
+              <div class="testimonial-avatar-wrap">
+                <div class="testimonial-avatar-icon icon-av-emerald">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                  </svg>
+                </div>
+                <span class="verified-dot"></span>
+              </div>
+              <div class="testimonial-user-info">
+                <h3 class="testimonial-name">Emma Thompson</h3>
+                <p class="testimonial-handle">@emmagamer</p>
+              </div>
+              <div class="testimonial-platform-tag">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.24 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+                Live Host
+              </div>
+            </div>
+            <p class="testimonial-text">
+              Tower Sky é uma mina de ouro. O chat se divide em equipes, fica mandando presente pra salvar ou derrubar a torre. É diversão pura e retorno garantido.
+            </p>
+          </div>
+
+          <!-- Depoimento 5 -->
+          <div class="testimonial-card">
+            <div class="testimonial-user-row">
+              <div class="testimonial-avatar-wrap">
+                <div class="testimonial-avatar-icon icon-av-amber">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                  </svg>
+                </div>
+                <span class="verified-dot"></span>
+              </div>
+              <div class="testimonial-user-info">
+                <h3 class="testimonial-name">Felipe Rocha</h3>
+                <p class="testimonial-handle">@felipeplay</p>
+              </div>
+              <div class="testimonial-platform-tag">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.24 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+                Live Host
+              </div>
+            </div>
+            <p class="testimonial-text">
+              O efeito manada é surreal: quando o primeiro manda comando, todo mundo quer participar. A live se sustenta sozinha por 4 horas direto!
+            </p>
+          </div>
+        </div>
+
+        <!-- Grupo 2 (Cópia exata para Loop Infinito Contínuo e Sem Quebras) -->
+        <div class="testimonials-group" aria-hidden="true">
+          <!-- Depoimento 1 -->
+          <div class="testimonial-card">
+            <div class="testimonial-user-row">
+              <div class="testimonial-avatar-wrap">
+                <div class="testimonial-avatar-icon icon-av-cyan">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                  </svg>
+                </div>
+                <span class="verified-dot"></span>
+              </div>
+              <div class="testimonial-user-info">
+                <h3 class="testimonial-name">Lucas Silva</h3>
+                <p class="testimonial-handle">@lucasstreamer</p>
+              </div>
+              <div class="testimonial-platform-tag">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.24 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+                Live Host
+              </div>
+            </div>
+            <p class="testimonial-text">
+              A retenção da minha live saltou de 40 para mais de 380 pessoas simultâneas no primeiro dia com o Flappy. O chat não para um segundo de mandar presente!
+            </p>
+          </div>
+
+          <!-- Depoimento 2 -->
+          <div class="testimonial-card">
+            <div class="testimonial-user-row">
+              <div class="testimonial-avatar-wrap">
+                <div class="testimonial-avatar-icon icon-av-purple">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                  </svg>
+                </div>
+                <span class="verified-dot"></span>
+              </div>
+              <div class="testimonial-user-info">
+                <h3 class="testimonial-name">David Park</h3>
+                <p class="testimonial-handle">@davidtechlive</p>
+              </div>
+              <div class="testimonial-platform-tag">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.24 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+                Live Host
+              </div>
+            </div>
+            <p class="testimonial-text">
+              O launcher é simplesmente impecável. Em menos de 2 minutos configurei tudo e abri a live. A resposta dos comandos em 60fps na tela deixa a galera maluca.
+            </p>
+          </div>
+
+          <!-- Depoimento 3 -->
+          <div class="testimonial-card">
+            <div class="testimonial-user-row">
+              <div class="testimonial-avatar-wrap">
+                <div class="testimonial-avatar-icon icon-av-pink">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                  </svg>
+                </div>
+                <span class="verified-dot"></span>
+              </div>
+              <div class="testimonial-user-info">
+                <h3 class="testimonial-name">Sofia Rodriguez</h3>
+                <p class="testimonial-handle">@sofiaml</p>
+              </div>
+              <div class="testimonial-platform-tag">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.24 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+                Live Host
+              </div>
+            </div>
+            <p class="testimonial-text">
+              O recurso dos Avatares na Live mudou completamente o engajamento da minha sala. As pessoas doam presente só pra ver o próprio boneco se movimentando!
+            </p>
+          </div>
+
+          <!-- Depoimento 4 -->
+          <div class="testimonial-card">
+            <div class="testimonial-user-row">
+              <div class="testimonial-avatar-wrap">
+                <div class="testimonial-avatar-icon icon-av-emerald">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                  </svg>
+                </div>
+                <span class="verified-dot"></span>
+              </div>
+              <div class="testimonial-user-info">
+                <h3 class="testimonial-name">Emma Thompson</h3>
+                <p class="testimonial-handle">@emmagamer</p>
+              </div>
+              <div class="testimonial-platform-tag">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.24 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+                Live Host
+              </div>
+            </div>
+            <p class="testimonial-text">
+              Tower Sky é uma mina de ouro. O chat se divide em equipes, fica mandando presente pra salvar ou derrubar a torre. É diversão pura e retorno garantido.
+            </p>
+          </div>
+
+          <!-- Depoimento 5 -->
+          <div class="testimonial-card">
+            <div class="testimonial-user-row">
+              <div class="testimonial-avatar-wrap">
+                <div class="testimonial-avatar-icon icon-av-amber">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                  </svg>
+                </div>
+                <span class="verified-dot"></span>
+              </div>
+              <div class="testimonial-user-info">
+                <h3 class="testimonial-name">Felipe Rocha</h3>
+                <p class="testimonial-handle">@felipeplay</p>
+              </div>
+              <div class="testimonial-platform-tag">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.24 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+                Live Host
+              </div>
+            </div>
+            <p class="testimonial-text">
+              O efeito manada é surreal: quando o primeiro manda comando, todo mundo quer participar. A live se sustenta sozinha por 4 horas direto!
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= SEÇÃO: PERGUNTAS FREQUENTES (FAQ) ================= -->
+  <section class="faq-section" id="faq">
+    <div id="duvidas"></div>
+    <div class="faq-container">
+      <div class="faq-header">
+        <h2 class="faq-title">Perguntas frequentes</h2>
+        <p class="faq-subtitle">O que os criadores costumam perguntar antes de entrar.</p>
+      </div>
+
+      <div class="faq-accordion">
+        
+        <!-- Item 1 -->
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            <span>Preciso saber programar?</span>
+            <svg class="faq-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+          <div class="faq-answer">
+            <p>
+              Não! Zero conhecimento técnico ou programação é necessário. Os jogos já vêm 100% integrados e prontos no launcher. Você só precisa abrir, conectar sua conta e iniciar a transmissão. O sistema lê os comentários e presentes automaticamente em tempo real.
+            </p>
+          </div>
+        </div>
+
+        <!-- Item 2 -->
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            <span>Preciso ficar ao vivo o tempo todo?</span>
+            <svg class="faq-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+          <div class="faq-answer">
+            <p>
+              Não. Você faz suas transmissões nos dias e horários que achar melhor. A grande vantagem é que como o público joga e interage entre si através do chat, a sua live se sustenta com retenção altíssima mesmo em momentos em que você faz pausas.
+            </p>
+          </div>
+        </div>
+
+        <!-- Item 3 -->
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            <span>Como entro na comunidade?</span>
+            <svg class="faq-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+          <div class="faq-answer">
+            <p>
+              Ao garantir o seu acesso, você recebe imediatamente o link exclusivo do nosso servidor oficial no Discord. Lá você terá acesso ao canal de suporte direto, anúncios de novos jogos em produção, dicas de monetização e troca de experiências com outros streamers.
+            </p>
+          </div>
+        </div>
+
+        <!-- Item 4 -->
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            <span>O atendimento é em português?</span>
+            <svg class="faq-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+          <div class="faq-answer">
+            <p>
+              Sim, 100% em português brasileiro! Nossa equipe de suporte e desenvolvedores está disponível no servidor para tirar dúvidas, auxiliar na configuração do OBS/TikTok Live Studio e resolver qualquer eventualidade.
+            </p>
+          </div>
+        </div>
+
+        <!-- Item 5 -->
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            <span>O que é o sistema anti-inatividade?</span>
+            <svg class="faq-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+          <div class="faq-answer">
+            <p>
+              É uma inteligência do jogo que detecta se o chat ficou alguns segundos sem interagir. Quando isso acontece, o jogo dispara automaticamente eventos surpresa, desafios de contagem ou bônus na tela para incentivar novos comentários e manter o algoritmo da live sempre em alta.
+            </p>
+          </div>
+        </div>
+
+        <!-- Item 6 -->
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            <span>Onde vejo os jogos funcionando?</span>
+            <svg class="faq-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+          <div class="faq-answer">
+            <p>
+              Você pode clicar no botão "Ver demonstração" em qualquer jogo no catálogo acima para conferir o gameplay, ou entrar na comunidade para assistir transmissões em tempo real de membros que estão ao vivo agora.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= SEÇÃO: DIVISOR FAIXAS DUPLAS EM "X" ================= -->
+  <div class="footer-marquee-x-section">
+    <div class="footer-marquee-x-wrap">
+      <!-- Ribbon 1 (Tilt -3deg) -->
+      <div class="footer-marquee-ribbon ribbon-tilt-1">
+        <div class="footer-marquee-track track-left">
+          <div class="footer-marquee-group">
+            <span>STREAM 100% AUTOMATIZADA</span> <span class="ribbon-star">✦</span>
+            <span>MODO AFK INTELIGENTE</span> <span class="ribbon-star-alt">✦</span>
+            <span>CHAT NO CONTROLE</span> <span class="ribbon-star">✦</span>
+            <span>SISTEMA ANTI-INATIVIDADE</span> <span class="ribbon-star-alt">✦</span>
+            <span>RETENÇÃO RECORDE</span> <span class="ribbon-star">✦</span>
+            <span>60 FPS NATIVO</span> <span class="ribbon-star-alt">✦</span>
+            <span>INTEGRAÇÃO TIKTOK LIVE</span> <span class="ribbon-star">✦</span>
+          </div>
+          <div class="footer-marquee-group" aria-hidden="true">
+            <span>STREAM 100% AUTOMATIZADA</span> <span class="ribbon-star">✦</span>
+            <span>MODO AFK INTELIGENTE</span> <span class="ribbon-star-alt">✦</span>
+            <span>CHAT NO CONTROLE</span> <span class="ribbon-star">✦</span>
+            <span>SISTEMA ANTI-INATIVIDADE</span> <span class="ribbon-star-alt">✦</span>
+            <span>RETENÇÃO RECORDE</span> <span class="ribbon-star">✦</span>
+            <span>60 FPS NATIVO</span> <span class="ribbon-star-alt">✦</span>
+            <span>INTEGRAÇÃO TIKTOK LIVE</span> <span class="ribbon-star">✦</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ribbon 2 (Tilt +3deg, Crossing in X) -->
+      <div class="footer-marquee-ribbon ribbon-tilt-2">
+        <div class="footer-marquee-track track-right">
+          <div class="footer-marquee-group">
+            <span>FATURAMENTO NO AUTOPILOTO</span> <span class="ribbon-star-cyan">✦</span>
+            <span>JOGOS EXCLUSIVOS</span> <span class="ribbon-star-purple">✦</span>
+            <span>EVENTOS & PRESENTES</span> <span class="ribbon-star-cyan">✦</span>
+            <span>OVERLAYS OBS STUDIO</span> <span class="ribbon-star-purple">✦</span>
+            <span>ENGAGEMENT BOOSTER</span> <span class="ribbon-star-cyan">✦</span>
+            <span>COMUNIDADE VIP</span> <span class="ribbon-star-purple">✦</span>
+            <span>ZERO PROGRAMAÇÃO</span> <span class="ribbon-star-cyan">✦</span>
+          </div>
+          <div class="footer-marquee-group" aria-hidden="true">
+            <span>FATURAMENTO NO AUTOPILOTO</span> <span class="ribbon-star-cyan">✦</span>
+            <span>JOGOS EXCLUSIVOS</span> <span class="ribbon-star-purple">✦</span>
+            <span>EVENTOS & PRESENTES</span> <span class="ribbon-star-cyan">✦</span>
+            <span>OVERLAYS OBS STUDIO</span> <span class="ribbon-star-purple">✦</span>
+            <span>ENGAGEMENT BOOSTER</span> <span class="ribbon-star-cyan">✦</span>
+            <span>COMUNIDADE VIP</span> <span class="ribbon-star-purple">✦</span>
+            <span>ZERO PROGRAMAÇÃO</span> <span class="ribbon-star-cyan">✦</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= SEÇÃO: CINEMATIC MOTION FOOTER ================= -->
+  <footer class="cinematic-motion-footer" id="footer">
+    <!-- Breathing Aurora Glow -->
+    <div class="footer-aurora-glow"></div>
+    
+    <!-- Cyber Grid Overlay -->
+    <div class="footer-grid-bg"></div>
+
+    <!-- Giant Background Watermark Text -->
+    <div class="footer-giant-watermark">RAVEN</div>
+
+    <!-- Main Footer Center Content -->
+    <div class="footer-main-content">
+      <h2 class="footer-cta-title">Pronto para começar?</h2>
+      <p class="footer-cta-desc">
+        Eleve o nível da sua live de TikTok com os jogos interativos que mais geram retenção e presentes.
+      </p>
+
+      <!-- Primary Action Buttons -->
+      <div class="footer-btn-group">
+        <a href="#comunidade" class="footer-pill-btn primary">
+          <span>Entrar na comunidade</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </a>
+
+        <a href="#download" class="footer-pill-btn secondary">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          <span>Baixar o Launcher</span>
+        </a>
+      </div>
+
+      <!-- Quick Nav Links -->
+      <div class="footer-quick-links">
+        <a href="#jogos">Catálogo de Jogos</a>
+        <a href="#como-funciona">Como Funciona</a>
+        <a href="#duvidas">Perguntas Frequentes</a>
+        <a href="termos.html">Termos de Uso</a>
+        <a href="termos.html#privacidade">Privacidade</a>
+        <a href="#recursos">Recursos</a>
+        <a href="#planos">Planos</a>
+      </div>
+    </div>
+
+    <!-- Bottom Credits & Back to Top -->
+    <div class="footer-bottom-bar">
+      <p class="footer-copyright">© 2026 Raven Games. Todos os direitos reservados.</p>
+      
+      <div class="footer-badge-crafted">
+        <span>Criado com</span>
+        <span class="heart-pulse">❤</span>
+        <span>para Criadores de Conteúdo</span>
+      </div>
+
+      <button class="footer-back-to-top" id="backToTopBtn" aria-label="Voltar ao topo">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
+        </svg>
+      </button>
+    </div>
+  </footer>
+
+  <style>
+    /* ================= ESTILOS DA SEÇÃO: PERGUNTAS FREQUENTES (FAQ) ================= */
+    .faq-section {
+      width: 100%;
+      padding: 6rem 1.5rem 7rem;
+      position: relative;
+      z-index: 5;
+      box-sizing: border-box;
+    }
+
+    .faq-container {
+      max-width: 840px;
+      margin: 0 auto;
+      width: 100%;
+      text-align: center;
+    }
+
+    .faq-header {
+      margin-bottom: 3.5rem;
+    }
+
+    .faq-title {
+      font-size: clamp(2.2rem, 4vw, 3rem);
+      font-weight: 800;
+      color: #ffffff;
+      margin: 0;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+    }
+
+    .faq-subtitle {
+      font-size: 1.05rem;
+      color: #94a3b8;
+      margin: 0.85rem 0 0;
+      line-height: 1.5;
+    }
+
+    .faq-accordion {
+      display: flex;
+      flex-direction: column;
+      text-align: left;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .faq-item {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      transition: background-color 0.2s ease;
+    }
+
+    .faq-question {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.6rem 0.5rem;
+      background: transparent;
+      border: none;
+      color: #ffffff;
+      font-size: 1.15rem;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      text-align: left;
+      gap: 1.5rem;
+      transition: color 0.2s ease, padding-left 0.2s ease;
+      box-sizing: border-box;
+    }
+
+    .faq-question:hover {
+      color: #00d2ff;
+      padding-left: 0.8rem;
+    }
+
+    .faq-chevron {
+      flex-shrink: 0;
+      color: #717791;
+      transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), color 0.2s ease;
+    }
+
+    .faq-item.active .faq-chevron {
+      transform: rotate(180deg);
+      color: #00d2ff;
+    }
+
+    .faq-item.active .faq-question {
+      color: #00d2ff;
+    }
+
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+      opacity: 0;
+    }
+
+    .faq-item.active .faq-answer {
+      max-height: 250px;
+      opacity: 1;
+    }
+
+    .faq-answer p {
+      margin: 0;
+      padding: 0 0.5rem 1.6rem;
+      font-size: 0.98rem;
+      line-height: 1.65;
+      color: #94a3b8;
+    }
+
+    @media (max-width: 640px) {
+      .faq-section {
+        padding: 4rem 1.25rem 5rem;
+      }
+      .faq-question {
+        font-size: 1.02rem;
+        padding: 1.35rem 0.25rem;
+      }
+      .faq-answer p {
+        font-size: 0.92rem;
+      }
+    }
+
+    /* ================= ESTILOS DA SEÇÃO: CINEMATIC MOTION FOOTER ================= */
+    .cinematic-motion-footer {
+      width: 100%;
+      position: relative;
+      background: #04060a;
+      overflow: hidden;
+      margin-top: 0;
+      border-top: none;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: auto;
+      box-sizing: border-box;
+      padding-top: 3.25rem;
+      z-index: 10;
+    }
+
+    /* Breathing Aurora Glow */
+    .footer-aurora-glow {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 80vw;
+      height: 60vh;
+      transform: translate(-50%, -50%);
+      background: radial-gradient(circle, rgba(0, 210, 255, 0.16) 0%, rgba(157, 78, 221, 0.12) 40%, transparent 70%);
+      filter: blur(90px);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 1;
+      animation: footerAuroraPulse 8s infinite ease-in-out;
+    }
+
+    @keyframes footerAuroraPulse {
+      0%, 100% { opacity: 0.7; transform: translate(-50%, -50%) scale(1); }
+      50% { opacity: 1; transform: translate(-50%, -50%) scale(1.15); }
+    }
+
+    /* Cyber Grid */
+    .footer-grid-bg {
+      position: absolute;
+      inset: 0;
+      background-image: 
+        linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+      background-size: 40px 40px;
+      mask-image: radial-gradient(ellipse 70% 60% at 50% 50%, black 60%, transparent 100%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Giant Background Watermark Text */
+    .footer-giant-watermark {
+      position: absolute;
+      bottom: -1vw;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: clamp(90px, 18vw, 190px);
+      line-height: 0.75;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(255, 255, 255, 0.07);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.1) 0%, transparent 65%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      pointer-events: none;
+      user-select: none;
+      white-space: nowrap;
+      z-index: 1;
+    }
+
+    /* Standalone Section Divider for Dual X Marquee */
+    .footer-marquee-x-section {
+      width: 100%;
+      position: relative;
+      z-index: 50;
+      margin-top: -65px;
+      margin-bottom: -50px;
+      padding: 35px 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .footer-marquee-x-wrap {
+      position: relative;
+      width: 100%;
+      height: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: auto;
+    }
+
+    .footer-marquee-ribbon {
+      position: absolute;
+      width: 110%;
+      left: -5%;
+      border-top: 1px solid rgba(255, 255, 255, 0.14);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+      padding: 0.95rem 0;
+      overflow: hidden;
+      box-shadow: 0 15px 45px rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    .ribbon-tilt-1 {
+      transform: rotate(-3deg) scale(1.03);
+      background: rgba(12, 17, 28, 0.88);
+      z-index: 2;
+    }
+
+    .ribbon-tilt-2 {
+      transform: rotate(3deg) scale(1.03);
+      background: rgba(18, 24, 38, 0.84);
+      border-color: rgba(0, 210, 255, 0.3);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9), 0 0 25px rgba(0, 210, 255, 0.15);
+      z-index: 3;
+    }
+
+    .footer-marquee-track {
+      display: flex;
+      width: max-content;
+    }
+
+    .track-left {
+      animation: footerMarqueeScrollLeft 30s linear infinite;
+    }
+
+    .track-right {
+      animation: footerMarqueeScrollRight 30s linear infinite;
+    }
+
+    .footer-marquee-group {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      padding-right: 2rem;
+      white-space: nowrap;
+      font-size: 0.82rem;
+      font-weight: 800;
+      letter-spacing: 0.25em;
+      color: #94a3b8;
+      text-transform: uppercase;
+    }
+
+    .ribbon-star {
+      color: #00d2ff;
+      font-size: 0.95rem;
+      text-shadow: 0 0 10px rgba(0, 210, 255, 0.8);
+    }
+
+    .ribbon-star-alt {
+      color: #c084fc;
+      font-size: 0.95rem;
+      text-shadow: 0 0 10px rgba(192, 132, 252, 0.8);
+    }
+
+    .ribbon-star-cyan {
+      color: #38bdf8;
+      font-size: 0.95rem;
+      text-shadow: 0 0 12px rgba(56, 189, 248, 0.9);
+    }
+
+    .ribbon-star-purple {
+      color: #e879f9;
+      font-size: 0.95rem;
+      text-shadow: 0 0 12px rgba(232, 121, 249, 0.9);
+    }
+
+    @keyframes footerMarqueeScrollLeft {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    @keyframes footerMarqueeScrollRight {
+      0% { transform: translateX(-50%); }
+      100% { transform: translateX(0); }
+    }
+
+    @media (max-width: 768px) {
+      .footer-marquee-x-wrap {
+        height: 100px;
+        margin-bottom: 2rem;
+      }
+      .ribbon-tilt-1 {
+        transform: rotate(-4deg) scale(1.05);
+      }
+      .ribbon-tilt-2 {
+        transform: rotate(4deg) scale(1.05);
+      }
+    }
+
+    /* Main Footer Center Content */
+    .footer-main-content {
+      position: relative;
+      z-index: 5;
+      max-width: 820px;
+      margin: 0 auto;
+      text-align: center;
+      padding: 0.5rem 1.5rem 3.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.25rem;
+    }
+
+    .footer-cta-title {
+      font-size: clamp(2.4rem, 5vw, 4.5rem);
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      color: #ffffff;
+      background: linear-gradient(180deg, #ffffff 0%, #cbd5e1 50%, rgba(255, 255, 255, 0.7) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 0 30px rgba(0, 210, 255, 0.3));
+    }
+
+    .footer-cta-desc {
+      font-size: clamp(1rem, 1.8vw, 1.15rem);
+      color: #94a3b8;
+      max-width: 580px;
+      line-height: 1.6;
+    }
+
+    .footer-btn-group {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1.25rem;
+      margin-top: 0.25rem;
+    }
+
+    .footer-pill-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.95rem 2.2rem;
+      border-radius: 999px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      text-decoration: none;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .footer-pill-btn.primary {
+      background: #ffffff;
+      color: #07090e;
+      box-shadow: 0 10px 30px rgba(255, 255, 255, 0.25);
+    }
+
+    .footer-pill-btn.primary:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 15px 40px rgba(0, 210, 255, 0.4);
+      background: #f0fdf4;
+    }
+
+    .footer-pill-btn.secondary {
+      background: rgba(18, 24, 38, 0.8);
+      color: #38bdf8;
+      border: 1px solid rgba(0, 210, 255, 0.35);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    .footer-pill-btn.secondary:hover {
+      transform: translateY(-3px) scale(1.02);
+      background: rgba(26, 35, 54, 0.95);
+      border-color: #00d2ff;
+      box-shadow: 0 15px 35px rgba(0, 210, 255, 0.25);
+    }
+
+    .footer-quick-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-top: 0.5rem;
+    }
+
+    .footer-quick-links a {
+      color: #64748b;
+      font-size: 0.88rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .footer-quick-links a:hover {
+      color: #00d2ff;
+    }
+
+    /* Bottom Credits Bar */
+    .footer-bottom-bar {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1.25rem 1.5rem 1.8rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-copyright {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: #64748b;
+      letter-spacing: 0.05em;
+    }
+
+    .footer-badge-crafted {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.45rem 1rem;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #94a3b8;
+    }
+
+    .heart-pulse {
+      color: #ef4444;
+      animation: heartPulseAnim 1.5s infinite ease-in-out;
+    }
+
+    @keyframes heartPulseAnim {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.3); }
+    }
+
+    .footer-back-to-top {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(18, 24, 38, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #94a3b8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+    }
+
+    .footer-back-to-top:hover {
+      background: rgba(0, 210, 255, 0.15);
+      border-color: #00d2ff;
+      color: #00d2ff;
+      transform: translateY(-3px);
+      box-shadow: 0 0 20px rgba(0, 210, 255, 0.3);
+    }
+
+    @media (max-width: 768px) {
+      .cinematic-motion-footer {
+        padding-top: 2rem;
+        min-height: auto;
+      }
+      .footer-marquee-ribbon {
+        margin-bottom: 2rem;
+      }
+      .footer-main-content {
+        padding: 1rem 1.5rem 3rem;
+        gap: 1.5rem;
+      }
+      .footer-bottom-bar {
+        flex-direction: column;
+        text-align: center;
+        gap: 1.25rem;
+        padding: 2rem 1.5rem 2.5rem;
+      }
+      .footer-giant-watermark {
+        font-size: 30vw;
+        bottom: -2vw;
+      }
+    }
+    /* ================= ESTILOS DA SEÇÃO: PROVAS SOCIAIS (MARQUEE 100% SEAMLESS LOOP) ================= */
+    .testimonials-section {
+      width: 100%;
+      padding: 5rem 0 6rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      position: relative;
+      z-index: 5;
+      overflow: hidden;
+    }
+
+    .testimonials-marquee-wrapper {
+      width: 100%;
+      overflow: hidden;
+      position: relative;
+      margin-top: 2.5rem;
+      mask-image: linear-gradient(to right, transparent, black 12%, black 88%, transparent);
+      -webkit-mask-image: linear-gradient(to right, transparent, black 12%, black 88%, transparent);
+      display: flex;
+    }
+
+    .testimonials-marquee-track {
+      display: flex;
+      width: max-content;
+      animation: marqueeTestimonials 32s linear infinite;
+    }
+
+    .testimonials-marquee-wrapper:hover .testimonials-marquee-track {
+      animation-play-state: paused;
+    }
+
+    .testimonials-group {
+      display: flex;
+      gap: 1.5rem;
+      padding-right: 1.5rem;
+      flex-shrink: 0;
+    }
+
+    @keyframes marqueeTestimonials {
+      0% {
+        transform: translateX(0);
+      }
+      100% {
+        transform: translateX(-50%);
+      }
+    }
+
+    .testimonial-card {
+      width: 320px;
+      flex-shrink: 0;
+      background: linear-gradient(180deg, rgba(18, 24, 38, 0.75) 0%, rgba(10, 14, 24, 0.85) 100%);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-top: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 18px;
+      padding: 1.5rem;
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 1rem;
+      box-shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+      transition: all 0.3s ease;
+    }
+
+    .testimonial-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(0, 210, 255, 0.35);
+      background: linear-gradient(180deg, rgba(22, 30, 48, 0.85) 0%, rgba(12, 17, 30, 0.95) 100%);
+      box-shadow: 0 20px 45px -10px rgba(0, 210, 255, 0.12);
+    }
+
+    .testimonial-user-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      position: relative;
+    }
+
+    .testimonial-avatar-wrap {
+      position: relative;
+      width: 44px;
+      height: 44px;
+      flex-shrink: 0;
+    }
+
+    .testimonial-avatar-icon {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1.5px solid rgba(255, 255, 255, 0.15);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    }
+
+    .icon-av-cyan {
+      background: linear-gradient(135deg, rgba(0, 210, 255, 0.2) 0%, rgba(0, 210, 255, 0.05) 100%);
+      color: #38bdf8;
+      border-color: rgba(0, 210, 255, 0.35);
+    }
+
+    .icon-av-purple {
+      background: linear-gradient(135deg, rgba(192, 132, 252, 0.2) 0%, rgba(192, 132, 252, 0.05) 100%);
+      color: #c084fc;
+      border-color: rgba(192, 132, 252, 0.35);
+    }
+
+    .icon-av-pink {
+      background: linear-gradient(135deg, rgba(244, 114, 182, 0.2) 0%, rgba(244, 114, 182, 0.05) 100%);
+      color: #f472b6;
+      border-color: rgba(244, 114, 182, 0.35);
+    }
+
+    .icon-av-emerald {
+      background: linear-gradient(135deg, rgba(52, 211, 153, 0.2) 0%, rgba(52, 211, 153, 0.05) 100%);
+      color: #34d399;
+      border-color: rgba(52, 211, 153, 0.35);
+    }
+
+    .icon-av-amber {
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.2) 0%, rgba(245, 158, 11, 0.05) 100%);
+      color: #fbbf24;
+      border-color: rgba(245, 158, 11, 0.35);
+    }
+
+    .verified-dot {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #00d2ff;
+      border: 2px solid #080b12;
+    }
+
+    .testimonial-user-info {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      flex-grow: 1;
+    }
+
+    .testimonial-name {
+      font-size: 0.98rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin: 0;
+      line-height: 1.2;
+    }
+
+    .testimonial-handle {
+      font-size: 0.8rem;
+      color: #717791;
+      margin: 0;
+    }
+
+    .testimonial-platform-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: #00d2ff;
+      background: rgba(0, 210, 255, 0.08);
+      border: 1px solid rgba(0, 210, 255, 0.2);
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+
+    .testimonial-text {
+      font-size: 0.92rem;
+      color: #94a3b8;
+      line-height: 1.55;
+      margin: 0;
+    }
+    /* ================= ESTILOS DA SEÇÃO: CATÁLOGO DE JOGOS ================= */
+    .games-catalog-section {
+      width: 100%;
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 5rem 1.5rem 6rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      position: relative;
+      z-index: 5;
+      box-sizing: border-box;
+    }
+
+    .games-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.75rem;
+      width: 100%;
+      margin-top: 1rem;
+    }
+
+    @media (max-width: 980px) {
+      .games-grid {
+        grid-template-columns: 1fr;
+        max-width: 420px;
+        margin-left: auto;
+        margin-right: auto;
+        gap: 1.5rem;
+      }
+    }
+
+    .game-card {
+      position: relative;
+      background: #080b12;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 24px;
+      padding: 14px 14px 22px 14px;
+      display: flex;
+      flex-direction: column;
+      text-align: left;
+      overflow: hidden;
+      box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .game-card:hover {
+      transform: translateY(-8px);
+      border-color: rgba(0, 210, 255, 0.3);
+      box-shadow: 0 25px 50px -10px rgba(0, 210, 255, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    }
+
+    .game-card-bg {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      filter: blur(12px) brightness(0.28) saturate(1.3);
+      opacity: 0.55;
+      transform: scale(1.15);
+      pointer-events: none;
+      z-index: 1;
+      transition: all 0.4s ease;
+    }
+
+    .game-card:hover .game-card-bg {
+      opacity: 0.75;
+      filter: blur(8px) brightness(0.35) saturate(1.5);
+      transform: scale(1.2);
+    }
+
+    .game-card-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(8, 11, 18, 0.2) 0%, rgba(6, 9, 15, 0.8) 55%, rgba(6, 9, 15, 0.98) 100%);
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .game-img-wrapper {
+      position: relative;
+      z-index: 3;
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      border-radius: 16px;
+      overflow: hidden;
+      background-color: #05070c;
+      margin-bottom: 16px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+    }
+
+    .game-cover-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.4s ease;
+    }
+
+    .game-card:hover .game-cover-img {
+      transform: scale(1.04);
+    }
+
+    .game-info {
+      position: relative;
+      z-index: 3;
+      padding: 0 6px;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+
+    .game-badge {
+      display: inline-block;
+      align-self: flex-start;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #94a3b8;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 6px;
+      margin-bottom: 12px;
+    }
+
+    .game-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 8px;
+      line-height: 1.3;
+      letter-spacing: -0.02em;
+    }
+
+    .game-desc {
+      font-size: 0.9rem;
+      line-height: 1.55;
+      color: #94a3b8;
+      margin-bottom: 20px;
+      flex-grow: 1;
+    }
+
+    .game-demo-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #a78bfa;
+      font-size: 0.92rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      margin-top: auto;
+    }
+
+    .game-demo-link svg {
+      transition: transform 0.2s ease;
+    }
+
+    .game-demo-link:hover {
+      color: #c4b5fd;
+    }
+
+    .game-demo-link:hover svg {
+      transform: translateX(4px);
+    }
+
+    /* Banner: Novos Títulos em Produção (Luxury Glass Style) */
+    .games-production-banner {
+      width: 100%;
+      margin-top: 2rem;
+      background: linear-gradient(135deg, rgba(16, 22, 36, 0.75) 0%, rgba(10, 14, 24, 0.85) 100%);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 20px;
+      padding: 1.5rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+      text-align: left;
+      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-sizing: border-box;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .games-production-banner::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 10%;
+      right: 10%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(0, 210, 255, 0.5), transparent);
+    }
+
+    .games-production-banner:hover {
+      transform: translateY(-4px);
+      border-color: rgba(0, 210, 255, 0.3);
+      box-shadow: 0 25px 50px -15px rgba(0, 210, 255, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    }
+
+    .banner-left-content {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      flex: 1;
+    }
+
+    .banner-icon-box {
+      width: 52px;
+      height: 52px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, rgba(0, 210, 255, 0.15), rgba(157, 78, 221, 0.15));
+      border: 1px solid rgba(0, 210, 255, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #38bdf8;
+      box-shadow: 0 0 20px rgba(0, 210, 255, 0.15);
+      flex-shrink: 0;
+    }
+
+    .banner-text-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .banner-title-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .banner-heading {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin: 0;
+      letter-spacing: -0.02em;
+    }
+
+    .banner-live-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #38bdf8;
+      background: rgba(0, 210, 255, 0.08);
+      border: 1px solid rgba(0, 210, 255, 0.25);
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+
+    .banner-badge-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #38bdf8;
+      box-shadow: 0 0 8px #38bdf8;
+      animation: pulseCyan 1.8s infinite;
+    }
+
+    @keyframes pulseCyan {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.3; transform: scale(0.7); }
+    }
+
+    .banner-subtext {
+      font-size: 0.95rem;
+      color: #94a3b8;
+      margin: 0;
+      line-height: 1.5;
+    }
+
+    .banner-right-action {
+      flex-shrink: 0;
+    }
+
+    .btn-discord-server {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: linear-gradient(135deg, rgba(88, 101, 242, 0.2) 0%, rgba(88, 101, 242, 0.35) 100%);
+      color: #ffffff;
+      border: 1px solid rgba(88, 101, 242, 0.5);
+      padding: 0.85rem 1.6rem;
+      border-radius: 999px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      text-decoration: none;
+      box-shadow: 0 4px 15px rgba(88, 101, 242, 0.2);
+      transition: all 0.25s ease;
+      white-space: nowrap;
+    }
+
+    .btn-discord-server:hover {
+      background: #5865f2;
+      color: #ffffff;
+      border-color: #5865f2;
+      box-shadow: 0 8px 25px rgba(88, 101, 242, 0.5);
+      transform: translateY(-2px);
+    }
+
+    .btn-discord-server svg:last-child {
+      transition: transform 0.2s ease;
+    }
+
+    .btn-discord-server:hover svg:last-child {
+      transform: translateX(4px);
+    }
+
+    @media (max-width: 900px) {
+      .games-production-banner {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.5rem;
+        padding: 1.5rem;
+      }
+
+      .banner-left-content {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+      }
+
+      .banner-right-action {
+        width: 100%;
+      }
+
+      .btn-discord-server {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+    /* ================= ESTILOS DA SEÇÃO: COMO FUNCIONA (WORLD CLASS GLASS) ================= */
+    .how-it-works-section {
+      width: 100%;
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 5rem 1.5rem 6rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      position: relative;
+      z-index: 5;
+      box-sizing: border-box;
+    }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.75rem;
+      width: 100%;
+      margin-top: 1rem;
+    }
+
+    @media (max-width: 980px) {
+      .steps-grid {
+        grid-template-columns: 1fr;
+        max-width: 420px;
+        margin-left: auto;
+        margin-right: auto;
+        gap: 1.5rem;
+      }
+    }
+
+    .step-card {
+      position: relative;
+      background: linear-gradient(180deg, rgba(16, 22, 36, 0.75) 0%, rgba(8, 11, 18, 0.9) 100%);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 24px;
+      padding: 1.75rem 1.6rem 1.6rem;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      text-align: left;
+      overflow: hidden;
+      box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .step-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 15%;
+      right: 15%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--card-glow-color, rgba(0, 210, 255, 0.6)), transparent);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .step-card:hover {
+      transform: translateY(-8px);
+      border-color: rgba(255, 255, 255, 0.18);
+      box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.8), 0 0 40px -10px var(--card-glow-soft);
+    }
+
+    .step-card:hover::before {
+      opacity: 1;
+    }
+
+    .step-card-cyan {
+      --card-glow-color: #00d2ff;
+      --card-glow-soft: rgba(0, 210, 255, 0.25);
+    }
+
+    .step-card-purple {
+      --card-glow-color: #c084fc;
+      --card-glow-soft: rgba(192, 132, 252, 0.25);
+    }
+
+    .step-card-emerald {
+      --card-glow-color: #34d399;
+      --card-glow-soft: rgba(52, 211, 153, 0.25);
+    }
+
+    .step-card-glow {
+      position: absolute;
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      filter: blur(60px);
+      opacity: 0.12;
+      pointer-events: none;
+      top: -50px;
+      right: -50px;
+      transition: opacity 0.3s ease;
+    }
+
+    .step-card:hover .step-card-glow {
+      opacity: 0.3;
+    }
+
+    .step-glow-1 { background: #00d2ff; }
+    .step-glow-2 { background: #c084fc; }
+    .step-glow-3 { background: #34d399; }
+
+    .step-header {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.25rem;
+    }
+
+    .step-number-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .step-number {
+      font-size: 2rem;
+      font-weight: 900;
+      color: rgba(255, 255, 255, 0.25);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      letter-spacing: -1px;
+      line-height: 1;
+    }
+
+    .step-tag-pill {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 6px;
+      border: 1px solid transparent;
+    }
+
+    .tag-cyan-pill {
+      background: rgba(0, 210, 255, 0.08);
+      border-color: rgba(0, 210, 255, 0.25);
+      color: #38bdf8;
+    }
+
+    .tag-purple-pill {
+      background: rgba(192, 132, 252, 0.08);
+      border-color: rgba(192, 132, 252, 0.25);
+      color: #c084fc;
+    }
+
+    .tag-emerald-pill {
+      background: rgba(52, 211, 153, 0.08);
+      border-color: rgba(52, 211, 153, 0.25);
+      color: #34d399;
+    }
+
+    .step-icon-wrap {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .icon-cyan {
+      background: linear-gradient(135deg, rgba(0, 210, 255, 0.2), rgba(0, 210, 255, 0.05));
+      color: #38bdf8;
+      border: 1px solid rgba(0, 210, 255, 0.35);
+      box-shadow: 0 0 15px rgba(0, 210, 255, 0.15);
+    }
+
+    .icon-purple {
+      background: linear-gradient(135deg, rgba(192, 132, 252, 0.2), rgba(192, 132, 252, 0.05));
+      color: #c084fc;
+      border: 1px solid rgba(192, 132, 252, 0.35);
+      box-shadow: 0 0 15px rgba(192, 132, 252, 0.15);
+    }
+
+    .icon-emerald {
+      background: linear-gradient(135deg, rgba(52, 211, 153, 0.2), rgba(52, 211, 153, 0.05));
+      color: #34d399;
+      border: 1px solid rgba(52, 211, 153, 0.35);
+      box-shadow: 0 0 15px rgba(52, 211, 153, 0.15);
+    }
+
+    .step-title {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 0.6rem;
+      line-height: 1.25;
+      letter-spacing: -0.02em;
+    }
+
+    .step-description {
+      font-size: 0.92rem;
+      color: #94a3b8;
+      line-height: 1.55;
+      margin-bottom: 1.5rem;
+      flex-grow: 1;
+    }
+
+    /* Módulos Visuais Interativos dos Cards */
+    .step-interactive-box {
+      width: 100%;
+      background: rgba(10, 14, 24, 0.75);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 14px;
+      padding: 1rem;
+      box-sizing: border-box;
+      box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.4);
+      margin-top: auto;
+    }
+
+    /* Box 1: Chat Stream Simulator */
+    .sim-chat-container {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .sim-chat-msg {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.8rem;
+    }
+
+    .sim-chat-msg.faded {
+      opacity: 0.4;
+    }
+
+    .sim-chat-msg.active {
+      background: rgba(0, 210, 255, 0.08);
+      border: 1px solid rgba(0, 210, 255, 0.25);
+      border-radius: 8px;
+      padding: 6px 8px;
+    }
+
+    .sim-avatar {
+      width: 20px;
+      height: 20px;
+      border-radius: 6px;
+      background: #1e293b;
+      display: grid;
+      place-items: center;
+      font-size: 0.65rem;
+      font-weight: 800;
+      color: #38bdf8;
+      flex-shrink: 0;
+    }
+
+    .sim-user {
+      font-weight: 700;
+      color: #94a3b8;
+      font-size: 0.78rem;
+    }
+
+    .sim-chat-msg.active .sim-user {
+      color: #38bdf8;
+    }
+
+    .sim-cmd-pill {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem;
+      font-weight: 700;
+      background: #000;
+      color: #fff;
+      padding: 2px 7px;
+      border-radius: 4px;
+      border: 1px solid rgba(0, 210, 255, 0.3);
+      margin-left: auto;
+    }
+
+    /* Box 2: HUD Runtime Simulator */
+    .sim-hud-container {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .sim-hud-header {
+      display: flex;
+      justify-content: space-between;
+      color: #c084fc;
+      font-size: 0.68rem;
+      border-bottom: 1px dashed rgba(192, 132, 252, 0.25);
+      padding-bottom: 5px;
+    }
+
+    .sim-hud-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #cbd5e1;
+    }
+
+    .sim-hud-val {
+      color: #fff;
+      font-weight: 700;
+    }
+
+    .sim-progress-track {
+      width: 100%;
+      height: 5px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 3px;
+      overflow: hidden;
+      margin-top: 3px;
+    }
+
+    .sim-progress-bar {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, #c084fc, #f472b6);
+      animation: simProgressAnim 2.2s infinite ease-in-out;
+    }
+
+    @keyframes simProgressAnim {
+      0% { width: 0%; }
+      60% { width: 100%; }
+      100% { width: 100%; }
+    }
+
+    /* Box 3: Growth Sparkline Widget */
+    .sim-growth-container {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .sim-growth-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+
+    .sim-growth-num {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 1.45rem;
+      font-weight: 800;
+      color: #34d399;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      line-height: 1;
+    }
+
+    .sim-growth-label {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: #717791;
+    }
+
+    .sim-sparkline-wrap {
+      width: 100%;
+      height: 32px;
+    }
+
+    .sim-sparkline-wrap svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .sim-growth-chips {
+      display: flex;
+      gap: 6px;
+    }
+
+    .sim-chip {
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 3px 6px;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.05);
+      color: #94a3b8;
+    }
+
+    .sim-chip.gold {
+      background: rgba(255, 184, 0, 0.1);
+      color: #fbbf24;
+      border: 1px solid rgba(255, 184, 0, 0.25);
+    }
+    /* ================= ESTILOS DA SEÇÃO DE PARCEIROS ================= */
+    .partners-section {
+      width: 100%;
+      padding: 3.5rem 0 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+      position: relative;
+      z-index: 5;
+    }
+
+    .partners-label {
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.25em;
+      color: rgba(255, 255, 255, 0.4);
+      text-transform: uppercase;
+      text-align: center;
+    }
+
+    .partners-slider-wrapper {
+      width: 100%;
+      max-width: 1100px;
+      overflow: hidden;
+      position: relative;
+      mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+      -webkit-mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+    }
+
+    .partners-track {
+      display: flex;
+      align-items: center;
+      gap: 4rem;
+      width: max-content;
+      animation: scrollPartners 24s linear infinite;
+    }
+
+    .partners-track:hover {
+      animation-play-state: paused;
+    }
+
+    @keyframes scrollPartners {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    .partner-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+      width: 180px;
+      flex-shrink: 0;
+      transition: transform 0.25s ease;
+      cursor: pointer;
+    }
+
+    .partner-card:hover {
+      transform: translateY(-3px);
+    }
+
+    .partner-logo {
+      height: 36px;
+      max-height: 36px;
+      width: auto;
+      max-width: 130px;
+      object-fit: contain;
+      filter: brightness(0) invert(1) opacity(0.65);
+      transition: all 0.3s ease;
+    }
+
+    .partner-card:hover .partner-logo {
+      filter: brightness(1) invert(0) opacity(1) drop-shadow(0 0 15px rgba(0, 210, 255, 0.4));
+    }
+
+    .partner-logo-obs {
+      width: 36px;
+      height: 36px;
+      color: #ffffff;
+      opacity: 0.85;
+      filter: none !important;
+      transition: all 0.3s ease;
+    }
+
+    .partner-card:hover .partner-logo-obs {
+      opacity: 1;
+      color: #00d2ff;
+      filter: drop-shadow(0 0 15px rgba(0, 210, 255, 0.6)) !important;
+      transform: scale(1.08);
+    }
+
+    .partner-logo-obs-img {
+      height: 38px;
+      max-height: 38px;
+      width: auto;
+      object-fit: contain;
+      filter: drop-shadow(0 0 8px rgba(0, 210, 255, 0.35)) !important;
+      transition: all 0.3s ease;
+    }
+
+    .partner-card:hover .partner-logo-obs-img {
+      filter: drop-shadow(0 0 18px rgba(0, 210, 255, 0.8)) !important;
+      transform: scale(1.1);
+    }
+
+    .partner-desc {
+      font-size: 0.72rem;
+      color: #94a3b8;
+      font-weight: 500;
+      text-align: center;
+      line-height: 1.3;
+      transition: color 0.2s ease;
+    }
+
+    .partner-card:hover .partner-desc {
+      color: #ffffff;
+    }
+
+    /* ================= RESPONSIVE DUAL-MOCKUP (TIKSPY EXACT) ================= */
+    .social-proof-section {
+      width: 100%;
+      padding: 5rem 1.5rem 6rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      box-sizing: border-box;
+    }
+
+    .section-title {
+      font-size: clamp(2.2rem, 5vw, 3.4rem);
+      font-weight: 800;
+      letter-spacing: -1.5px;
+      line-height: 1.15;
+      color: #ffffff;
+      margin-bottom: 1rem;
+    }
+
+    .section-subtitle {
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      color: rgba(255, 255, 255, 0.65);
+      max-width: 750px;
+      margin: 0 auto 3.5rem;
+      line-height: 1.6;
+    }
+
+    .mobile-break {
+      display: none;
+    }
+
+    .mockup-desktop-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      position: relative;
+      overflow: visible;
+    }
+
+    .mockup-mobile-container {
+      display: none;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      position: relative;
+    }
+
+    @media (max-width: 1023px) {
+      .mockup-desktop-container {
+        display: none !important;
+      }
+      .mockup-mobile-container {
+        display: flex !important;
+      }
+      .mobile-break {
+        display: block;
+      }
+    }
+
+    /* ---------- EXACT MACBOOK MOCKUP (DESKTOP) ---------- */
+    .macbook-device {
+      position: relative;
+      width: 800px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    @media (min-width: 1024px) and (max-width: 1200px) {
+      .macbook-device {
+        transform: scale(0.85);
+        transform-origin: top center;
+        margin-bottom: -75px;
+      }
+    }
+
+    .mac-bezel {
+      position: relative;
+      width: 800px;
+      height: 500px;
+      background: #1a1a1a;
+      border-top-left-radius: 16px;
+      border-top-right-radius: 16px;
+      padding: 12px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+      box-sizing: border-box;
+    }
+
+    .mac-camera-notch {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 20px;
+      height: 20px;
+      background: #1a1a1a;
+      border-bottom-left-radius: 9999px;
+      border-bottom-right-radius: 9999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 30;
+    }
+
+    .mac-camera-dot {
+      width: 8px;
+      height: 8px;
+      background: #374151;
+      border-radius: 9999px;
+    }
+
+    .mac-screen-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      border-radius: 8px;
+      overflow: hidden;
+      background: #000;
+    }
+
+    .mac-wallpaper {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .mac-dark-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.2), transparent, rgba(0,0,0,0.3));
+    }
+
+    .mac-menubar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 10;
+      height: 28px;
+      background: rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(24px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      box-sizing: border-box;
+    }
+
+    .mac-menu-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .mac-apple-svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .mac-menu-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #fff;
+      font-size: 12px;
+    }
+
+    .mac-status-svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .mac-battery-wrap {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .mac-battery-svg {
+      width: 20px;
+      height: 12px;
+    }
+
+    .mac-menu-right .bold {
+      font-weight: 600;
+    }
+
+    .mac-center-clock {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      color: #fff;
+      z-index: 10;
+    }
+
+    .mac-clock-time {
+      font-size: 6rem;
+      font-weight: 200;
+      letter-spacing: -0.05em;
+      line-height: 1;
+      text-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    }
+
+    .mac-clock-date {
+      font-size: 1.25rem;
+      font-weight: 500;
+      margin-top: 8px;
+      text-transform: capitalize;
+      opacity: 0.9;
+      text-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+    }
+
+    .mac-notif-area {
+      position: absolute;
+      top: 40px;
+      right: 16px;
+      bottom: 16px;
+      width: 320px;
+      z-index: 10;
+      overflow: hidden;
+    }
+
+    /* macOS Dock */
+    .mac-dock-outer {
+      position: absolute;
+      bottom: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 20;
+    }
+
+    .mac-dock-inner {
+      display: flex;
+      align-items: flex-end;
+      gap: 8px;
+      padding: 8px 12px;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(24px);
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .dock-app-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .dock-app-icon:hover {
+      transform: scale(1.2) translateY(-6px);
+    }
+
+    .dock-app-icon svg {
+      width: 28px;
+      height: 28px;
+      color: #fff;
+    }
+
+    .icon-mail { background: linear-gradient(135deg, #60a5fa, #2563eb); }
+    .icon-pages { background: linear-gradient(135deg, #fb923c, #ea580c); }
+    .icon-chat { background: linear-gradient(135deg, #4ade80, #16a34a); }
+    .icon-music { background: linear-gradient(135deg, #c084fc, #9333ea); }
+    .dock-sep { width: 1px; height: 40px; background: rgba(255,255,255,0.3); margin: 0 4px; }
+    .icon-gear { background: linear-gradient(135deg, #4b5563, #1f2937); }
+
+    .mac-hinge {
+      width: 800px;
+      height: 12px;
+      background: linear-gradient(to bottom, #2a2a2a, #1a1a1a);
+      border-bottom-left-radius: 2px;
+      border-bottom-right-radius: 2px;
+    }
+
+    .mac-base {
+      position: relative;
+      width: 900px;
+      height: 16px;
+      background: linear-gradient(to bottom, #c0c0c0, #a0a0a0);
+      border-bottom-left-radius: 12px;
+      border-bottom-right-radius: 12px;
+      box-shadow: 0 10px 15px -3px rgba(0,0,0,0.4);
+    }
+
+    .mac-trackpad-notch {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 4px;
+      background: #888;
+      border-bottom-left-radius: 2px;
+      border-bottom-right-radius: 2px;
+    }
+
+    .mac-reflection-glow {
+      position: absolute;
+      inset: -32px;
+      background: linear-gradient(to bottom, rgba(255,255,255,0.05), transparent);
+      border-radius: 24px;
+      z-index: -10;
+      filter: blur(32px);
+    }
+
+    /* ---------- EXACT PHONE MOCKUP (MOBILE) ---------- */
+    .phone-device {
+      position: relative;
+      margin: 0 auto;
+      transform-origin: top center;
+    }
+
+    @media (max-width: 360px) {
+      .phone-device {
+        transform: scale(0.85);
+        margin-bottom: -90px;
+      }
+    }
+
+    @media (min-width: 361px) and (max-width: 400px) {
+      .phone-device {
+        transform: scale(0.92);
+        margin-bottom: -50px;
+      }
+    }
+
+    .phone-frame {
+      position: relative;
+      width: 320px;
+      height: 660px;
+      background: #000;
+      border-radius: 50px;
+      padding: 12px;
+      box-sizing: border-box;
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+    }
+
+    .phone-border-bezel {
+      position: absolute;
+      inset: 0;
+      border-radius: 50px;
+      border: 3px solid rgba(55, 65, 81, 0.5);
+      pointer-events: none;
+      z-index: 20;
+    }
+
+    .phone-screen-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      border-radius: 40px;
+      overflow: hidden;
+      background: #000;
+    }
+
+    .phone-wallpaper {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .phone-dark-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.3), transparent, rgba(0,0,0,0.4));
+    }
+
+    .phone-status-bar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 10;
+      padding: 12px 24px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .phone-status-icons {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .phone-svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    .phone-dynamic-island {
+      position: absolute;
+      top: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 28px;
+      background: #000;
+      border-radius: 9999px;
+      z-index: 20;
+    }
+
+    .phone-lock-clock {
+      position: absolute;
+      top: 80px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      color: #fff;
+      z-index: 10;
+    }
+
+    .phone-clock-digits {
+      font-size: 60px;
+      font-weight: 300;
+      letter-spacing: -0.05em;
+      line-height: 1;
+    }
+
+    .phone-clock-text {
+      font-size: 16px;
+      font-weight: 500;
+      margin-top: 4px;
+      text-transform: capitalize;
+      opacity: 0.9;
+    }
+
+    .phone-notif-area {
+      position: absolute;
+      inset: 0;
+      padding-top: 160px;
+      z-index: 10;
+      overflow: hidden;
+    }
+
+    .phone-home-indicator {
+      position: absolute;
+      bottom: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 128px;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.5);
+      border-radius: 9999px;
+      z-index: 20;
+    }
+
+    .phone-reflection-glow {
+      position: absolute;
+      inset: -16px;
+      background: linear-gradient(to bottom, rgba(255,255,255,0.05), transparent);
+      border-radius: 60px;
+      z-index: -10;
+      filter: blur(24px);
+    }
+
+    /* ---------- LIQUID GLASS NOTIFICATIONS (EXACT TIKSPY) ---------- */
+    .falling-notifs-wrap {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .falling-notifs-wrap.desktop {
+      justify-content: flex-start;
+      align-items: flex-end;
+      padding-top: 12px;
+      padding-right: 12px;
+      gap: 8px;
+    }
+
+    .falling-notifs-wrap.mobile {
+      justify-content: flex-end;
+      align-items: center;
+      padding-bottom: 80px;
+      padding-left: 16px;
+      padding-right: 16px;
+      gap: 12px;
+    }
+
+    .liquid-glass-card {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      box-shadow: inset 1px 1px 1px 0 rgba(255, 255, 255, 0.3), inset -1px -1px 1px 0 rgba(255, 255, 255, 0.3), 0 4px 12px rgba(0, 0, 0, 0.15);
+      transition: all 0.3s ease;
+    }
+
+    .liquid-glass-card.anim-desktop {
+      animation: slideInDesktop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .liquid-glass-card.anim-mobile {
+      animation: slideInMobile 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes slideInDesktop {
+      from { opacity: 0; transform: translateX(40px) scale(0.85); }
+      to { opacity: 1; transform: translateX(0) scale(1); }
+    }
+
+    @keyframes slideInMobile {
+      from { opacity: 0; transform: translateY(40px) scale(0.85); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .desktop .liquid-glass-card {
+      max-width: 220px;
+      padding: 8px;
+      border-radius: 12px;
+    }
+
+    .mobile .liquid-glass-card {
+      max-width: 280px;
+      padding: 12px;
+      border-radius: 16px;
+    }
+
+    .notif-inner-row {
+      display: flex;
+      align-items: center;
+      text-align: left;
+    }
+
+    .desktop .notif-inner-row { gap: 8px; }
+    .mobile .notif-inner-row { gap: 12px; }
+
+    .notif-app-img {
+      flex-shrink: 0;
+      object-fit: cover;
+    }
+
+    .desktop .notif-app-img { width: 24px; height: 24px; border-radius: 6px; }
+    .mobile .notif-app-img { width: 36px; height: 36px; border-radius: 8px; }
+
+    .notif-content-col {
+      flex: 1;
+      overflow: hidden;
+      min-width: 0;
+    }
+
+    .notif-heading {
+      font-weight: 700;
+      color: #ffffff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .desktop .notif-heading { font-size: 11px; }
+    .mobile .notif-heading { font-size: 14px; }
+
+    .notif-body-text {
+      color: #e5e7eb;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .desktop .notif-body-text { font-size: 10px; }
+    .mobile .notif-body-text { font-size: 12px; }
+
+    .notif-time-badge {
+      color: #9ca3af;
+      flex-shrink: 0;
+    }
+
+    .desktop .notif-time-badge { font-size: 9px; }
+    .mobile .notif-time-badge { font-size: 12px; }
+  </style>
+
+  <!-- Script Dinâmico TikSpy (Relógio ao Vivo + Notificações de Presentes da Live em Cascata) -->
+  <script>
+    const liveGifts = [
+      { heading: 'Presente Recebido 🦁', desc: 'Leão do TikTok • +29.999 Moedas 🪙' },
+      { heading: 'Presente Recebido 🪐', desc: 'Universo TikTok • +44.999 Moedas 🪙' },
+      { heading: 'Presente Recebido 🎁', desc: 'Galáxia • +1.000 Moedas 🪙' },
+      { heading: 'Presente Recebido 🚀', desc: 'Foguete Espacial • +20.000 Moedas 🪙' },
+      { heading: 'Presente Recebido 🌹', desc: 'Rosa x1.000 • +1.000 Moedas 🪙' },
+      { heading: 'Comando do Chat ⚔️', desc: 'Spawnou Boss • +500 Moedas 🪙' },
+      { heading: 'Presente Recebido 🐋', desc: 'Baleia Mergulhadora • +2.150 Moedas 🪙' },
+      { heading: 'Presente Recebido 🦅', desc: 'Falcão Voador • +10.999 Moedas 🪙' },
+      { heading: 'Novo Dono do Topo 👑', desc: 'Assumiu o 1º Lugar da Live' },
+      { heading: 'Interação de Live ⚡', desc: 'Ativou Dança do Personagem' }
+    ];
+
+    const notifIcon = 'notif-icon.png';
+    const timeLabels = ['agora', '1m', '2m', '3m'];
+
+    function getRandomGift() {
+      return liveGifts[Math.floor(Math.random() * liveGifts.length)];
+    }
+
+    // Atualiza relógio e datas
+    function updateMockupClocks() {
+      const now = new Date();
+      const timeStr = now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+      const dateShort = now.toLocaleDateString('pt-BR', { weekday: 'short', day: 'numeric', month: 'short' });
+      const dateLong = now.toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' });
+
+      // Desktop MacBook
+      const macTime = document.getElementById('macCurrentTime');
+      const macDate = document.getElementById('macCurrentDate');
+      const macDTime = document.getElementById('macDeskTime');
+      const macDDate = document.getElementById('macDeskDate');
+      if (macTime) macTime.textContent = timeStr;
+      if (macDate) macDate.textContent = dateShort;
+      if (macDTime) macDTime.textContent = timeStr;
+      if (macDDate) macDDate.textContent = dateShort;
+
+      // Mobile Phone
+      const pTime = document.getElementById('phoneTime');
+      const pLockTime = document.getElementById('phoneLockTime');
+      const pLockDate = document.getElementById('phoneLockDate');
+      if (pTime) pTime.textContent = timeStr;
+      if (pLockTime) pLockTime.textContent = timeStr;
+      if (pLockDate) pLockDate.textContent = dateLong;
+    }
+
+    setInterval(updateMockupClocks, 1000);
+    updateMockupClocks();
+
+    function createCard(gift, timeLabel, isMobile, animate) {
+      const card = document.createElement('div');
+      card.className = `liquid-glass-card ${animate ? (isMobile ? 'anim-mobile' : 'anim-desktop') : ''}`;
+      card.innerHTML = `
+        <div class="notif-inner-row">
+          <img src="${notifIcon}" alt="Raven Live" class="notif-app-img" />
+          <div class="notif-content-col">
+            <p class="notif-heading">${gift.heading}</p>
+            <p class="notif-body-text">${gift.desc}</p>
+          </div>
+          <span class="notif-time-badge">${timeLabel}</span>
+        </div>
+      `;
+      return card;
+    }
+
+    function pushDesktop() {
+      const deskWrap = document.getElementById('desktopNotifs');
+      if (!deskWrap) return;
+      const card = createCard(getRandomGift(), 'agora', false, true);
+      deskWrap.prepend(card);
+      if (deskWrap.children.length > 4) {
+        deskWrap.removeChild(deskWrap.lastChild);
+      }
+      const badges = deskWrap.querySelectorAll('.notif-time-badge');
+      badges.forEach((b, idx) => {
+        b.textContent = timeLabels[idx] || (idx + 1) + 'm';
+      });
+    }
+
+    function pushMobile() {
+      const mobWrap = document.getElementById('mobileNotifs');
+      if (!mobWrap) return;
+      const card = createCard(getRandomGift(), 'agora', true, true);
+      mobWrap.appendChild(card);
+      if (mobWrap.children.length > 4) {
+        mobWrap.removeChild(mobWrap.firstChild);
+      }
+      const badges = mobWrap.querySelectorAll('.notif-time-badge');
+      const len = badges.length;
+      badges.forEach((b, idx) => {
+        b.textContent = timeLabels[len - 1 - idx] || (len - idx) + 'm';
+      });
+    }
+
+    // Inicializa com 4 notificações de presentes
+    function initNotifs() {
+      const deskWrap = document.getElementById('desktopNotifs');
+      const mobWrap = document.getElementById('mobileNotifs');
+      if (deskWrap) {
+        deskWrap.innerHTML = '';
+        for (let i = 0; i < 4; i++) {
+          const card = createCard(liveGifts[i % liveGifts.length], timeLabels[i], false, false);
+          deskWrap.appendChild(card);
+        }
+      }
+      if (mobWrap) {
+        mobWrap.innerHTML = '';
+        for (let i = 3; i >= 0; i--) {
+          const card = createCard(liveGifts[i % liveGifts.length], timeLabels[i], true, false);
+          mobWrap.appendChild(card);
+        }
+      }
+    }
+
+    initNotifs();
+
+    // Adiciona um novo presente de live a cada 2.5s
+    setInterval(() => {
+      pushDesktop();
+      pushMobile();
+    }, 2500);
+
+    // FAQ Accordion Interativo
+    document.querySelectorAll('.faq-question').forEach(button => {
+      button.addEventListener('click', () => {
+        const item = button.closest('.faq-item');
+        const isActive = item.classList.contains('active');
+        
+        // Fecha outros itens para comportamento accordion limpo
+        document.querySelectorAll('.faq-item').forEach(otherItem => {
+          if (otherItem !== item) {
+            otherItem.classList.remove('active');
+            const otherBtn = otherItem.querySelector('.faq-question');
+            if (otherBtn) otherBtn.setAttribute('aria-expanded', 'false');
+          }
+        });
+
+        // Alterna o item atual
+        if (isActive) {
+          item.classList.remove('active');
+          button.setAttribute('aria-expanded', 'false');
+        } else {
+          item.classList.add('active');
+          button.setAttribute('aria-expanded', 'true');
+        }
+      });
+    });
+
+    // ================= SELETOR DE IDIOMA E INTERNACIONALIZAÇÃO (PT / EN) =================
+    const langSwitcherWrap = document.getElementById('langSwitcher');
+    const langToggleBtn = document.getElementById('langToggleBtn');
+    const currentLangLabel = document.getElementById('currentLangLabel');
+    const langOptions = document.querySelectorAll('.lang-option');
+
+    // Abre/fecha dropdown
+    if (langToggleBtn && langSwitcherWrap) {
+      langToggleBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        langSwitcherWrap.classList.toggle('open');
+      });
+
+      document.addEventListener('click', (e) => {
+        if (!langSwitcherWrap.contains(e.target)) {
+          langSwitcherWrap.classList.remove('open');
+        }
+      });
+    }
+
+    const translations = {
+      pt: {
+        code: 'PT',
+        nav: ['Jogos', 'Como Funciona', 'Recursos', 'Planos', 'Dúvidas'],
+        navCta: 'Entrar na comunidade',
+        heroBadge: 'Comunidade ativa com mais de 2.000 streamers',
+        heroTitle: 'Sua live de TikTok jogando <br><span class="highlight">sozinha</span>, com o chat dentro do jogo.',
+        heroSubtitle: 'Jogos interativos com modo AFK e anti-inatividade. O chat e os presentes controlam a partida em tempo real, mantendo a transmissão viva e faturando mesmo quando você não está no teclado.',
+        heroCta1: 'Entrar na comunidade',
+        heroCta2: 'Baixar o Launcher',
+        heroCta3: 'Ver Jogos Disponíveis',
+        partnersLabel: 'TECNOLOGIAS E PLATAFORMAS INTEGRADAS',
+        howItWorksBadge: 'TUTORIAL RÁPIDO EM 3 PASSOS',
+        howItWorksTitle: 'Como funciona',
+        howItWorksSubtitle: 'Três etapas entre abrir a transmissão e ver o chat participando da partida.',
+        gamesBadge: 'EXPERIÊNCIAS INTERATIVAS',
+        gamesTitle: 'Catálogo de jogos',
+        gamesSubtitle: 'Experiências prontas para transmissão, construídas especificamente para o formato de live interativa. O catálogo é ampliado continuamente.',
+        bannerHeading: 'Novos títulos em produção',
+        bannerSubtext: 'O catálogo cresce de forma contínua. Lançamentos são anunciados primeiro dentro do servidor.',
+        bannerCta: 'Acompanhar no Servidor',
+        testimonialsBadge: 'RESULTADOS REAIS DE QUEM TRANSMITE',
+        testimonialsTitle: 'Quem usa, domina o algoritmo',
+        testimonialsSubtitle: 'Veja o que streamers e criadores de conteúdo ao vivo dizem sobre a retenção e monetização com nossos jogos interativos.',
+        faqTitle: 'Perguntas frequentes',
+        faqSubtitle: 'O que os criadores costumam perguntar antes de entrar.'
+      },
+      en: {
+        code: 'EN',
+        nav: ['Games', 'How it Works', 'Features', 'Plans', 'FAQ'],
+        navCta: 'Join the Community',
+        heroBadge: 'Active community with over 2,000 streamers',
+        heroTitle: 'Your TikTok Live playing <br><span class="highlight">on autopilot</span>, with chat inside the game.',
+        heroSubtitle: 'Interactive games with AFK mode and anti-idling. Chat comments and gifts control the match in real time, keeping your stream active and monetizing even when you are away from the keyboard.',
+        heroCta1: 'Join the Community',
+        heroCta2: 'Download Launcher',
+        heroCta3: 'Browse Games',
+        partnersLabel: 'INTEGRATED TECHNOLOGIES & PLATFORMS',
+        howItWorksBadge: 'QUICK 3-STEP TUTORIAL',
+        howItWorksTitle: 'How it works',
+        howItWorksSubtitle: 'Three simple steps between starting your live and seeing your chat take over the game.',
+        gamesBadge: 'INTERACTIVE EXPERIENCES',
+        gamesTitle: 'Game Catalog',
+        gamesSubtitle: 'Ready-to-stream experiences built specifically for the interactive live format. The catalog is continuously expanded.',
+        bannerHeading: 'New titles in production',
+        bannerSubtext: 'The catalog grows continuously. New releases are announced first inside the Discord server.',
+        bannerCta: 'Join our Server',
+        testimonialsBadge: 'REAL STREAMER RESULTS',
+        testimonialsTitle: 'Whoever uses it, dominates the algorithm',
+        testimonialsSubtitle: 'See what streamers and live creators are saying about retention and monetization with our interactive games.',
+        faqTitle: 'Frequently asked questions',
+        faqSubtitle: 'What creators usually ask before getting started.'
+      }
+    };
+
+    function applyLanguage(lang) {
+      const data = translations[lang] || translations.pt;
+      if (currentLangLabel) currentLangLabel.textContent = data.code;
+
+      // Nav
+      const navLinks = document.querySelectorAll('.nav-links a');
+      if (navLinks && navLinks.length >= 5) {
+        navLinks.forEach((link, idx) => {
+          if (data.nav[idx]) link.textContent = data.nav[idx];
+        });
+      }
+      const navCta = document.querySelector('.btn-nav');
+      if (navCta) navCta.textContent = data.navCta;
+
+      // Hero
+      const heroBadge = document.querySelector('.hero .badge');
+      if (heroBadge) heroBadge.innerHTML = `<span class="status-dot"></span>${data.heroBadge}`;
+
+      const heroTitle = document.querySelector('.hero-title');
+      if (heroTitle) heroTitle.innerHTML = data.heroTitle;
+
+      const heroSubtitle = document.querySelector('.hero-subtitle');
+      if (heroSubtitle) heroSubtitle.textContent = data.heroSubtitle;
+
+      const heroCta1 = document.querySelector('.cta-group .btn-primary');
+      if (heroCta1) {
+        heroCta1.innerHTML = `${data.heroCta1} <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>`;
+      }
+
+      const heroCta2 = document.querySelector('.cta-group .btn-launcher');
+      if (heroCta2) {
+        heroCta2.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg> ${data.heroCta2}`;
+      }
+
+      const heroCta3 = document.querySelector('.cta-group .btn-secondary');
+      if (heroCta3) {
+        heroCta3.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="12" x2="10" y2="12"></line><line x1="8" y1="10" x2="8" y2="14"></line><line x1="15" y1="13" x2="15.01" y2="13"></line><line x1="18" y1="11" x2="18.01" y2="11"></line><rect x="2" y="6" width="20" height="12" rx="2"></rect></svg> ${data.heroCta3}`;
+      }
+
+      // Partners
+      const partnersLabel = document.querySelector('.partners-label');
+      if (partnersLabel) partnersLabel.textContent = data.partnersLabel;
+
+      // Como Funciona
+      const hwSection = document.getElementById('como-funciona');
+      if (hwSection) {
+        const hwBadge = hwSection.querySelector('.badge');
+        if (hwBadge) hwBadge.innerHTML = `<span class="status-dot"></span>${data.howItWorksBadge}`;
+        const hwTitle = hwSection.querySelector('.section-title');
+        if (hwTitle) hwTitle.textContent = data.howItWorksTitle;
+        const hwSub = hwSection.querySelector('.section-subtitle');
+        if (hwSub) hwSub.textContent = data.howItWorksSubtitle;
+      }
+
+      // Jogos
+      const gamesSection = document.getElementById('jogos');
+      if (gamesSection) {
+        const gBadge = gamesSection.querySelector('.badge');
+        if (gBadge) gBadge.innerHTML = `<span class="status-dot"></span>${data.gamesBadge}`;
+        const gTitle = gamesSection.querySelector('.section-title');
+        if (gTitle) gTitle.textContent = data.gamesTitle;
+        const gSub = gamesSection.querySelector('.section-subtitle');
+        if (gSub) gSub.textContent = data.gamesSubtitle;
+
+        const bHeading = gamesSection.querySelector('.banner-heading');
+        if (bHeading) bHeading.textContent = data.bannerHeading;
+        const bSub = gamesSection.querySelector('.banner-subtext');
+        if (bSub) bSub.textContent = data.bannerSubtext;
+        const bCta = gamesSection.querySelector('.btn-discord-server span');
+        if (bCta) bCta.textContent = data.bannerCta;
+      }
+
+      // Prova Social
+      const testSection = document.getElementById('depoimentos');
+      if (testSection) {
+        const tBadge = testSection.querySelector('.badge');
+        if (tBadge) tBadge.innerHTML = `<span class="status-dot"></span>${data.testimonialsBadge}`;
+        const tTitle = testSection.querySelector('.section-title');
+        if (tTitle) tTitle.textContent = data.testimonialsTitle;
+        const tSub = testSection.querySelector('.section-subtitle');
+        if (tSub) tSub.textContent = data.testimonialsSubtitle;
+      }
+
+      // FAQ
+      const faqSection = document.getElementById('faq');
+      if (faqSection) {
+        const fTitle = faqSection.querySelector('.faq-title');
+        if (fTitle) fTitle.textContent = data.faqTitle;
+        const fSub = faqSection.querySelector('.faq-subtitle');
+        if (fSub) fSub.textContent = data.faqSubtitle;
+      }
+
+      // Active state in dropdown
+      langOptions.forEach(opt => {
+        if (opt.getAttribute('data-lang') === lang) {
+          opt.classList.add('active');
+        } else {
+          opt.classList.remove('active');
+        }
+      });
+
+      localStorage.setItem('site_lang_pref', lang);
+    }
+
+    langOptions.forEach(opt => {
+      opt.addEventListener('click', () => {
+        const selectedLang = opt.getAttribute('data-lang');
+        applyLanguage(selectedLang);
+        if (langSwitcherWrap) langSwitcherWrap.classList.remove('open');
+      });
+    });
+
+    // Restaura preferência salva
+    const savedLang = localStorage.getItem('site_lang_pref') || 'pt';
+    if (savedLang !== 'pt') {
+      applyLanguage(savedLang);
+    }
+
+    // Header Fixo com Efeito Glass ao Rolar
+    const stickyHeaderEl = document.getElementById('stickyHeader');
+    if (stickyHeaderEl) {
+      const handleScroll = () => {
+        if (window.scrollY > 20) {
+          stickyHeaderEl.classList.add('scrolled');
+        } else {
+          stickyHeaderEl.classList.remove('scrolled');
+        }
+      };
+      window.addEventListener('scroll', handleScroll, { passive: true });
+      handleScroll();
+    }
+
+    // Botão Voltar ao Topo (Footer)
+    const backToTopBtn = document.getElementById('backToTopBtn');
+    if (backToTopBtn) {
+      backToTopBtn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
+  </script>
+
+</body>
+</html>

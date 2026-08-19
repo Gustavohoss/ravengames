@@ -1,0 +1,880 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Termos de Uso & Política Anti-Reembolso | Raven Games</title>
+  <meta name="description" content="Termos de Uso, Condições Gerais de Serviços e Política Estrita de Não-Reembolso da plataforma Raven Games para criadores de conteúdo e streamers interativos.">
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="favicon.png">
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+
+  <!-- Fontes Google Inter & Space Grotesk -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-dark: #07090e;
+      --bg-card: rgba(18, 24, 38, 0.7);
+      --border-card: rgba(255, 255, 255, 0.08);
+      --border-glow: rgba(0, 210, 255, 0.3);
+      --primary-cyan: #00d2ff;
+      --primary-purple: #9d4edd;
+      --alert-red: #ef4444;
+      --alert-amber: #f59e0b;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-heading: 'Space Grotesk', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: var(--font-body);
+      overflow-x: clip;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding-top: 75px;
+      line-height: 1.7;
+    }
+
+    /* Aurora Glow de Fundo */
+    .bg-aurora {
+      position: fixed;
+      top: -20vh;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 90vw;
+      height: 70vh;
+      background: radial-gradient(circle, rgba(0, 210, 255, 0.12) 0%, rgba(157, 78, 221, 0.08) 50%, transparent 80%);
+      filter: blur(100px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Grid Tecnológico */
+    .bg-grid {
+      position: fixed;
+      inset: 0;
+      background-image: 
+        linear-gradient(to right, rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+      background-size: 50px 50px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ================= HEADER FIXO ================= */
+    .header-wrapper {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 99999;
+      background: rgba(7, 9, 14, 0.75);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      transition: all 0.3s ease;
+    }
+
+    .header-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      height: 75px;
+      padding: 0 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+    }
+
+    .brand-logo img {
+      height: 42px;
+      width: auto;
+      object-fit: contain;
+    }
+
+    .header-nav {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .btn-back-home {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #94a3b8;
+      text-decoration: none;
+      font-size: 0.92rem;
+      font-weight: 600;
+      transition: color 0.2s ease;
+    }
+
+    .btn-back-home:hover {
+      color: var(--primary-cyan);
+    }
+
+    .btn-community {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.6rem 1.4rem;
+      border-radius: 999px;
+      background: #ffffff;
+      color: #07090e;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 700;
+      transition: all 0.25s ease;
+      box-shadow: 0 4px 20px rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-community:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 25px rgba(0, 210, 255, 0.4);
+      background: #f0fdf4;
+    }
+
+    /* ================= CONTEÚDO PRINCIPAL ================= */
+    .terms-main {
+      position: relative;
+      z-index: 10;
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 4rem 1.5rem 6rem;
+      width: 100%;
+    }
+
+    .terms-hero {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    .legal-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.4rem 1rem;
+      border-radius: 999px;
+      background: rgba(0, 210, 255, 0.1);
+      border: 1px solid rgba(0, 210, 255, 0.3);
+      color: var(--primary-cyan);
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 1.25rem;
+    }
+
+    .terms-title {
+      font-family: var(--font-heading);
+      font-size: clamp(2.4rem, 5vw, 3.8rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      color: #ffffff;
+      margin-bottom: 1rem;
+    }
+
+    .terms-subtitle {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    /* Layout com Sidebar e Corpo de Texto */
+    .terms-layout {
+      display: grid;
+      grid-template-columns: 290px 1fr;
+      gap: 3.5rem;
+      align-items: start;
+    }
+
+    /* Sidebar Índice Fixo */
+    .terms-sidebar {
+      position: sticky;
+      top: 105px;
+      background: rgba(18, 24, 38, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 1.5rem;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    .sidebar-title {
+      font-size: 0.85rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--primary-cyan);
+      margin-bottom: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .sidebar-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+      list-style: none;
+    }
+
+    .sidebar-link {
+      color: #94a3b8;
+      text-decoration: none;
+      font-size: 0.86rem;
+      font-weight: 500;
+      padding: 0.45rem 0.6rem;
+      border-radius: 8px;
+      transition: all 0.2s ease;
+      display: block;
+      line-height: 1.4;
+    }
+
+    .sidebar-link:hover {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.06);
+      padding-left: 0.85rem;
+    }
+
+    .sidebar-link.highlight-alert {
+      color: #f87171;
+      font-weight: 700;
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.25);
+    }
+
+    .sidebar-link.highlight-alert:hover {
+      background: rgba(239, 68, 68, 0.2);
+      color: #fca5a5;
+    }
+
+    /* Artigo / Seções dos Termos */
+    .terms-body {
+      display: flex;
+      flex-direction: column;
+      gap: 3rem;
+    }
+
+    .terms-card {
+      background: rgba(18, 24, 38, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 20px;
+      padding: 2.25rem 2.5rem;
+      backdrop-filter: blur(12px);
+      scroll-margin-top: 105px;
+      transition: border-color 0.3s ease;
+    }
+
+    .terms-card:hover {
+      border-color: rgba(0, 210, 255, 0.25);
+    }
+
+    .terms-card h2 {
+      font-family: var(--font-heading);
+      font-size: 1.45rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .section-number {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: rgba(0, 210, 255, 0.15);
+      color: var(--primary-cyan);
+      font-size: 0.9rem;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+
+    .terms-card p {
+      font-size: 0.98rem;
+      color: #cbd5e1;
+      margin-bottom: 1.2rem;
+      line-height: 1.75;
+    }
+
+    .terms-card p:last-child {
+      margin-bottom: 0;
+    }
+
+    .terms-card ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin: 1.2rem 0;
+      padding-left: 0.5rem;
+    }
+
+    .terms-card li {
+      position: relative;
+      padding-left: 1.75rem;
+      font-size: 0.95rem;
+      color: #cbd5e1;
+    }
+
+    .terms-card li::before {
+      content: '✦';
+      position: absolute;
+      left: 0;
+      color: var(--primary-cyan);
+      font-size: 0.8rem;
+      top: 2px;
+    }
+
+    .highlight-box {
+      background: rgba(0, 210, 255, 0.06);
+      border-left: 3px solid var(--primary-cyan);
+      padding: 1.25rem 1.5rem;
+      border-radius: 0 12px 12px 0;
+      margin: 1.5rem 0;
+    }
+
+    .highlight-box p {
+      color: #e2e8f0;
+      font-size: 0.92rem;
+      margin: 0;
+    }
+
+    /* ================= CARD ENORME ANTI-REEMBOLSO ================= */
+    .terms-card-alert {
+      background: linear-gradient(180deg, rgba(38, 16, 22, 0.7) 0%, rgba(18, 24, 38, 0.8) 100%);
+      border: 2px solid rgba(239, 68, 68, 0.45);
+      border-radius: 24px;
+      padding: 3rem 2.8rem;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 20px 60px rgba(239, 68, 68, 0.18), 0 0 35px rgba(239, 68, 68, 0.12);
+      scroll-margin-top: 105px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .terms-card-alert::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #ef4444 0%, #f59e0b 50%, #ef4444 100%);
+    }
+
+    .alert-header-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.5rem 1.2rem;
+      border-radius: 999px;
+      background: rgba(239, 68, 68, 0.2);
+      border: 1px solid rgba(239, 68, 68, 0.5);
+      color: #fca5a5;
+      font-size: 0.84rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 1.5rem;
+    }
+
+    .terms-card-alert h2 {
+      font-family: var(--font-heading);
+      font-size: clamp(1.6rem, 2.5vw, 2.1rem);
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 1.5rem;
+      line-height: 1.25;
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+    }
+
+    .alert-section-number {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: #ef4444;
+      color: #ffffff;
+      font-size: 1.1rem;
+      font-weight: 900;
+      flex-shrink: 0;
+      box-shadow: 0 0 15px rgba(239, 68, 68, 0.6);
+    }
+
+    .alert-main-banner {
+      background: rgba(239, 68, 68, 0.12);
+      border: 1px solid rgba(239, 68, 68, 0.35);
+      border-radius: 14px;
+      padding: 1.5rem 1.75rem;
+      margin: 1.5rem 0 2rem;
+    }
+
+    .alert-main-banner h3 {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #fecaca;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .alert-main-banner p {
+      font-size: 0.95rem;
+      color: #f87171;
+      line-height: 1.6;
+      margin: 0;
+      font-weight: 600;
+    }
+
+    .anti-refund-clause {
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 1.6rem 1.8rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .anti-refund-clause h4 {
+      font-size: 1.08rem;
+      font-weight: 700;
+      color: #f8fafc;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .anti-refund-clause h4 span {
+      color: #f59e0b;
+    }
+
+    .anti-refund-clause p {
+      font-size: 0.94rem;
+      color: #cbd5e1;
+      line-height: 1.7;
+      margin-bottom: 0.75rem;
+    }
+
+    .anti-refund-clause ul {
+      margin: 0.75rem 0;
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .anti-refund-clause li {
+      position: relative;
+      padding-left: 1.75rem;
+      font-size: 0.92rem;
+      color: #e2e8f0;
+    }
+
+    .anti-refund-clause li::before {
+      content: '✕';
+      position: absolute;
+      left: 0;
+      color: #ef4444;
+      font-weight: 900;
+      font-size: 0.85rem;
+      top: 1px;
+    }
+
+    /* ================= FOOTER ================= */
+    .terms-footer {
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      background: #04060a;
+      padding: 2.5rem 1.5rem;
+      margin-top: auto;
+      position: relative;
+      z-index: 10;
+    }
+
+    .footer-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
+
+    .footer-copy {
+      font-size: 0.85rem;
+      color: #64748b;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .footer-links a {
+      color: #94a3b8;
+      font-size: 0.88rem;
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .footer-links a:hover {
+      color: var(--primary-cyan);
+    }
+
+    /* ================= RESPONSIVIDADE ================= */
+    @media (max-width: 900px) {
+      .terms-layout {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+      .terms-sidebar {
+        display: none;
+      }
+      .terms-card, .terms-card-alert {
+        padding: 1.75rem 1.5rem;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .btn-community {
+        display: none;
+      }
+      .terms-main {
+        padding: 2.5rem 1.25rem 4rem;
+      }
+      .footer-inner {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Aurora & Grid Backgrounds -->
+  <div class="bg-aurora"></div>
+  <div class="bg-grid"></div>
+
+  <!-- Header Fixo -->
+  <header class="header-wrapper">
+    <div class="header-container">
+      <a href="index.html" class="brand-logo">
+        <img src="logo.png" alt="Raven Games Logo">
+      </a>
+
+      <div class="header-nav">
+        <a href="index.html" class="btn-back-home">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+          <span>Voltar ao Início</span>
+        </a>
+        <a href="index.html#comunidade" class="btn-community">
+          <span>Entrar na comunidade</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Conteúdo Principal -->
+  <main class="terms-main">
+    
+    <!-- Hero Header -->
+    <div class="terms-hero">
+      <div class="legal-badge">
+        <span>✦ Documento Oficial & Jurídico</span>
+      </div>
+      <h1 class="terms-title">Termos de Uso e Condições Gerais</h1>
+      <p class="terms-subtitle">
+        Estes termos regem o acesso, a licença do Launcher, os jogos interativos e a <strong>política estrita de não-reembolso</strong> para os produtos digitais da <strong>Raven Games</strong>.
+      </p>
+    </div>
+
+    <!-- Layout com Sidebar & Artigos -->
+    <div class="terms-layout">
+      
+      <!-- Sidebar de Navegação Rápida -->
+      <aside class="terms-sidebar">
+        <div class="sidebar-title">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 6h16M4 12h16M4 18h7"/></svg>
+          Índice de Tópicos
+        </div>
+        <ul class="sidebar-nav">
+          <li><a href="#aceitacao" class="sidebar-link">1. Aceitação dos Termos</a></li>
+          <li><a href="#servicos" class="sidebar-link">2. Descrição dos Serviços</a></li>
+          <li><a href="#licenca" class="sidebar-link">3. Licença de Uso & IP</a></li>
+          <li><a href="#integracao" class="sidebar-link">4. Integração com TikTok Live</a></li>
+          <li><a href="#monetizacao" class="sidebar-link">5. Presentes & Monetização</a></li>
+          <li><a href="#conduta" class="sidebar-link">6. Conduta do Usuário</a></li>
+          <li><a href="#afk" class="sidebar-link">7. Modo AFK & Automação</a></li>
+          <li><a href="#planos" class="sidebar-link">8. Assinaturas & Acessos</a></li>
+          <li><a href="#anti-reembolso" class="sidebar-link highlight-alert">⚠ 9. POLÍTICA ANTI-REEMBOLSO</a></li>
+          <li><a href="#responsabilidade" class="sidebar-link">10. Limitação de Responsabilidade</a></li>
+          <li><a href="#privacidade" class="sidebar-link">11. Privacidade & LGPD</a></li>
+          <li><a href="#contato" class="sidebar-link">12. Suporte & Contato</a></li>
+        </ul>
+      </aside>
+
+      <!-- Corpo dos Artigos -->
+      <article class="terms-body">
+        
+        <!-- 1. Aceitação -->
+        <section class="terms-card" id="aceitacao">
+          <h2><span class="section-number">1</span> Aceitação dos Termos</h2>
+          <p>
+            Ao criar uma conta, fazer o download do Launcher, instalar os pacotes de jogos ou utilizar qualquer recurso fornecido pela <strong>Raven Games</strong>, você confirma ter lido, compreendido e concordado integralmente com estes Termos de Uso e com a nossa Política Estrita de Não-Reembolso.
+          </p>
+          <p>
+            Caso você não concorde com qualquer cláusula deste documento, você deve descontinuar imediatamente a aquisição e o uso de todas as nossas ferramentas e softwares.
+          </p>
+        </section>
+
+        <!-- 2. Descrição dos Serviços -->
+        <section class="terms-card" id="servicos">
+          <h2><span class="section-number">2</span> Descrição dos Serviços & Launcher</h2>
+          <p>
+            A <strong>Raven Games</strong> disponibiliza uma suíte de jogos interativos executados localmente em 60 FPS através de um Launcher proprietário compatível com Windows. Os jogos são desenvolvidos para se conectar a transmissões ao vivo (lives de plataformas como TikTok), permitindo que os espectadores interajam em tempo real por meio de comandos de texto, curtidas, presentes virtuais e compartilhamentos.
+          </p>
+          <div class="highlight-box">
+            <p><strong>Nota importante:</strong> A Raven Games fornece o software de jogo e overlay interativo. Você é o único responsável pela realização, conteúdo, conformidade e transmissão da sua live.</p>
+          </div>
+        </section>
+
+        <!-- 3. Licença de Uso & IP -->
+        <section class="terms-card" id="licenca">
+          <h2><span class="section-number">3</span> Licença de Uso & Propriedade Intelectual</h2>
+          <p>
+            Concedemos a você uma licença pessoal, não exclusiva, intransferível, revogável e limitada para instalar e executar o Launcher e os jogos licenciados exclusivamente para fins de transmissão de suas próprias lives.
+          </p>
+          <ul>
+            <li>É expressamente proibido fazer engenharia reversa, descompilar, modificar ou redistribuir o código-fonte dos jogos e do launcher.</li>
+            <li>É proibido revender, sublicenciar, alugar ou transferir sua licença ou conta para terceiros sem autorização prévia.</li>
+            <li>Todas as marcas, logotipos, artes, animações sonoras e mecânicas de jogo são de propriedade exclusiva da Raven Games.</li>
+          </ul>
+        </section>
+
+        <!-- 4. Integração TikTok Live & Terceiros -->
+        <section class="terms-card" id="integracao">
+          <h2><span class="section-number">4</span> Integrações com TikTok Live, OBS Studio & Terceiros</h2>
+          <p>
+            Nossas ferramentas interagem com softwares de streaming como OBS Studio, Streamlabs e protocolos de leitura de eventos do TikTok Live. O usuário reconhece que:
+          </p>
+          <ul>
+            <li>A Raven Games é uma desenvolvedora independente e não possui vínculo oficial de propriedade ou endosso direto por parte da ByteDance / TikTok, OBS Project ou Streamlabs.</li>
+            <li>O criador de conteúdo deve cumprir rigorosamente as Diretrizes da Comunidade e Termos de Serviço de cada plataforma onde realiza suas transmissões ao vivo.</li>
+          </ul>
+        </section>
+
+        <!-- 5. Presentes e Monetização -->
+        <section class="terms-card" id="monetizacao">
+          <h2><span class="section-number">5</span> Presentes Virtuais, Moedas e Monetização</h2>
+          <p>
+            Todos os presentes virtuais, diamantes e moedas enviados pelos espectadores durante as transmissões ao vivo são processados diretamente pela plataforma anfitriã (ex: TikTok).
+          </p>
+          <p>
+            A Raven Games não intermedia, não processa e não retém qualquer porcentagem dos presentes ou pagamentos que você recebe do público através da sua live. Seu repasse financeiro e regras de saque obedecem exclusivamente às políticas da respectiva plataforma de transmissão.
+          </p>
+        </section>
+
+        <!-- 6. Conduta do Usuário -->
+        <section class="terms-card" id="conduta">
+          <h2><span class="section-number">6</span> Conduta do Usuário e Moderação</h2>
+          <p>
+            O usuário concorda em utilizar as ferramentas da Raven Games de maneira ética e legal. É estritamente vedado utilizar os jogos para:
+          </p>
+          <ul>
+            <li>Promover discursos de ódio, violência, pornografia, assédio ou qualquer conteúdo ilegal.</li>
+            <li>Fraudar métricas de engajamento ou praticar qualquer atividade que viole a segurança de terceiros.</li>
+            <li>Utilizar bots ou ataques maliciosos contra a infraestrutura de servidores da comunidade.</li>
+          </ul>
+        </section>
+
+        <!-- 7. Modo AFK e Automação -->
+        <section class="terms-card" id="afk">
+          <h2><span class="section-number">7</span> Modo AFK e Automação de Transmissão</h2>
+          <p>
+            O sistema disponibiliza mecânicas automatizadas de anti-inatividade para manter a retenção dos espectadores durante pausas ou transmissões contínuas. O criador é responsável por monitorar sua transmissão e garantir que sua live continue em conformidade com as regras de presença da plataforma escolhida.
+          </p>
+        </section>
+
+        <!-- 8. Planos e Assinaturas -->
+        <section class="terms-card" id="planos">
+          <h2><span class="section-number">8</span> Planos, Assinaturas e Atualizações</h2>
+          <p>
+            O acesso a novos jogos, launchers atualizados e canais VIP é disponibilizado conforme o plano ou modalidade de aquisição vigente no momento da adesão. As atualizações de novos títulos, correções de desempenho e melhorias de compatibilidade são entregues automaticamente através do Launcher Raven Games.
+          </p>
+        </section>
+
+        <!-- ================= 9. CLÁUSULA ENORME ANTI-REEMBOLSO ================= -->
+        <section class="terms-card-alert" id="anti-reembolso">
+          <div class="alert-header-tag">
+            <span>⚠ CLÁUSULA VINCULANTE & NÃO-NEGOCIÁVEL</span>
+          </div>
+
+          <h2>
+            <span class="alert-section-number">9</span>
+            Política Estrita de Não-Reembolsabilidade (Anti-Reembolso) & Entrega Digital Imediata
+          </h2>
+
+          <div class="alert-main-banner">
+            <h3>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+              AVISO EXPRESSO DE CONSUMO IMEDIATO
+            </h3>
+            <p>
+              OS PRODUTOS E SERVIÇOS DA RAVEN GAMES SÃO BENS DIGITAIS INTANGÍVEIS DE EXECUÇÃO IMEDIATA. AO CONCLUIR A COMPRA E RECEBER O ACESSO AO LAUNCHER, DOWNLOAD DOS JOGOS E ENTRADA NA COMUNIDADE VIP, O CONTRATO É CONSIDERADO INTEGRALMENTE EXECUTADO E CONSUMIDO, NÃO CABENDO DIREITO A ARREPENDIMENTO, ESTORNO OU REEMBOLSO SOB NENHUMA HIPÓTESE.
+            </p>
+          </div>
+
+          <!-- 9.1 Consumo Imediato -->
+          <div class="anti-refund-clause">
+            <h4><span>9.1</span> Natureza do Produto Digital e Fruição Instantânea</h4>
+            <p>
+              Ao realizar a assinatura ou compra de licença na <strong>Raven Games</strong>, o usuário obtém acesso imediato a arquivos executáveis protegidos, pacotes de jogos em 60 FPS, bibliotecas de assets proprietários, scripts de automação, chaves de liberação e canais restritos de networking e suporte VIP. 
+            </p>
+            <p>
+              Por se tratar de conteúdo digital imediatamente disponibilizado para download e cópia local na máquina do usuário, a entrega é instantânea e irrevogável, configurando o <strong>consumo pleno do produto no ato da confirmação do pagamento</strong>.
+            </p>
+          </div>
+
+          <!-- 9.2 Renúncia Expressa ao Arrependimento -->
+          <div class="anti-refund-clause">
+            <h4><span>9.2</span> Renúncia Expressa ao Direito de Arrependimento</h4>
+            <p>
+              Em observância à legislação aplicável ao fornecimento de arquivos digitais, softwares com download instantâneo e serviços consumados no ato da entrega (inclusive em consonância com as exceções previstas no comércio eletrônico e Artigo 49 do CDC quanto a produtos imateriais de fruição imediata), <strong>o usuário declara e consente expressamente que renuncia a qualquer direito de desistência ou estorno após a liberação das credenciais ou download dos executáveis</strong>.
+            </p>
+            <ul>
+              <li>Não há estorno por desistência voluntária ou falta de tempo do streamer para abrir lives.</li>
+              <li>Não há estorno alegando "não gostei dos jogos" ou "minha live não teve visualizações".</li>
+              <li>Não há reembolso retroativo para períodos ou meses já utilizados ou acessados.</li>
+            </ul>
+          </div>
+
+          <!-- 9.3 Anti-Chargeback e Tolerância Zero -->
+          <div class="anti-refund-clause">
+            <h4><span>9.3</span> Política de Tolerância Zero contra Chargebacks & Fraudes Bancárias</h4>
+            <p>
+              A abertura indevida de disputa financeira, contestação bancária fraudulenta ou "chargeback amigável" junto a operadoras de cartão ou gateways de pagamento, após o recebimento dos arquivos e acessos, constitui <strong>violação gravíssima deste contrato e fraude civil</strong>.
+            </p>
+            <p>Em caso de chargeback ou contestação não autorizada, a Raven Games aplicará imediatamente:</p>
+            <ul>
+              <li><strong>Banimento Permanente por HWID (Hardware ID):</strong> O computador do usuário será bloqueado definitivamente de executar qualquer jogo ou versão futura do launcher da Raven Games.</li>
+              <li><strong>Cancelamento Sumário da Conta:</strong> Revogação irrevogável de todos os acessos, licenças e expulsão de todas as comunidades e grupos VIP.</li>
+              <li><strong>Inclusão em Blacklist de Risco:</strong> Compartilhamento do identificador com redes de segurança anti-fraude de parceiros do ecossistema.</li>
+              <li><strong>Medidas Jurídicas e Cobrança Extrajudicial:</strong> Acionamento de cobrança do valor devido acrescido de multas, juros, custas processuais e honorários advocatícios.</li>
+            </ul>
+          </div>
+
+          <!-- 9.4 Incompatibilidade e Requisitos Técnicos -->
+          <div class="anti-refund-clause">
+            <h4><span>9.4</span> Incompatibilidade Técnica Evitável e Suporte</h4>
+            <p>
+              Todos os requisitos de sistema (sistema operacional Windows 10/11 64-bit, conexão estável com a internet e software de transmissão OBS Studio ou Streamlabs) são expressamente informados de maneira pública antes da contratação.
+            </p>
+            <p>
+              A alegação de impossibilidade técnica decorrente de computadores fora das especificações mínimas, bloqueios de firewall do próprio usuário, suspensões aplicadas pelo próprio TikTok na conta do streamer ou falhas de configuração pessoal não configuram defeito do software e <strong>não conferem direito a reembolso</strong>. Nossa equipe técnica oferece suporte para orientar a configuração correta de todos os membros.
+            </p>
+          </div>
+
+          <!-- 9.5 Rescisão por Conduta -->
+          <div class="anti-refund-clause">
+            <h4><span>9.5</span> Suspensão por Violação de Termos sem Direito a Restituição</h4>
+            <p>
+              Qualquer tentativa de pirataria, compartilhamento de arquivos de instalação com terceiros, vazamento de chaves de licença, uso de cheats/trapaças ou comportamento desrespeitoso contra a comunidade resultará no cancelamento unilateral do serviço <strong>sem qualquer devolução ou compensação financeira</strong>.
+            </p>
+          </div>
+        </section>
+
+        <!-- 10. Limitação de Responsabilidade -->
+        <section class="terms-card" id="responsabilidade">
+          <h2><span class="section-number">10</span> Limitação de Responsabilidade</h2>
+          <p>
+            O software é fornecido "no estado em que se encontra" (as is). A Raven Games não se responsabiliza por instabilidades na conexão de internet do usuário, manutenções em servidores de terceiros (como TikTok ou OBS), suspensões de contas causadas por infrações das regras das plataformas parceiras ou incompatibilidades de hardware do computador do streamer.
+          </p>
+        </section>
+
+        <!-- 11. Privacidade -->
+        <section class="terms-card" id="privacidade">
+          <h2><span class="section-number">11</span> Privacidade & Tratamento de Dados (LGPD)</h2>
+          <p>
+            A Raven Games preza pelo sigilo e proteção total dos seus dados pessoais. Coletamos apenas as informações estritamente necessárias para autenticação da sua conta, validação de licença e entrega de suporte técnico, em conformidade com a Lei Geral de Proteção de Dados (LGPD - Lei nº 13.709/2018).
+          </p>
+          <p>
+            Não vendemos nem compartilhamos seus dados pessoais com terceiros para fins publicitários.
+          </p>
+        </section>
+
+        <!-- 12. Contato -->
+        <section class="terms-card" id="contato">
+          <h2><span class="section-number">12</span> Canal de Atendimento & Suporte</h2>
+          <p>
+            Se você tiver dúvidas, solicitações de esclarecimento ou precisar de suporte referente a estes Termos de Uso, entre em contato diretamente com nossa equipe através da nossa comunidade oficial ou canais de suporte técnico.
+          </p>
+          <div class="highlight-box">
+            <p><strong>Comunidade VIP & Suporte:</strong> Acesse o canal de atendimento no Discord oficial da Raven Games ou clique em "Entrar na comunidade" no topo desta página.</p>
+          </div>
+        </section>
+
+      </article>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="terms-footer">
+    <div class="footer-inner">
+      <div class="footer-copy">
+        © 2026 Raven Games. Todos os direitos reservados.
+      </div>
+      <div class="footer-links">
+        <a href="index.html">Início</a>
+        <a href="index.html#jogos">Jogos</a>
+        <a href="index.html#como-funciona">Como Funciona</a>
+        <a href="index.html#faq">Perguntas Frequentes</a>
+        <a href="termos.html" style="color: #00d2ff;">Termos de Uso</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
