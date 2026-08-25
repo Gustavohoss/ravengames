@@ -466,16 +466,31 @@
       Veja como funciona, <span class="highlight">em 2 minutos</span>
     </h1>
 
-    <p class="page-subtitle">
+    <p class="page-subtitle" style="margin-bottom:1.2rem;">
       O vídeo mostra tudo: como escolher o plano, como pagar e como abrir o primeiro jogo na sua live.
     </p>
+
+    <!-- Aviso de Compatibilidade: Apenas PC / Windows -->
+    <div style="background:rgba(0, 210, 255, 0.06); border:1px solid rgba(0, 210, 255, 0.28); border-radius:14px; padding:12px 18px; display:flex; align-items:center; gap:14px; margin-bottom:1.2rem; box-shadow:0 4px 20px rgba(0,210,255,0.08);">
+      <div style="width:36px; height:36px; min-width:36px; border-radius:10px; background:rgba(0,210,255,0.15); display:flex; align-items:center; justify-content:center; color:#00d2ff;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+          <line x1="8" y1="21" x2="16" y2="21"></line>
+          <line x1="12" y1="17" x2="12" y2="21"></line>
+        </svg>
+      </div>
+      <div style="font-size:0.92rem; color:#f1f5f9; line-height:1.45;">
+        <strong style="color:#00d2ff; font-weight:700;">Disponível apenas para Computador (Windows):</strong> O launcher roda exclusivamente no PC para transmitir e automatizar sua live. Se você estiver no celular, abra este link no seu computador.
+      </div>
+    </div>
 
     <!-- Player de Vídeo Estilizado -->
     <div class="video-card">
       <iframe 
-        src="https://www.youtube.com/embed/1ay0NKLJ6do?rel=0&modestbranding=1" 
+        src="https://www.youtube.com/embed/1ay0NKLJ6do" 
         title="Como funciona o RAVENGAMES" 
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+        referrerpolicy="strict-origin-when-cross-origin"
         allowfullscreen>
       </iframe>
     </div>
@@ -555,6 +570,70 @@
     </div>
 
   </main>
+
+  <!-- Modal / Alerta: Funciona Apenas em Computador -->
+  <div id="modalAvisoPc" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(7,9,14,0.85); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); z-index:99999; align-items:center; justify-content:center; padding:20px; box-sizing:border-box;">
+    <div style="background:#0f1523; border:1px solid rgba(0,210,255,0.3); border-radius:20px; max-width:440px; width:100%; padding:32px 24px; text-align:center; box-shadow:0 20px 50px rgba(0,0,0,0.7), 0 0 40px rgba(0,210,255,0.15); animation:modalPop 0.25s cubic-bezier(0.16, 1, 0.3, 1);">
+      <div style="width:64px; height:64px; background:rgba(0,210,255,0.1); border:1px solid rgba(0,210,255,0.25); border-radius:18px; display:inline-flex; align-items:center; justify-content:center; margin-bottom:18px; color:#00d2ff;">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+          <line x1="8" y1="21" x2="16" y2="21"></line>
+          <line x1="12" y1="17" x2="12" y2="21"></line>
+        </svg>
+      </div>
+      <h3 style="font-size:1.35rem; font-weight:800; color:#fff; margin-bottom:12px; letter-spacing:-0.5px;">Apenas para Computador</h3>
+      <p style="font-size:0.95rem; color:#94a3b8; line-height:1.55; margin-bottom:24px;">
+        O <strong>RAVENGAMES Launcher</strong> funciona exclusivamente em <strong>computadores e notebooks (Windows)</strong> para transmitir suas lives com automação.<br><br>
+        <span style="color:#f8fafc; font-size:0.88rem;">📱 Não funciona diretamente no celular. Abra este site no seu PC para instalar.</span>
+      </p>
+      <div style="display:flex; flex-direction:column; gap:10px;">
+        <a id="btnConfirmarDownload" href="#" class="action-btn btn-download-main" style="justify-content:center; padding:14px 20px; font-size:0.95rem; border-radius:12px; text-decoration:none;">
+          <span style="font-weight:700;">Entendi, baixar no PC</span>
+        </a>
+        <button id="btnFecharModalPc" type="button" style="background:transparent; border:1px solid rgba(255,255,255,0.1); color:#94a3b8; padding:12px 20px; border-radius:12px; font-size:0.9rem; font-weight:600; cursor:pointer; transition:all 0.2s ease;">
+          Fechar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    @keyframes modalPop {
+      0% { opacity:0; transform:scale(0.92); }
+      100% { opacity:1; transform:scale(1); }
+    }
+  </style>
+
+  <script>
+    (function() {
+      const modal = document.getElementById('modalAvisoPc');
+      const btnConfirmar = document.getElementById('btnConfirmarDownload');
+      const btnFechar = document.getElementById('btnFecharModalPc');
+      const downloadLink = document.querySelector('.btn-download-main');
+      let targetUrl = "https://github.com/Gustavohoss/ravengames/releases/download/v1.0.0/RAVENGAMES-Instalador.exe";
+
+      if (downloadLink) {
+        targetUrl = downloadLink.getAttribute('href') || targetUrl;
+        downloadLink.addEventListener('click', function(e) {
+          e.preventDefault();
+          btnConfirmar.setAttribute('href', targetUrl);
+          modal.style.display = 'flex';
+        });
+      }
+
+      btnConfirmar.addEventListener('click', function() {
+        modal.style.display = 'none';
+      });
+
+      btnFechar.addEventListener('click', function() {
+        modal.style.display = 'none';
+      });
+
+      modal.addEventListener('click', function(e) {
+        if (e.target === modal) modal.style.display = 'none';
+      });
+    })();
+  </script>
 
 </body>
 </html>
