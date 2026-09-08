@@ -50,7 +50,44 @@
       padding-top: 75px;
     }
 
-    /* Iluminação de fundo (Glows / Grid) */
+    /* Fundo Shader Adaptativo da Primeira Seção */
+    .hero-canvas-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 980px;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    #heroShaderCanvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+      opacity: 0;
+      transition: opacity 0.8s ease;
+    }
+
+    #heroShaderCanvas.is-ready {
+      opacity: 1;
+    }
+
+    .hero-canvas-fade {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 380px;
+      background: linear-gradient(to bottom, transparent 0%, rgba(7, 9, 14, 0.7) 60%, var(--bg-main) 100%);
+      pointer-events: none;
+    }
+
+    /* Iluminação de fundo (Glows) */
     .ambient-glow-1 {
       position: absolute;
       top: -120px;
@@ -58,7 +95,7 @@
       transform: translateX(-50%);
       width: min(750px, 100vw);
       height: 420px;
-      background: radial-gradient(circle, rgba(0, 210, 255, 0.15) 0%, rgba(157, 78, 221, 0.08) 50%, transparent 70%);
+      background: radial-gradient(circle, rgba(0, 210, 255, 0.12) 0%, rgba(157, 78, 221, 0.06) 50%, transparent 70%);
       filter: blur(80px);
       z-index: 0;
       pointer-events: none;
@@ -71,20 +108,8 @@
       transform: translateX(-50%);
       width: min(600px, 100vw);
       height: 300px;
-      background: radial-gradient(circle, rgba(0, 210, 255, 0.1) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(0, 210, 255, 0.08) 0%, transparent 70%);
       filter: blur(100px);
-      z-index: 0;
-      pointer-events: none;
-    }
-
-    .grid-overlay {
-      position: absolute;
-      inset: 0;
-      background-image: 
-        linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-      background-size: 48px 48px;
-      mask-image: radial-gradient(ellipse 60% 50% at 50% 30%, black 70%, transparent 100%);
       z-index: 0;
       pointer-events: none;
     }
@@ -316,31 +341,47 @@
     .badge {
       display: inline-flex;
       align-items: center;
-      gap: 0.55rem;
-      padding: 0.4rem 1rem;
+      gap: 0.5rem;
+      padding: 0.38rem 0.95rem;
       border-radius: 999px;
-      background: rgba(16, 185, 129, 0.08);
-      border: 1px solid rgba(16, 185, 129, 0.25);
-      color: #34d399;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(0, 210, 255, 0.28);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: 0 0 20px rgba(0, 210, 255, 0.12);
+      color: #e2e8f0;
       font-size: 0.78rem;
-      font-weight: 700;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
+      font-weight: 600;
+      letter-spacing: 0.2px;
       margin-bottom: 2rem;
+      white-space: nowrap;
+      transition: all 0.25s ease;
+    }
+
+    .badge:hover {
+      border-color: rgba(0, 210, 255, 0.5);
+      box-shadow: 0 0 25px rgba(0, 210, 255, 0.25);
+      transform: translateY(-1px);
+    }
+
+    .badge strong, .badge .badge-highlight {
+      color: var(--ciano);
+      font-weight: 800;
     }
 
     .status-dot {
       width: 7px;
       height: 7px;
-      background-color: var(--accent-green);
+      background-color: var(--ciano);
       border-radius: 50%;
-      box-shadow: 0 0 8px var(--accent-green);
+      box-shadow: 0 0 8px var(--ciano);
       animation: pulse 2s infinite ease-in-out;
+      flex-shrink: 0;
     }
 
     @keyframes pulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.4; transform: scale(0.85); }
+      0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 8px var(--ciano); }
+      50% { opacity: 0.4; transform: scale(0.85); box-shadow: 0 0 3px var(--ciano); }
     }
 
     /* Títulos */
@@ -377,6 +418,9 @@
       flex-wrap: wrap;
       justify-content: center;
       margin-bottom: 3.5rem;
+      position: relative;
+      z-index: 10;
+      isolation: isolate;
     }
 
     .btn-primary {
@@ -392,6 +436,10 @@
       text-decoration: none;
       box-shadow: 0 0 25px rgba(255, 255, 255, 0.15);
       transition: all 0.25s ease;
+      position: relative;
+      z-index: 2;
+      overflow: hidden;
+      border: none;
     }
 
     .btn-primary:hover {
@@ -514,9 +562,14 @@
 </head>
 <body>
 
+  <!-- Fundo Shader Adaptativo da Primeira Seção -->
+  <div class="hero-canvas-container">
+    <canvas id="heroShaderCanvas"></canvas>
+    <div class="hero-canvas-fade"></div>
+  </div>
+
   <div class="ambient-glow-1"></div>
   <div class="ambient-glow-2"></div>
-  <div class="grid-overlay"></div>
 
   <!-- Header Sticky Wrapper -->
   <div class="header-wrapper" id="stickyHeader">
@@ -527,6 +580,7 @@
 
       <nav>
         <ul class="nav-links">
+          <li><a href="painel.html" style="color: var(--primary); font-weight: 800;">Painel Web 🎮</a></li>
           <li><a href="#jogos">Jogos</a></li>
           <li><a href="#como-funciona">Como Funciona</a></li>
           <li><a href="#recursos">Recursos</a></li>
@@ -536,6 +590,9 @@
       </nav>
 
       <div class="header-right-actions">
+        <!-- Botão Painel Web -->
+        <a href="painel.html" class="btn-nav" style="background: linear-gradient(135deg, #00d2ff, #0099ff); color: #07090e; font-weight: 800; border: none; box-shadow: 0 0 16px rgba(0, 210, 255, 0.35);">Acessar Painel</a>
+
         <!-- Language Switcher Pill -->
         <div class="lang-switcher-wrap" id="langSwitcher">
           <button class="lang-btn" id="langToggleBtn" aria-label="Trocar Idioma">
@@ -571,7 +628,7 @@
   <main class="hero">
     <div class="badge">
       <span class="status-dot"></span>
-      Comunidade ativa com mais de 2.000 streamers
+      <span>Comunidade com <strong>+2.000 Streamers</strong></span>
     </div>
 
     <h1 class="hero-title">
@@ -584,32 +641,27 @@
     </p>
 
     <div class="cta-group">
-      <a href="https://discord.gg/4CCx9Cw2n9" target="_blank" rel="noopener noreferrer" class="btn-primary">
-        Entrar na comunidade
+      <a href="painel.html?cadastro=1" class="btn-primary" style="background: linear-gradient(135deg, #00d2ff, #0099ff); color: #07090e; font-weight: 800; box-shadow: 0 0 25px rgba(0, 210, 255, 0.4); border: none;">
+        Criar Conta / Cadastrar
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
           <line x1="5" y1="12" x2="19" y2="12"></line>
           <polyline points="12 5 19 12 12 19"></polyline>
         </svg>
       </a>
 
-      <a href="download.html" class="btn-launcher" title="Baixar o RAVENGAMES Launcher">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-          <polyline points="7 10 12 15 17 10"></polyline>
-          <line x1="12" y1="15" x2="12" y2="3"></line>
-        </svg>
-        Baixar o Launcher
-      </a>
-
-      <a href="#jogos" class="btn-secondary">
+      <a href="painel.html" class="btn-secondary">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="6" width="20" height="12" rx="2"></rect>
           <line x1="6" y1="12" x2="10" y2="12"></line>
           <line x1="8" y1="10" x2="8" y2="14"></line>
           <line x1="15" y1="13" x2="15.01" y2="13"></line>
           <line x1="18" y1="11" x2="18.01" y2="11"></line>
-          <rect x="2" y="6" width="20" height="12" rx="2"></rect>
         </svg>
-        Ver Jogos Disponíveis
+        Ver Vitrine de Jogos
+      </a>
+
+      <a href="https://discord.gg/4CCx9Cw2n9" target="_blank" rel="noopener noreferrer" class="btn-secondary">
+        Entrar na Comunidade
       </a>
     </div>
   </main>
@@ -1095,7 +1147,7 @@
   <section id="provas" style="padding: 80px 24px 0; max-width:900px; margin: 0 auto;">
     <div class="section-label" style="text-align:center; display:inline-block; margin: 0 auto 12px; padding: 6px 16px; background: rgba(0, 210, 255, 0.1); border: 1px solid rgba(0, 210, 255, 0.3); border-radius: 999px; font-size: 0.85rem; font-weight: 700; color: #00d2ff; text-transform: uppercase; letter-spacing: 1px;">Resultados reais</div>
     <h2 style="text-align:center; font-family:'Plus Jakarta Sans',sans-serif; font-size:clamp(2rem,4vw,3.2rem); font-weight:800; letter-spacing:-1.5px; line-height:1.3; margin-bottom:8px; color:#ffffff;">
-      Prints de quem já <span style="color:#ff2d78; background: linear-gradient(135deg, #ff2d78 0%, #ff758c 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">está faturando</span>
+      Prints de quem já <span style="color:#00d2ff; background: linear-gradient(135deg, #00d2ff 0%, #0099ff 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">está faturando</span>
     </h2>
     <p style="text-align:center; color:#94a3b8; font-size:1rem; max-width:500px; margin:12px auto 40px; line-height:1.6;">
       Diamantes reais, seguidores reais, dinheiro real. Sem edição, sem mentira.
@@ -1459,13 +1511,12 @@
           </svg>
         </a>
 
-        <a href="download.html" class="footer-pill-btn secondary" title="Baixar o RAVENGAMES Launcher">
+        <a href="painel.html" class="footer-pill-btn secondary" title="Acessar conta ou cadastrar">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-            <polyline points="7 10 12 15 17 10"></polyline>
-            <line x1="12" y1="15" x2="12" y2="3"></line>
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
           </svg>
-          <span>Baixar o Launcher</span>
+          <span>Acessar conta ou cadastrar</span>
         </a>
       </div>
 
@@ -3815,7 +3866,7 @@
         code: 'PT',
         nav: ['Jogos', 'Como Funciona', 'Recursos', 'Planos', 'Dúvidas'],
         navCta: 'Entrar na comunidade',
-        heroBadge: 'Comunidade ativa com mais de 2.000 streamers',
+        heroBadge: '<span>Comunidade com <strong>+2.000 Streamers</strong></span>',
         heroTitle: 'Sua live de TikTok jogando <br><span class="highlight">sozinha</span>, com o chat dentro do jogo.',
         heroSubtitle: 'Jogos interativos com modo AFK e anti-inatividade. O chat e os presentes controlam a partida em tempo real, mantendo a transmissão viva e faturando mesmo quando você não está no teclado.',
         heroCta1: 'Entrar na comunidade',
@@ -3841,7 +3892,7 @@
         code: 'EN',
         nav: ['Games', 'How it Works', 'Features', 'Plans', 'FAQ'],
         navCta: 'Join the Community',
-        heroBadge: 'Active community with over 2,000 streamers',
+        heroBadge: '<span>Active Community with <strong>+2,000 Streamers</strong></span>',
         heroTitle: 'Your TikTok Live playing <br><span class="highlight">on autopilot</span>, with chat inside the game.',
         heroSubtitle: 'Interactive games with AFK mode and anti-idling. Chat comments and gifts control the match in real time, keeping your stream active and monetizing even when you are away from the keyboard.',
         heroCta1: 'Join the Community',
@@ -4086,6 +4137,251 @@
       }
 
       updateUI();
+    })();
+  </script>
+
+  <!-- Fundo Shader Adaptativo da Primeira Seção (Aurora Cósmica + Qualidade Dinâmica) -->
+  <script>
+    (function initAdaptiveHeroShader() {
+      const canvas = document.getElementById('heroShaderCanvas');
+      if (!canvas) return;
+
+      const gl = canvas.getContext('webgl', { 
+        alpha: true, 
+        antialias: false, 
+        powerPreference: 'high-performance',
+        preserveDrawingBuffer: false
+      }) || canvas.getContext('experimental-webgl');
+
+      if (!gl) {
+        canvas.style.display = 'none';
+        return;
+      }
+
+      const vsSource = `
+        attribute vec2 a_position;
+        void main() {
+          gl_Position = vec4(a_position, 0.0, 1.0);
+        }
+      `;
+
+      const fsSource = `
+        precision highp float;
+        uniform vec2 u_resolution;
+        uniform float u_time;
+        uniform vec2 u_mouse;
+        uniform float u_quality;
+
+        float hash(vec3 p) {
+          vec3 q = fract(p * vec3(0.1031, 0.1030, 0.0973));
+          float r = q.x + dot(q, q.yzx + 33.33);
+          return fract((r + q.y) * r);
+        }
+
+        float noise(vec3 p) {
+          vec3 i = floor(p);
+          vec3 f = fract(p);
+          vec3 u = f * f * (3.0 - 2.0 * f);
+          float a = mix(hash(i), hash(i + vec3(1.0, 0.0, 0.0)), u.x);
+          float b = mix(hash(i + vec3(0.0, 1.0, 0.0)), hash(i + vec3(1.0, 1.0, 0.0)), u.x);
+          float c = mix(hash(i + vec3(0.0, 0.0, 1.0)), hash(i + vec3(1.0, 0.0, 1.0)), u.x);
+          float d = mix(hash(i + vec3(0.0, 1.0, 1.0)), hash(i + vec3(1.0, 1.0, 1.0)), u.x);
+          return mix(mix(a, b, u.y), mix(c, d, u.y), u.z);
+        }
+
+        float fbm(vec3 p) {
+          float v = 0.0;
+          float a = 0.5;
+          vec3 q = p;
+          for(int i = 0; i < 4; i++) {
+            v += a * noise(q);
+            q = q * 2.02 + vec3(1.7, 9.2, 3.1);
+            a *= 0.5;
+          }
+          return v;
+        }
+
+        float density(vec3 p, float t) {
+          vec3 drift = vec3(t * 0.07, t * 0.025, t * 0.045);
+          float band = exp(-abs(p.y - 0.32 * sin(p.x * 1.1 + t * 0.25)) * 2.2);
+          float ribbons = fbm(p * 1.5 + drift);
+          return max(0.0, ribbons - 0.44) * band * 2.0;
+        }
+
+        vec3 palette(float t) {
+          vec3 a = vec3(0.0, 0.72, 0.98);  // Cyan vibrante Raven
+          vec3 b = vec3(0.38, 0.22, 0.88); // Deep Violet
+          vec3 c = vec3(0.02, 0.88, 0.65); // Esmeralda Glow
+          return mix(mix(a, b, smoothstep(0.0, 0.55, t)), c, smoothstep(0.5, 1.0, t));
+        }
+
+        vec3 tonemapAces(vec3 col) {
+          float a = 2.51;
+          float b = 0.03;
+          float c = 2.43;
+          float d = 0.59;
+          float e = 0.14;
+          return clamp((col * (a * col + b)) / (col * (c * col + d) + e), 0.0, 1.0);
+        }
+
+        void main() {
+          vec2 uv = gl_FragCoord.xy / u_resolution.xy;
+          float aspect = u_resolution.x / u_resolution.y;
+          vec2 screen = vec2((uv.x - 0.5) * aspect, uv.y - 0.5) * 2.0;
+          
+          vec2 m = (u_mouse / u_resolution.xy - 0.5) * 0.25;
+          screen += m;
+
+          vec3 origin = vec3(0.0, 0.0, -3.0);
+          vec3 direction = normalize(vec3(screen, 1.6));
+
+          int maxSteps = u_quality > 0.75 ? 24 : 12;
+          float stepsF = float(maxSteps);
+          float stepSize = 4.5 / stepsF;
+          vec3 accumulated = vec3(0.0);
+          float transmittance = 1.0;
+          float t = 0.6;
+
+          for(int i = 0; i < 24; i++) {
+            if (i >= maxSteps) break;
+            vec3 p = origin + direction * t;
+            float d = density(p, u_time);
+            if (d > 0.001) {
+              vec3 glow = palette(clamp(d * 0.85 + p.y * 0.25 + 0.35, 0.0, 1.0));
+              float absorb = exp(-d * stepSize * 1.6);
+              accumulated += glow * d * transmittance * stepSize * 1.55;
+              transmittance *= absorb;
+            }
+            t += stepSize;
+          }
+
+          vec3 sky = mix(vec3(0.027, 0.035, 0.06), vec3(0.012, 0.015, 0.028), uv.y);
+          vec3 col = sky * transmittance + accumulated;
+
+          // Partículas estelares dinâmicas
+          vec2 starGrid = uv * vec2(120.0, 70.0);
+          vec2 cell = floor(starGrid);
+          float seed = hash(vec3(cell, 7.0));
+          vec2 local = fract(starGrid) - vec2(hash(vec3(cell, 11.0)), hash(vec3(cell, 13.0)));
+          float star = step(0.983, seed) * smoothstep(0.08, 0.0, length(local)) * (0.3 + 0.7 * sin(u_time * 2.2 + seed * 10.0));
+          col += vec3(star) * 0.95 * transmittance;
+
+          vec2 centered = uv - 0.5;
+          float vignette = 1.0 - dot(centered, centered) * 0.65;
+          col = tonemapAces(col * vignette);
+
+          gl_FragColor = vec4(col, 1.0);
+        }
+      `;
+
+      function createShader(gl, type, source) {
+        const shader = gl.createShader(type);
+        gl.shaderSource(shader, source);
+        gl.compileShader(shader);
+        if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+          gl.deleteShader(shader);
+          return null;
+        }
+        return shader;
+      }
+
+      const vs = createShader(gl, gl.VERTEX_SHADER, vsSource);
+      const fs = createShader(gl, gl.FRAGMENT_SHADER, fsSource);
+      if (!vs || !fs) return;
+
+      const program = gl.createProgram();
+      gl.attachShader(program, vs);
+      gl.attachShader(program, fs);
+      gl.linkProgram(program);
+      if (!gl.getProgramParameter(program, gl.LINK_STATUS)) return;
+
+      gl.useProgram(program);
+
+      const posBuffer = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, posBuffer);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
+        -1, -1,
+         1, -1,
+        -1,  1,
+        -1,  1,
+         1, -1,
+         1,  1,
+      ]), gl.STATIC_DRAW);
+
+      const aPos = gl.getAttribLocation(program, 'a_position');
+      gl.enableVertexAttribArray(aPos);
+      gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0);
+
+      const uRes = gl.getUniformLocation(program, 'u_resolution');
+      const uTime = gl.getUniformLocation(program, 'u_time');
+      const uMouse = gl.getUniformLocation(program, 'u_mouse');
+      const uQual = gl.getUniformLocation(program, 'u_quality');
+
+      let currentQuality = 1.0;
+      let targetDpr = Math.min(window.devicePixelRatio || 1, 1.5);
+      let mouseX = window.innerWidth / 2;
+      let mouseY = window.innerHeight / 2;
+      let targetMouseX = mouseX;
+      let targetMouseY = mouseY;
+      let isVisible = true;
+      let lastTime = performance.now();
+      let frameTimes = [];
+
+      window.addEventListener('mousemove', (e) => {
+        targetMouseX = e.clientX;
+        targetMouseY = e.clientY;
+      }, { passive: true });
+
+      function resize() {
+        const rect = canvas.getBoundingClientRect();
+        const width = Math.floor(rect.width * targetDpr * currentQuality);
+        const height = Math.floor(rect.height * targetDpr * currentQuality);
+
+        if (canvas.width !== width || canvas.height !== height) {
+          canvas.width = Math.max(1, width);
+          canvas.height = Math.max(1, height);
+          gl.viewport(0, 0, canvas.width, canvas.height);
+        }
+      }
+
+      window.addEventListener('resize', resize, { passive: true });
+      resize();
+
+      const observer = new IntersectionObserver((entries) => {
+        isVisible = entries[0].isIntersecting;
+      }, { threshold: 0.05 });
+      observer.observe(canvas.parentElement || canvas);
+
+      canvas.classList.add('is-ready');
+
+      function render(now) {
+        requestAnimationFrame(render);
+        if (!isVisible) return;
+
+        const delta = now - lastTime;
+        lastTime = now;
+        frameTimes.push(delta);
+        if (frameTimes.length > 60) {
+          frameTimes.shift();
+          const avgDelta = frameTimes.reduce((a, b) => a + b, 0) / frameTimes.length;
+          if (avgDelta > 22 && currentQuality > 0.5) {
+            currentQuality = 0.5;
+            resize();
+          }
+        }
+
+        mouseX += (targetMouseX - mouseX) * 0.05;
+        mouseY += (targetMouseY - mouseY) * 0.05;
+
+        gl.uniform2f(uRes, canvas.width, canvas.height);
+        gl.uniform1f(uTime, now * 0.001);
+        gl.uniform2f(uMouse, mouseX, mouseY);
+        gl.uniform1f(uQual, currentQuality);
+
+        gl.drawArrays(gl.TRIANGLES, 0, 6);
+      }
+
+      requestAnimationFrame(render);
     })();
   </script>
 

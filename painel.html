@@ -1,0 +1,3072 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Raven Games — Painel Oficial</title>
+  <link rel="icon" type="image/png" href="favicon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --fundo: #0e1117;
+      --fundo-sidebar: #131722;
+      --fundo-card: #181d2c;
+      --fundo-card-hover: #22293d;
+      --borda: rgba(255, 255, 255, 0.08);
+      --borda-foco: #00d2ff;
+      --texto: #f8fafc;
+      --texto-mutado: #94a3b8;
+      --ciano: #00d2ff;
+      --ciano-glow: rgba(0, 210, 255, 0.25);
+      --verde: #10b981;
+      --sidebar-w: 250px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background: var(--fundo);
+      color: var(--texto);
+      min-height: 100vh;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ================= TELA DE LOGIN / CADASTRO (PORTÃO) ================= */
+    #telaPortaoAuth {
+      position: fixed;
+      inset: 0;
+      background: #07090e;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 99999;
+      overflow: hidden;
+    }
+
+    .portao-shader-bg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.95;
+    }
+
+    .card-auth {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 20px;
+      max-width: 410px;
+      width: 100%;
+      padding: 34px 28px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7), 0 0 35px rgba(255, 255, 255, 0.05);
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .auth-logo {
+      width: 52px;
+      height: 52px;
+      border-radius: 12px;
+      margin-bottom: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      box-shadow: 0 0 20px rgba(0, 210, 255, 0.25);
+    }
+
+    .auth-title {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .auth-title span {
+      color: var(--ciano);
+    }
+
+    .auth-desc {
+      font-size: 0.8rem;
+      color: #cbd5e1;
+      margin: 4px 0 22px;
+    }
+
+    .auth-alert {
+      background: rgba(239, 68, 68, 0.2);
+      border: 1px solid #ef4444;
+      color: #fca5a5;
+      font-size: 0.78rem;
+      padding: 8px 12px;
+      border-radius: 8px;
+      margin-bottom: 14px;
+      display: none;
+      text-align: left;
+    }
+
+    .form-group {
+      margin-bottom: 12px;
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .form-group label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #e2e8f0;
+    }
+
+    .form-input {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #fff;
+      padding: 11px 14px;
+      border-radius: 10px;
+      font-size: 0.88rem;
+      outline: none;
+      transition: all 0.2s;
+    }
+
+    .form-input:focus {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: var(--ciano);
+      box-shadow: 0 0 14px rgba(0, 210, 255, 0.25);
+    }
+
+    .btn-submit {
+      width: 100%;
+      background: var(--ciano);
+      color: #0b0e14;
+      font-size: 0.9rem;
+      font-weight: 800;
+      padding: 12px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      margin-top: 8px;
+      box-shadow: 0 4px 16px var(--ciano-glow);
+      transition: transform 0.15s;
+    }
+
+    .btn-submit:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn-google {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #fff;
+      font-size: 0.85rem;
+      font-weight: 700;
+      padding: 11px;
+      border-radius: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 10px;
+      transition: background 0.2s;
+    }
+
+    .btn-google:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .auth-toggle {
+      margin-top: 18px;
+      font-size: 0.8rem;
+      color: var(--texto-mutado);
+    }
+
+    .auth-toggle a {
+      color: var(--ciano);
+      font-weight: 700;
+      text-decoration: none;
+      margin-left: 4px;
+    }
+
+    /* ================= PAINEL DO USUÁRIO (APÓS LOGIN) ================= */
+    #painelApp {
+      display: none;
+      min-height: 100vh;
+    }
+
+    /* Sidebar Desktop */
+    aside.sidebar {
+      width: var(--sidebar-w);
+      height: 100vh;
+      background: var(--fundo-sidebar);
+      border-right: 1px solid var(--borda);
+      position: fixed;
+      top: 0;
+      left: 0;
+      display: flex;
+      flex-direction: column;
+      padding: 20px 14px;
+      z-index: 100;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 6px 10px 20px;
+      border-bottom: 1px solid var(--borda);
+      text-decoration: none;
+    }
+
+    .brand img {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+    }
+
+    .brand-name {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .brand-name span {
+      color: var(--ciano);
+    }
+
+    .nav-group {
+      margin-top: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      flex: 1;
+    }
+
+    .nav-label {
+      font-size: 0.7rem;
+      font-weight: 800;
+      color: #64748b;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 8px 12px 4px;
+    }
+
+    .nav-btn {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 11px 14px;
+      border-radius: 10px;
+      color: var(--texto-mutado);
+      font-size: 0.88rem;
+      font-weight: 600;
+      border: 1px solid transparent;
+      background: transparent;
+      cursor: pointer;
+      text-decoration: none;
+      width: 100%;
+      text-align: left;
+    }
+
+    .nav-btn:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .nav-btn.active {
+      color: #fff;
+      background: rgba(0, 210, 255, 0.1);
+      border-color: rgba(0, 210, 255, 0.25);
+    }
+
+    .nav-btn svg {
+      width: 18px;
+      height: 18px;
+      stroke: currentColor;
+    }
+
+    .nav-btn.active svg {
+      stroke: var(--ciano);
+    }
+
+    /* Botões Destacados de Ação na Sidebar */
+    .nav-btn-action {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      border-radius: 12px;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      position: relative;
+      margin-top: 4px;
+      border: 1px solid var(--borda);
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .nav-btn-action:hover {
+      transform: translateY(-1px);
+    }
+
+    .nav-btn-action.discord {
+      background: linear-gradient(135deg, rgba(88, 101, 242, 0.12) 0%, rgba(88, 101, 242, 0.04) 100%);
+      border-color: rgba(88, 101, 242, 0.35);
+    }
+
+    .nav-btn-action.discord:hover {
+      background: linear-gradient(135deg, rgba(88, 101, 242, 0.22) 0%, rgba(88, 101, 242, 0.08) 100%);
+      border-color: rgba(88, 101, 242, 0.55);
+      box-shadow: 0 4px 15px rgba(88, 101, 242, 0.2);
+    }
+
+    .nav-btn-action.home {
+      background: rgba(255, 255, 255, 0.04);
+      border-color: rgba(255, 255, 255, 0.08);
+    }
+
+    .nav-btn-action.home:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.18);
+    }
+
+    .nav-btn-icon-wrap {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .nav-btn-icon-wrap.discord {
+      background: rgba(88, 101, 242, 0.2);
+      color: #5865F2;
+    }
+
+    .nav-btn-icon-wrap.home {
+      background: rgba(0, 210, 255, 0.12);
+      color: var(--ciano);
+    }
+
+    .nav-btn-icon-wrap svg {
+      width: 17px;
+      height: 17px;
+      stroke: currentColor;
+    }
+
+    .nav-btn-text {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .nav-btn-title {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.2;
+    }
+
+    .nav-btn-sub {
+      font-size: 0.68rem;
+      color: var(--texto-mutado);
+      line-height: 1.2;
+    }
+
+    .nav-btn-arrow {
+      width: 14px;
+      height: 14px;
+      stroke: #64748b;
+      flex-shrink: 0;
+      transition: stroke 0.2s, transform 0.2s;
+    }
+
+    .nav-btn-action:hover .nav-btn-arrow {
+      stroke: #fff;
+      transform: translateX(2px);
+    }
+
+    .user-footer {
+      padding-top: 16px;
+      border-top: 1px solid var(--borda);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .user-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--ciano), #3b82f6);
+      color: #0e1117;
+      font-weight: 800;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .user-meta {
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .user-meta-name {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .user-meta-status {
+      font-size: 0.72rem;
+      color: var(--texto-mutado);
+    }
+
+    .btn-sair {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--borda);
+      color: #fca5a5;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 6px 10px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    /* Main Container */
+    main.main-content {
+      margin-left: var(--sidebar-w);
+      flex: 1;
+      padding: 28px 36px 60px;
+      max-width: 1400px;
+    }
+
+    .mobile-bar {
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px;
+      background: rgba(14, 17, 23, 0.92);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--borda);
+      position: sticky;
+      top: 0;
+      z-index: 90;
+      margin: -20px -16px 18px;
+    }
+
+    .catalog-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .catalog-title {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .cat-pills {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      scrollbar-width: none;
+    }
+
+    .cat-pills::-webkit-scrollbar {
+      display: none;
+    }
+
+    .pill-btn {
+      background: var(--fundo-card);
+      border: 1px solid var(--borda);
+      color: var(--texto-mutado);
+      padding: 7px 14px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .pill-btn.active {
+      background: var(--ciano);
+      color: #0e1117;
+      border-color: var(--ciano);
+    }
+
+    /* Grid de Jogos (Posters) */
+    .games-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+      gap: 20px;
+    }
+
+    .game-card {
+      background: var(--fundo-card);
+      border: 1px solid var(--borda);
+      border-radius: 14px;
+      overflow: hidden;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+      position: relative;
+    }
+
+    .game-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(0, 210, 255, 0.4);
+    }
+
+    .poster-wrap {
+      width: 100%;
+      padding-top: 135%;
+      position: relative;
+      background: #10141f;
+      overflow: hidden;
+    }
+
+    .poster-img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .game-tag-badge {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(14, 17, 23, 0.85);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      font-size: 0.68rem;
+      font-weight: 800;
+      color: #fff;
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+
+    .game-tag-badge.roblox {
+      border-color: rgba(0, 210, 255, 0.4);
+      color: var(--ciano);
+    }
+
+    .game-info {
+      padding: 12px 14px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .game-name {
+      font-size: 0.92rem;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .game-sub {
+      font-size: 0.75rem;
+      color: var(--texto-mutado);
+      display: -webkit-box;
+      -webkit-line-clamp: 1;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .game-action-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px solid var(--borda);
+    }
+
+    .game-play-btn {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--ciano);
+    }
+
+    /* ================= PLANOS & ASSINATURAS (PREMIUM) ================= */
+    .plans-header-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      margin-bottom: 28px;
+      gap: 14px;
+    }
+
+    .plans-cycle-toggle {
+      display: inline-flex;
+      align-items: center;
+      background: rgba(14, 18, 28, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(12px);
+      padding: 5px;
+      border-radius: 999px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+      gap: 4px;
+    }
+
+    .cycle-btn {
+      padding: 8px 20px;
+      border-radius: 999px;
+      font-size: 0.84rem;
+      font-weight: 700;
+      border: none;
+      background: transparent;
+      color: #94a3b8;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .cycle-btn.active {
+      background: linear-gradient(135deg, #00d2ff, #0099ff);
+      color: #07090e;
+      font-weight: 800;
+      box-shadow: 0 2px 14px rgba(0, 210, 255, 0.4);
+    }
+
+    .cycle-save-pill {
+      background: rgba(16, 185, 129, 0.2);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      color: #34d399;
+      font-size: 0.68rem;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .cycle-btn.active .cycle-save-pill {
+      background: #07090e;
+      color: #10b981;
+      border-color: transparent;
+    }
+
+    .plans-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+      margin-bottom: 28px;
+    }
+
+    .plan-box {
+      background: linear-gradient(180deg, rgba(20, 26, 42, 0.75) 0%, rgba(12, 16, 26, 0.95) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-radius: 20px;
+      padding: 30px 24px 24px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+    }
+
+    .plan-box:hover {
+      transform: translateY(-4px);
+      border-color: rgba(0, 210, 255, 0.35);
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6), 0 0 30px rgba(0, 210, 255, 0.1);
+    }
+
+    .plan-box.featured {
+      background: linear-gradient(180deg, rgba(0, 210, 255, 0.12) 0%, rgba(14, 18, 30, 0.96) 100%);
+      border: 2px solid var(--ciano);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 35px rgba(0, 210, 255, 0.22);
+    }
+
+    .plan-box.featured:hover {
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7), 0 0 45px rgba(0, 210, 255, 0.32);
+    }
+
+    .plan-badge-top {
+      position: absolute;
+      top: -13px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(135deg, #00d2ff, #0099ff);
+      color: #07090e;
+      font-size: 0.68rem;
+      font-weight: 900;
+      padding: 4px 14px;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      box-shadow: 0 4px 15px rgba(0, 210, 255, 0.4);
+      white-space: nowrap;
+    }
+
+    .plan-head-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 6px;
+    }
+
+    .plan-box-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #ffffff;
+      line-height: 1.2;
+    }
+
+    .plan-box-icon {
+      font-size: 1.5rem;
+      line-height: 1;
+    }
+
+    .plan-box-desc {
+      font-size: 0.8rem;
+      color: var(--texto-mutado);
+      line-height: 1.45;
+      margin-bottom: 14px;
+    }
+
+    .plan-price-wrap {
+      padding: 16px 0;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      margin-bottom: 20px;
+    }
+
+    .plan-price-val {
+      font-size: 2.1rem;
+      font-weight: 900;
+      color: #ffffff;
+      line-height: 1;
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+    }
+
+    .plan-price-val .subtext {
+      font-size: 0.84rem;
+      font-weight: 600;
+      color: var(--texto-mutado);
+    }
+
+    .plan-price-installment {
+      font-size: 0.8rem;
+      color: #38bdf8;
+      font-weight: 700;
+      margin-top: 6px;
+    }
+
+    .plan-box-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 24px;
+      flex: 1;
+    }
+
+    .plan-box-list li {
+      font-size: 0.82rem;
+      color: #cbd5e1;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      line-height: 1.45;
+    }
+
+    .plan-check-svg {
+      width: 17px;
+      height: 17px;
+      color: var(--verde);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .plan-box-list li strong {
+      color: #ffffff;
+    }
+
+    .btn-buy {
+      width: 100%;
+      padding: 14px;
+      border-radius: 12px;
+      font-size: 0.9rem;
+      font-weight: 800;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      cursor: pointer;
+      background: rgba(255, 255, 255, 0.08);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .btn-buy:hover {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .btn-buy.primary {
+      background: linear-gradient(135deg, #00d2ff 0%, #0099ff 100%);
+      color: #07090e;
+      border: none;
+      box-shadow: 0 4px 20px rgba(0, 210, 255, 0.35);
+    }
+
+    .btn-buy.primary:hover {
+      box-shadow: 0 6px 28px rgba(0, 210, 255, 0.55);
+      transform: translateY(-2px);
+    }
+
+    /* Trust Footer Bar */
+    .plans-trust-bar {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 18px 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-top: 10px;
+    }
+
+    .trust-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #94a3b8;
+    }
+
+    .trust-item svg {
+      width: 18px;
+      height: 18px;
+      color: var(--ciano);
+      flex-shrink: 0;
+    }
+
+    /* Downloads */
+    .dl-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      margin-top: 10px;
+    }
+
+    .dl-card {
+      background: var(--fundo-card);
+      border: 1px solid var(--borda);
+      border-radius: 16px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .dl-card h3 {
+      font-size: 1.1rem;
+      color: #fff;
+    }
+
+    .dl-card p {
+      font-size: 0.82rem;
+      color: var(--texto-mutado);
+      line-height: 1.4;
+    }
+
+    .btn-dl {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 18px;
+      border-radius: 10px;
+      font-size: 0.88rem;
+      font-weight: 800;
+      text-decoration: none;
+      margin-top: auto;
+      background: var(--ciano);
+      color: #0e1117;
+    }
+
+    /* ================= VÍDEO AULAS ================= */
+    .video-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 20px;
+      margin-top: 14px;
+    }
+
+    .video-card {
+      background: var(--fundo-card);
+      border: 1px solid var(--borda);
+      border-radius: 16px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .video-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(0, 210, 255, 0.45);
+      box-shadow: 0 14px 35px rgba(0, 0, 0, 0.6), 0 0 25px rgba(0, 210, 255, 0.15);
+    }
+
+    .video-thumb-wrap {
+      width: 100%;
+      padding-top: 56.25%; /* 16:9 */
+      position: relative;
+      background: #0d111a;
+      overflow: hidden;
+    }
+
+    .video-thumb-img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.35s ease;
+    }
+
+    .video-card:hover .video-thumb-img {
+      transform: scale(1.06);
+    }
+
+    .video-play-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(7, 9, 14, 0.1) 0%, rgba(7, 9, 14, 0.6) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.25s ease;
+    }
+
+    .video-card:hover .video-play-overlay {
+      background: rgba(7, 9, 14, 0.25);
+    }
+
+    .video-play-btn {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #00d2ff, #0099ff);
+      color: #07090e;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 25px rgba(0, 210, 255, 0.7);
+      transition: all 0.25s ease;
+    }
+
+    .video-card:hover .video-play-btn {
+      transform: scale(1.15);
+      box-shadow: 0 0 35px rgba(0, 210, 255, 0.95);
+    }
+
+    .video-duration-badge {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(8px);
+      color: #fff;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .video-tag-badge {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: rgba(14, 17, 23, 0.9);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(0, 210, 255, 0.4);
+      font-size: 0.68rem;
+      font-weight: 800;
+      color: var(--ciano);
+      padding: 3px 8px;
+      border-radius: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .video-info {
+      padding: 16px 18px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      flex: 1;
+    }
+
+    .video-title {
+      font-size: 0.96rem;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.35;
+    }
+
+    .video-desc {
+      font-size: 0.8rem;
+      color: var(--texto-mutado);
+      line-height: 1.45;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      margin-top: 2px;
+    }
+
+    .video-footer-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: auto;
+      padding-top: 12px;
+      border-top: 1px solid var(--borda);
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--ciano);
+    }
+
+    /* Estado de Vídeo Bloqueado (Não-VIP) */
+    .video-card.locked {
+      border-color: rgba(245, 158, 11, 0.25);
+    }
+
+    .video-card.locked .video-thumb-img {
+      filter: blur(14px) brightness(0.4) saturate(0.8);
+      transform: scale(1.15);
+      transition: filter 0.3s ease, transform 0.3s ease;
+    }
+
+    .video-card.locked:hover .video-thumb-img {
+      filter: blur(16px) brightness(0.35) saturate(0.7);
+      transform: scale(1.18);
+    }
+
+    .video-card.locked .video-play-overlay {
+      background: rgba(7, 9, 14, 0.45);
+      backdrop-filter: blur(4px);
+    }
+
+    .video-card.locked:hover {
+      border-color: rgba(245, 158, 11, 0.65);
+      box-shadow: 0 14px 35px rgba(0, 0, 0, 0.6), 0 0 25px rgba(245, 158, 11, 0.2);
+    }
+
+    .video-card.locked .video-play-btn {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      box-shadow: 0 0 25px rgba(245, 158, 11, 0.7);
+    }
+
+    .video-card.locked .video-play-btn:hover {
+      box-shadow: 0 0 35px rgba(245, 158, 11, 0.95);
+    }
+
+    .video-card.locked .video-footer-row {
+      color: #fbbf24;
+    }
+
+    .video-lock-pill {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(14, 17, 23, 0.9);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(245, 158, 11, 0.45);
+      color: #fbbf24;
+      font-size: 0.68rem;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    /* ================= PROVAS SOCIAIS ================= */
+    .metrics-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .metric-card {
+      background: var(--fundo-card);
+      border: 1px solid var(--borda);
+      border-radius: 14px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .metric-icon {
+      font-size: 1.8rem;
+    }
+
+    .metric-val {
+      font-size: 1.2rem;
+      font-weight: 900;
+      color: #fff;
+    }
+
+    .metric-label {
+      font-size: 0.75rem;
+      color: var(--texto-mutado);
+    }
+
+    .proofs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+      gap: 18px;
+    }
+
+    .proof-card {
+      background: var(--fundo-card);
+      border: 1px solid var(--borda);
+      border-radius: 14px;
+      overflow: hidden;
+      cursor: pointer;
+      position: relative;
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .proof-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(0, 210, 255, 0.4);
+      box-shadow: 0 10px 25px rgba(0, 210, 255, 0.15);
+    }
+
+    .proof-img {
+      width: 100%;
+      height: 320px;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.3s ease;
+    }
+
+    .proof-card:hover .proof-img {
+      transform: scale(1.03);
+    }
+
+    .proof-overlay-tag {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      right: 10px;
+      background: rgba(14, 17, 23, 0.85);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 6px 10px;
+      border-radius: 8px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    /* Modal */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(10px);
+      z-index: 9999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal-sheet {
+      background: #141824;
+      border: 1px solid var(--borda);
+      border-radius: 18px;
+      max-width: 460px;
+      width: 100%;
+      padding: 24px;
+      position: relative;
+    }
+
+    .modal-close-btn {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #94a3b8;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      z-index: 10;
+    }
+
+    .modal-close-btn:hover {
+      background: rgba(255, 255, 255, 0.16);
+      color: #fff;
+      transform: scale(1.08);
+    }
+
+    /* Estilo Premium do Modal de Computador */
+    .pc-modal-card {
+      background: linear-gradient(180deg, #161b28 0%, #0d1017 100%);
+      border: 1px solid rgba(0, 210, 255, 0.25);
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 35px rgba(0, 210, 255, 0.12);
+      border-radius: 22px;
+      max-width: 440px;
+      width: 100%;
+      padding: 30px 24px 26px;
+      position: relative;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .pc-modal-glow {
+      position: absolute;
+      top: -60px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 220px;
+      height: 120px;
+      background: radial-gradient(circle, rgba(0, 210, 255, 0.25) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .pc-modal-icon-wrap {
+      width: 68px;
+      height: 68px;
+      margin: 0 auto 16px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, rgba(0, 210, 255, 0.18), rgba(59, 130, 246, 0.18));
+      border: 1.5px solid rgba(0, 210, 255, 0.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 25px rgba(0, 210, 255, 0.25);
+      position: relative;
+    }
+
+    .pc-modal-icon-wrap svg {
+      width: 34px;
+      height: 34px;
+      stroke: var(--ciano);
+    }
+
+    .pc-modal-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      background: rgba(0, 210, 255, 0.1);
+      border: 1px solid rgba(0, 210, 255, 0.3);
+      color: var(--ciano);
+      font-size: 0.7rem;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .pc-modal-title {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: -0.5px;
+      line-height: 1.25;
+      margin-bottom: 8px;
+    }
+
+    .pc-modal-desc {
+      font-size: 0.85rem;
+      color: #94a3b8;
+      line-height: 1.5;
+      margin-bottom: 18px;
+    }
+
+    .pc-modal-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .pc-modal-sys-card {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-align: left;
+    }
+
+    .pc-modal-sys-icon {
+      font-size: 1.25rem;
+    }
+
+    .pc-modal-sys-name {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.2;
+    }
+
+    .pc-modal-sys-sub {
+      font-size: 0.65rem;
+      color: var(--texto-mutado);
+    }
+
+    .pc-modal-alert {
+      background: rgba(245, 158, 11, 0.08);
+      border: 1px solid rgba(245, 158, 11, 0.25);
+      border-radius: 12px;
+      padding: 10px 14px;
+      font-size: 0.75rem;
+      color: #fde68a;
+      line-height: 1.45;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 22px;
+    }
+
+    .pc-modal-btn-confirm {
+      width: 100%;
+      background: linear-gradient(135deg, #00d2ff 0%, #0099ff 100%);
+      color: #07090e;
+      font-size: 0.92rem;
+      font-weight: 800;
+      padding: 14px;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 20px rgba(0, 210, 255, 0.35);
+      transition: all 0.2s ease;
+    }
+
+    .pc-modal-btn-confirm:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 25px rgba(0, 210, 255, 0.5);
+    }
+
+    .pc-modal-btn-back {
+      background: transparent;
+      border: none;
+      color: #64748b;
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 10px;
+      cursor: pointer;
+      margin-top: 6px;
+      transition: color 0.2s;
+    }
+
+    .pc-modal-btn-back:hover {
+      color: #cbd5e1;
+    }
+
+    /* Bottom bar Mobile */
+    .mobile-tab-bar {
+      display: none;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 60px;
+      background: rgba(14, 17, 23, 0.96);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-top: 1px solid var(--borda);
+      z-index: 1000;
+      justify-content: space-around;
+      align-items: center;
+      padding-bottom: env(safe-area-inset-bottom, 0px);
+    }
+
+    .m-tab-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      background: none;
+      border: none;
+      color: var(--texto-mutado);
+      font-size: 0.68rem;
+      font-weight: 700;
+      cursor: pointer;
+      padding: 6px;
+      flex: 1;
+      text-decoration: none;
+    }
+
+    .m-tab-item svg {
+      width: 20px;
+      height: 20px;
+      stroke: currentColor;
+    }
+
+    .m-tab-item.active {
+      color: var(--ciano);
+    }
+
+    @media (max-width: 860px) {
+      aside.sidebar { display: none; }
+      main.main-content { margin-left: 0; padding: 20px 16px 85px; }
+      .mobile-bar { display: flex; }
+      .mobile-tab-bar { display: flex; }
+      .games-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+      .game-info { padding: 10px; }
+      .game-name { font-size: 0.85rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ================= TELA DE LOGIN / CADASTRO OBRIGATÓRIO (PORTÃO) ================= -->
+  <div id="telaPortaoAuth">
+    <canvas id="portaoShaderCanvas" class="portao-shader-bg"></canvas>
+    <div class="card-auth">
+      <img src="logo.png" alt="Raven Games Logo" class="auth-logo" />
+      <h1 class="auth-title">RAVEN <span>GAMES</span></h1>
+      <p class="auth-desc" id="portaoSub">Crie sua conta para acessar o catálogo de jogos.</p>
+
+      <div class="auth-alert" id="portaoAlert"></div>
+
+      <form id="formPortao" onsubmit="executarAuth(event)">
+        <div class="form-group" id="blocoNomePortao">
+          <label>Seu Nome</label>
+          <input type="text" id="inputNomePortao" class="form-input" placeholder="Seu nome completo" required />
+        </div>
+
+        <div class="form-group">
+          <label>Seu E-mail</label>
+          <input type="email" id="inputEmailPortao" class="form-input" placeholder="voce@exemplo.com" required />
+        </div>
+
+        <div class="form-group">
+          <label>Sua Senha</label>
+          <input type="password" id="inputSenhaPortao" class="form-input" placeholder="Mínimo 6 caracteres" minlength="6" required />
+        </div>
+
+        <button type="submit" class="btn-submit" id="btnPortaoSubmit">CRIAR CONTA ➔</button>
+      </form>
+
+      <button type="button" class="btn-google" onclick="loginComGoogle()">
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+          <path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5a5.6 5.6 0 0 1-2.4 3.7v3h3.9c2.3-2.1 3.5-5.2 3.5-8.9z"/>
+          <path fill="#34A853" d="M12 24c3.2 0 6-1.1 8-2.9l-3.9-3c-1.1.7-2.5 1.2-4.1 1.2-3.1 0-5.8-2.1-6.7-5H1.3v3.1A12 12 0 0 0 12 24z"/>
+          <path fill="#FBBC05" d="M5.3 14.3a7.2 7.2 0 0 1 0-4.6V6.6H1.3a12 12 0 0 0 0 10.8l4-3.1z"/>
+          <path fill="#EA4335" d="M12 4.8c1.8 0 3.3.6 4.6 1.8l3.4-3.4A12 12 0 0 0 1.3 6.6l4 3.1c.9-2.9 3.6-4.9 6.7-4.9z"/>
+        </svg>
+        Entrar com Google
+      </button>
+
+      <div class="auth-toggle">
+        <span id="portaoToggleTexto">Já tem uma conta?</span>
+        <a href="javascript:void(0)" onclick="alternarModoPortao()" id="portaoToggleLink">Fazer Login</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= PAINEL PRINCIPAL (SÓ APARECE LOGADO) ================= -->
+  <div id="painelApp">
+    <!-- Sidebar Desktop -->
+    <aside class="sidebar">
+      <a href="index.html" class="brand">
+        <img src="logo.png" alt="Raven Logo" />
+        <div class="brand-name">RAVEN <span>GAMES</span></div>
+      </a>
+
+      <div class="nav-group">
+        <span class="nav-label">CATÁLOGO</span>
+        <button class="nav-btn active" onclick="trocarAba('jogos', this)">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><line x1="6" y1="12" x2="10" y2="12"/><line x1="8" y1="10" x2="8" y2="14"/><line x1="15" y1="13" x2="15.01" y2="13"/><line x1="18" y1="11" x2="18.01" y2="11"/></svg>
+          <span>Jogos da Live</span>
+        </button>
+
+        <button class="nav-btn" onclick="trocarAba('aulas', this)">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+          <span>Vídeo Aulas</span>
+        </button>
+
+        <button class="nav-btn" id="btnSidebarPlanos" onclick="trocarAba('planos', this)">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <span>Planos & VIP</span>
+        </button>
+
+        <button class="nav-btn" onclick="trocarAba('provas', this)">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <span>Resultados & Provas</span>
+        </button>
+
+        <button class="nav-btn" onclick="trocarAba('downloads', this)">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          <span>Baixar App (PC/Mac)</span>
+        </button>
+
+        <span class="nav-label" style="margin-top: 14px;">COMUNIDADE</span>
+        <a href="https://discord.gg/4CCx9Cw2n9" target="_blank" class="nav-btn-action discord" title="Entrar no Discord Oficial">
+          <div class="nav-btn-icon-wrap discord">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+            </svg>
+          </div>
+          <div class="nav-btn-text">
+            <span class="nav-btn-title">Discord Oficial</span>
+            <span class="nav-btn-sub">Comunidade VIP</span>
+          </div>
+          <svg class="nav-btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="7" y1="17" x2="17" y2="7"></line>
+            <polyline points="7 7 17 7 17 17"></polyline>
+          </svg>
+        </a>
+
+        <a href="index.html" class="nav-btn-action home" title="Voltar para a Página Inicial">
+          <div class="nav-btn-icon-wrap home">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+              <polyline points="9 22 9 12 15 12 15 22"/>
+            </svg>
+          </div>
+          <div class="nav-btn-text">
+            <span class="nav-btn-title">Página Inicial</span>
+            <span class="nav-btn-sub">Ir ao site</span>
+          </div>
+          <svg class="nav-btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </a>
+      </div>
+
+      <div class="user-footer">
+        <div class="user-avatar" id="avatarUser">U</div>
+        <div class="user-meta">
+          <div class="user-meta-name" id="nomeUser">Usuário</div>
+          <div class="user-meta-status" id="planoUser">Sem plano ativo</div>
+        </div>
+        <button class="btn-sair" onclick="deslogar()">Sair</button>
+      </div>
+    </aside>
+
+    <!-- Conteúdo Principal -->
+    <main class="main-content">
+      <!-- Topbar Mobile -->
+      <div class="mobile-bar">
+        <a href="index.html" style="display: flex; align-items: center; gap: 8px; text-decoration: none;">
+          <img src="logo.png" alt="Raven Logo" style="width: 28px; height: 28px; border-radius: 6px;" />
+          <span style="font-weight: 800; font-size: 0.95rem; color: #fff;">RAVEN <span style="color: var(--ciano);">GAMES</span></span>
+        </a>
+        <button class="btn-sair" onclick="deslogar()">Sair</button>
+      </div>
+
+      <!-- SEÇÃO JOGOS -->
+      <section id="aba-jogos">
+        <!-- Banner de Conta VIP Ativa -->
+        <div id="bannerVipAtivo" style="display: none; background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(0, 210, 255, 0.1)); border: 1px solid rgba(16, 185, 129, 0.4); border-radius: 14px; padding: 16px 20px; margin-bottom: 20px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap;">
+            <div>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 1.1rem;">👑</span>
+                <h3 style="font-size: 1rem; color: #fff; font-weight: 800;">Conta VIP Ativa e Liberada</h3>
+              </div>
+              <p style="font-size: 0.8rem; color: #cbd5e1; margin-top: 2px;">
+                Plano: <strong id="vipNomePlano" style="color: var(--verde);">VIP Ativo</strong> • Validade: <strong id="vipValidade" style="color: #fff;">Vitalício</strong>
+              </p>
+            </div>
+            <button onclick="trocarAba('downloads')" class="btn-buy primary" style="width: auto; padding: 8px 16px; font-size: 0.8rem;">
+              ⬇️ Baixar App para Jogar
+            </button>
+          </div>
+        </div>
+
+        <div class="catalog-header">
+          <h1 class="catalog-title">Jogos da Live</h1>
+          <div class="cat-pills">
+            <button class="pill-btn active" onclick="filtrar('todos', this)">Todos</button>
+            <button class="pill-btn" onclick="filtrar('roblox', this)">Roblox</button>
+            <button class="pill-btn" onclick="filtrar('launcher', this)">Launcher</button>
+            <button class="pill-btn" onclick="filtrar('estrategia', this)">Batalhas</button>
+          </div>
+        </div>
+        <div class="games-grid" id="gridJogos"></div>
+      </section>
+
+      <!-- SEÇÃO VÍDEO AULAS -->
+      <section id="aba-aulas" style="display: none;">
+        <!-- Banner de Status de Acesso às Aulas -->
+        <div id="bannerAulasBloqueadas" style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.12), rgba(217, 119, 6, 0.08)); border: 1px solid rgba(245, 158, 11, 0.4); border-radius: 14px; padding: 16px 20px; margin-bottom: 20px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap;">
+            <div>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 1.1rem;">🔒</span>
+                <h3 style="font-size: 1rem; color: #fff; font-weight: 800;">Conteúdo Exclusivo para Assinantes</h3>
+              </div>
+              <p style="font-size: 0.8rem; color: #fde68a; margin-top: 3px;">
+                As vídeo aulas completas são liberadas automaticamente para quem possui qualquer plano ativo da Raven Games.
+              </p>
+            </div>
+            <button onclick="trocarAba('planos')" class="btn-buy" style="width: auto; padding: 8px 18px; font-size: 0.82rem; background: linear-gradient(135deg, #f59e0b, #d97706); color: #07090e; font-weight: 800;">
+              💎 Desbloquear com Plano ➔
+            </button>
+          </div>
+        </div>
+
+        <div id="bannerAulasLiberadas" style="display: none; background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(0, 210, 255, 0.1)); border: 1px solid rgba(16, 185, 129, 0.4); border-radius: 14px; padding: 16px 20px; margin-bottom: 20px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap;">
+            <div>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 1.1rem;">👑</span>
+                <h3 style="font-size: 1rem; color: #fff; font-weight: 800;">Acesso VIP Liberado</h3>
+              </div>
+              <p style="font-size: 0.8rem; color: #cbd5e1; margin-top: 3px;">
+                Sua conta possui acesso ilimitado a todas as aulas, jogos e atualizações da plataforma.
+              </p>
+            </div>
+            <button onclick="trocarAba('downloads')" class="btn-buy primary" style="width: auto; padding: 8px 16px; font-size: 0.8rem;">
+              ⬇️ Baixar Launcher
+            </button>
+          </div>
+        </div>
+
+        <div class="catalog-header">
+          <div>
+            <h1 class="catalog-title">Vídeo Aulas & Tutoriais Oficiais 🎬</h1>
+            <p style="font-size: 0.8rem; color: var(--texto-mutado); margin-top: 4px;">Passo a passo completo em vídeo para configurar jogos, conectar com o TikTok/OBS e maximizar retenção.</p>
+          </div>
+          <div class="cat-pills">
+            <button class="pill-btn active" onclick="filtrarAulas('todos', this)">Todas as Aulas</button>
+            <button class="pill-btn" onclick="filtrarAulas('jogos', this)">⚙️ Configurar Jogos</button>
+            <button class="pill-btn" onclick="filtrarAulas('live', this)">🔴 Tutorial de Lives</button>
+            <button class="pill-btn" onclick="filtrarAulas('roblox', this)">🧱 Roblox Studio</button>
+            <button class="pill-btn" onclick="filtrarAulas('estrategia', this)">🔥 Aquecer Live</button>
+          </div>
+        </div>
+        <div class="video-grid" id="gridAulas"></div>
+      </section>
+
+      <!-- SEÇÃO PROVAS SOCIAIS -->
+      <section id="aba-provas" style="display: none;">
+        <div class="catalog-header">
+          <div>
+            <h1 class="catalog-title">Resultados & Provas Reais 🔥</h1>
+            <p style="font-size: 0.8rem; color: var(--texto-mutado); margin-top: 4px;">Lives lotadas, faturamentos e depoimentos de quem transmite com o Raven Games.</p>
+          </div>
+        </div>
+
+        <div class="metrics-row">
+          <div class="metric-card">
+            <div class="metric-icon">👥</div>
+            <div>
+              <div class="metric-val">+400</div>
+              <div class="metric-label">Pessoas no Discord</div>
+            </div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-icon">📈</div>
+            <div>
+              <div class="metric-val">+1.200</div>
+              <div class="metric-label">Por Live</div>
+            </div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-icon">⚡</div>
+            <div>
+              <div class="metric-val">100%</div>
+              <div class="metric-label">Automático na Live</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="proofs-grid" id="gridProvas"></div>
+      </section>
+
+      <!-- SEÇÃO PLANOS -->
+      <section id="aba-planos" style="display: none;">
+        <div class="catalog-header" style="flex-direction: column; align-items: center; text-align: center; gap: 8px; margin-bottom: 24px;">
+          <h1 class="catalog-title" style="font-size: 1.7rem;">Escolha o Plano Ideal para a sua Live 🔥</h1>
+          <p style="font-size: 0.86rem; color: var(--texto-mutado); max-width: 580px;">
+            Acesso imediato a todos os jogos interativos, integração automática com TikTok/OBS e atualizações contínuas.
+          </p>
+
+          <!-- Toggle de Ciclo: Mensal / Anual -->
+          <div class="plans-cycle-toggle" style="margin-top: 12px;">
+            <button class="cycle-btn active" id="btnCicloMensal" onclick="alternarCicloPlanos('mensal', this)">
+              Mensal
+            </button>
+            <button class="cycle-btn" id="btnCicloAnual" onclick="alternarCicloPlanos('anual', this)">
+              Anual <span class="cycle-save-pill">Economize até 45%</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- GRID DE PLANOS MENSAIS -->
+        <div class="plans-grid" id="gridPlanosMensal">
+          <!-- Básico Mensal -->
+          <div class="plan-box">
+            <div class="plan-head-row">
+              <div>
+                <h3 class="plan-box-title">Básico Mensal</h3>
+                <p class="plan-box-desc">Jogos clássicos do launcher para transmissões interativas.</p>
+              </div>
+              <span class="plan-box-icon">🎮</span>
+            </div>
+
+            <div class="plan-price-wrap">
+              <div class="plan-price-val">
+                <span>R$ 59,90</span>
+                <span class="subtext">/ mês</span>
+              </div>
+              <div class="plan-price-installment">Cobrança mensal recorrente</div>
+            </div>
+
+            <ul class="plan-box-list">
+              <li>
+                <svg class="plan-check-svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                <span>Todos os jogos do launcher inclusos</span>
+              </li>
+              <li>
+                <svg class="plan-check-svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                <span>Painel de personalização em todos os jogos</span>
+              </li>
+              <li>
+                <svg class="plan-check-svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                <span>Studio Mode integrado para gerenciar sua live</span>
+              </li>
+              <li>
+                <svg class="plan-check-svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                <span>Overlays transparentes prontas para OBS Studio</span>
+              </li>
+              <li>
+                <svg class="plan-check-svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                <span>Novos jogos lançados entram automaticamente</span>
+              </li>
+              <li>
+                <svg class="plan-check-svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                <span>Sem fidelidade • Cancele quando quiser</span>
+              </li>
+            </ul>
+
+            <button class="btn-buy" onclick="irParaCheckout('PPU38CQFES6')">
+              Assinar Básico Mensal ➔
+            </button>
+          </div>
+
+          <!-- Completo Mensal (DESTAQUE MENSAL) -->
+          <div class="plan-box featured">
+            <div class="plan-badge-top">🔥 MAIS POPULAR</div>
+            <div class="plan-head-row">
+              <div>
+                <h3 class="plan-box-title" style="color: var(--ciano);">Completo Mensal</h3>
+                <p class="plan-box-desc">Roblox Live com Skins Reais + Launcher completo.</p>
+              </div>
+              <span class="plan-box-icon">👑</span>
+            </div>
+
+            <div class="plan-price-wrap">
+              <div class="plan-price-val">
+                <span>R$ 129,90</span>
+                <span class="subtext">/ mês</span>
+              </div>
+              <div class="plan-price-installment">Roblox + Launcher Liberados</div>
+            </div>
+
+            <ul class="plan-box-list">
+              <li>
+                <svg class="plan-check-svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                <span><strong>Jogos de Roblox Live inclusos (com Skins Reais)</strong></span>
+              </li>
+              <li>
+                <svg class="plan-check-svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                <span>Ponte do TikTok e painel de comandos automáticos</span>
+              </li>
+              <li>
+                <svg class="plan-check-svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                <span>Todos os jogos do launcher sem limitações</span>
+              </li>
+              <li>
+                <svg class="plan-check-svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                <span>Studio Mode + Overlays transparentes OBS</span>
+              </li>
+              <li>
+                <svg class="plan-check-svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                <span>Acesso a todas as Vídeo Aulas e tutoriais</span>
+              </li>
+              <li>
+                <svg class="plan-check-svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                <span>Suporte via Discord da Comunidade</span>
+              </li>
+            </ul>
+
+            <button class="btn-buy primary" onclick="irParaCheckout('PPU38CQFES8')">
+              Assinar Completo Mensal ➔
+            </button>
+          </div>
+        </div>
+
+        <!-- GRID DE PLANOS ANUAIS (INICIALMENTE OCULTO) -->
+        <div class="plans-grid" id="gridPlanosAnual" style="display: none;">
+          <!-- Básico Anual -->
+          <div class="plan-box">
+            <div class="plan-head-row">
+              <div>
+                <h3 class="plan-box-title">Básico Anual</h3>
+                <p class="plan-box-desc">Economize 4,5 meses • Pague 1x e use o ano todo.</p>
+              </div>
+              <span class="plan-box-icon">⚡</span>
+            </div>
+
+            <div class="plan-price-wrap">
+              <div class="plan-price-val">
+                <span>12x R$ 30,02</span>
+              </div>
+              <div class="plan-price-installment">ou R$ 299,00 à vista no Pix</div>
+            </div>
+
+            <ul class="plan-box-list">
+              <li>
+                <svg class="plan-check-svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                <span><strong>1 Ano Inteiro de Acesso</strong> sem mensalidades</span>
+              </li>
+              <li>
+                <svg class="plan-check-svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                <span>Todos os jogos do launcher inclusos</span>
+              </li>
+              <li>
+                <svg class="plan-check-svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                <span>Painel de personalização e Studio Mode</span>
+              </li>
+              <li>
+                <svg class="plan-check-svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                <span>Overlays transparentes prontas para OBS</span>
+              </li>
+              <li>
+                <svg class="plan-check-svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                <span>Novos jogos adicionados durante 365 dias</span>
+              </li>
+            </ul>
+
+            <button class="btn-buy" onclick="irParaCheckout('PPU38CQFES7')">
+              Assinar Básico Anual ➔
+            </button>
+          </div>
+
+          <!-- Completo Anual (MAIOR DESTAQUE) -->
+          <div class="plan-box featured">
+            <div class="plan-badge-top">💎 MAIS RECOMENDADO • MELHOR CUSTO-BENEFÍCIO</div>
+            <div class="plan-head-row">
+              <div>
+                <h3 class="plan-box-title" style="color: var(--ciano);">Completo Anual</h3>
+                <p class="plan-box-desc">Roblox + Launcher + Cargo VIP Discord • Economize R$ 1.059</p>
+              </div>
+              <span class="plan-box-icon">🚀</span>
+            </div>
+
+            <div class="plan-price-wrap">
+              <div class="plan-price-val">
+                <span>12x R$ 50,10</span>
+              </div>
+              <div class="plan-price-installment">ou R$ 499,00 à vista no Pix (Acesso 1 Ano)</div>
+            </div>
+
+            <ul class="plan-box-list">
+              <li>
+                <svg class="plan-check-svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                <span><strong>Jogos de Roblox Live inclusos (com Skins Reais)</strong></span>
+              </li>
+              <li>
+                <svg class="plan-check-svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                <span>Ponte do TikTok e automação de danças/presentes</span>
+              </li>
+              <li>
+                <svg class="plan-check-svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                <span><strong>1 Ano de Acesso Total</strong> a tudo na plataforma</span>
+              </li>
+              <li>
+                <svg class="plan-check-svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                <span>Acesso irrestrito a todas as Vídeo Aulas & Tutoriais</span>
+              </li>
+              <li>
+                <svg class="plan-check-svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                <span><strong>Cargo VIP Exclusivo + Suporte Prioritário</strong> no Discord</span>
+              </li>
+              <li>
+                <svg class="plan-check-svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                <span>Atualizações automáticas de todos os jogos</span>
+              </li>
+            </ul>
+
+            <button class="btn-buy primary" onclick="irParaCheckout('PPU38CQFESB')">
+              Garantir Completo Anual ➔
+            </button>
+          </div>
+        </div>
+
+        <!-- BARRA DE CONFIANÇA / GARANTIA -->
+        <div class="plans-trust-bar">
+          <div class="trust-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+            <span>Liberação Imediata no Pix & Cartão</span>
+          </div>
+          <div class="trust-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            <span>7 Dias de Garantia Incondicional</span>
+          </div>
+          <div class="trust-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+            <span>Suporte VIP no Discord Oficial</span>
+          </div>
+          <div class="trust-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+            <span>Pagamento 100% Criptografado</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- SEÇÃO DOWNLOADS -->
+      <section id="aba-downloads" style="display: none;">
+        <div class="catalog-header">
+          <h1 class="catalog-title">Downloads do Launcher</h1>
+        </div>
+
+        <div class="dl-grid">
+          <div class="dl-card">
+            <h3>🪟 Windows Launcher</h3>
+            <p>Instalador oficial para Windows 10 e Windows 11 (64-bit).</p>
+            <a href="https://github.com/ravengames777/raven-games-app-windows/releases/download/1.0.0/RAVENGAMES.INSTALADOR.exe" class="btn-dl">
+              Baixar para Windows (.exe)
+            </a>
+          </div>
+
+          <div class="dl-card">
+            <h3>🍏 macOS Launcher</h3>
+            <p>Instalador para computadores Apple Silicon (M1/M2/M3/M4) e Intel.</p>
+            <a href="https://github.com/ravengames777/raven-games-app-windows/releases" class="btn-dl" style="background: rgba(255,255,255,0.08); color: #fff;">
+              Baixar para Mac (.dmg)
+            </a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Mobile Bottom Bar -->
+    <nav class="mobile-tab-bar">
+      <button class="m-tab-item active" onclick="trocarAba('jogos', this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><line x1="6" y1="12" x2="10" y2="12"/><line x1="8" y1="10" x2="8" y2="14"/><line x1="15" y1="13" x2="15.01" y2="13"/><line x1="18" y1="11" x2="18.01" y2="11"/></svg>
+        <span>Jogos</span>
+      </button>
+      <button class="m-tab-item" onclick="trocarAba('aulas', this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+        <span>Aulas</span>
+      </button>
+      <button class="m-tab-item" id="btnMobilePlanos" onclick="trocarAba('planos', this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <span>Planos</span>
+      </button>
+      <button class="m-tab-item" onclick="trocarAba('provas', this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        <span>Provas</span>
+      </button>
+      <button class="m-tab-item" onclick="trocarAba('downloads', this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        <span>Baixar</span>
+      </button>
+      <a href="https://discord.gg/4CCx9Cw2n9" target="_blank" class="m-tab-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+        <span>Discord</span>
+      </a>
+    </nav>
+  </div>
+
+  <!-- Modal Player de Vídeo Aula -->
+  <div class="modal-backdrop" id="modalVideoAula">
+    <div class="modal-sheet" style="max-width: 760px; width: 100%; padding: 22px; background: #0e111a; border: 1px solid rgba(0, 210, 255, 0.35); border-radius: 20px; box-shadow: 0 25px 60px rgba(0,0,0,0.9), 0 0 35px rgba(0,210,255,0.15);">
+      <button class="modal-close-btn" onclick="fecharModalVideo()">✕</button>
+      <div style="margin-bottom: 12px; text-align: left;">
+        <span id="modalVideoModulo" style="font-size: 0.72rem; font-weight: 800; color: var(--ciano); text-transform: uppercase; letter-spacing: 0.05em;">RAVEN GAMES • TUTORIAL 01</span>
+        <h3 id="modalVideoTitulo" style="font-size: 1.15rem; font-weight: 800; color: #fff; margin-top: 4px;">Título da Aula</h3>
+      </div>
+      <div style="position: relative; padding-top: 56.25%; width: 100%; border-radius: 12px; overflow: hidden; background: #000; margin-bottom: 14px; border: 1px solid rgba(255,255,255,0.08);">
+        <iframe id="modalVideoIframe" style="position: absolute; top:0; left:0; width:100%; height:100%; border:0;" src="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+      </div>
+      <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+        <p id="modalVideoDesc" style="font-size: 0.85rem; color: #cbd5e1; line-height: 1.5; text-align: left; flex: 1; min-width: 240px;"></p>
+        <a id="modalVideoYtLink" href="#" target="_blank" rel="noopener noreferrer" class="btn-buy" style="width: auto; padding: 9px 18px; font-size: 0.82rem; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); display: inline-flex; align-items: center; gap: 6px; text-decoration: none; border-radius: 8px;">
+          ▶️ Assistir no YouTube ↗
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Visualizar Prova Social em Tela Cheia -->
+  <div class="modal-backdrop" id="modalProva">
+    <div class="modal-sheet" style="max-width: 580px; padding: 12px; background: #0c0f17; text-align: center;">
+      <button class="modal-close-btn" onclick="fecharModal('modalProva')">✕</button>
+      <img id="modalProvaImg" src="" style="width: 100%; max-height: 80vh; object-fit: contain; border-radius: 10px;" />
+    </div>
+  </div>
+
+  <!-- Modal Detalhe do Jogo -->
+  <div class="modal-backdrop" id="modalJogo">
+    <div class="modal-sheet">
+      <button class="modal-close-btn" onclick="fecharModalJogo()">✕</button>
+      <div id="modalJogoConteudo"></div>
+    </div>
+  </div>
+
+  <!-- Modal Bloqueio VIP para Vídeo Aulas -->
+  <div class="modal-backdrop" id="modalBloqueioVip">
+    <div class="pc-modal-card" style="max-width: 440px; border-color: rgba(245, 158, 11, 0.35); box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85), 0 0 35px rgba(245, 158, 11, 0.15);">
+      <div class="pc-modal-glow" style="background: radial-gradient(circle, rgba(245, 158, 11, 0.25) 0%, transparent 70%);"></div>
+      <button class="modal-close-btn" onclick="fecharModal('modalBloqueioVip')">✕</button>
+      
+      <div class="pc-modal-icon-wrap" style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.18), rgba(217, 119, 6, 0.18)); border-color: rgba(245, 158, 11, 0.45); box-shadow: 0 0 25px rgba(245, 158, 11, 0.25);">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 32px; height: 32px;">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+        </svg>
+      </div>
+
+      <div class="pc-modal-badge" style="background: rgba(245, 158, 11, 0.12); border-color: rgba(245, 158, 11, 0.4); color: #fbbf24;">
+        <span>🔒</span> Exclusivo para Assinantes
+      </div>
+
+      <h2 class="pc-modal-title">Vídeo Aula Bloqueada</h2>
+      
+      <p class="pc-modal-desc">
+        Os tutoriais oficiais e vídeo aulas são exclusivos para membros com <strong>plano ativo</strong> na Raven Games. Assine para desbloquear todas as aulas, launcher e jogos!
+      </p>
+
+      <button class="pc-modal-btn-confirm" onclick="fecharModal('modalBloqueioVip'); trocarAba('planos');" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: #07090e; box-shadow: 0 4px 20px rgba(245, 158, 11, 0.4);">
+        💎 Ver Planos & Desbloquear Acesso ➔
+      </button>
+
+      <button class="pc-modal-btn-back" onclick="fecharModal('modalBloqueioVip')">
+        Voltar ao catálogo
+      </button>
+    </div>
+  </div>
+
+  <!-- Modal Aviso de Computador Obrigatório (Premium) -->
+  <div class="modal-backdrop" id="modalAvisoComputador">
+    <div class="pc-modal-card">
+      <div class="pc-modal-glow"></div>
+      <button class="modal-close-btn" onclick="fecharModal('modalAvisoComputador')">✕</button>
+      
+      <div class="pc-modal-icon-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+          <line x1="8" y1="21" x2="16" y2="21"></line>
+          <line x1="12" y1="17" x2="12" y2="21"></line>
+        </svg>
+      </div>
+
+      <div class="pc-modal-badge">
+        <span>⚡</span> Requisito do Launcher
+      </div>
+
+      <h2 class="pc-modal-title">Você precisa de um Computador</h2>
+      
+      <p class="pc-modal-desc">
+        Para rodar os jogos e transmitir sua live, você precisará de acesso a <strong style="color: #fff;">1 computador (PC ou Mac)</strong>.
+      </p>
+
+      <div class="pc-modal-grid">
+        <div class="pc-modal-sys-card">
+          <span class="pc-modal-sys-icon">🪟</span>
+          <div>
+            <div class="pc-modal-sys-name">Windows PC</div>
+            <div class="pc-modal-sys-sub">Win 10 e Win 11</div>
+          </div>
+        </div>
+        <div class="pc-modal-sys-card">
+          <span class="pc-modal-sys-icon">🍏</span>
+          <div>
+            <div class="pc-modal-sys-name">Apple Mac</div>
+            <div class="pc-modal-sys-sub">Intel ou Apple Silicon</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pc-modal-alert">
+        <span style="font-size: 1.1rem; flex-shrink: 0;">⚠️</span>
+        <span>Os jogos não funcionam no celular. O celular serve apenas para abrir a transmissão ao vivo.</span>
+      </div>
+
+      <button id="btnConfirmarCheckout" onclick="confirmarCheckout()" class="pc-modal-btn-confirm">
+        <span>Tenho computador, prosseguir</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+          <polyline points="12 5 19 12 12 19"></polyline>
+        </svg>
+      </button>
+
+      <button onclick="fecharModal('modalAvisoComputador')" class="pc-modal-btn-back">
+        Voltar aos Planos
+      </button>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { 
+      getAuth, 
+      signInWithEmailAndPassword, 
+      createUserWithEmailAndPassword, 
+      signInWithPopup,
+      GoogleAuthProvider,
+      onAuthStateChanged,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyA6_bbuiAtaQCUz0B9EsQVpDIJuANGL8fg",
+      authDomain: "tiklive-6ff37.firebaseapp.com",
+      projectId: "tiklive-6ff37"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const googleProvider = new GoogleAuthProvider();
+    const FIRESTORE_URL = `https://firestore.googleapis.com/v1/projects/${firebaseConfig.projectId}/databases/(default)/documents`;
+
+    let modoPortao = 'cadastro'; // 'cadastro' ou 'login'
+    window.usuarioAtual = null;
+
+    const JOGOS = [
+      {
+        slug: "avatares-roblox",
+        nome: "Avatares da Live",
+        cat: "roblox",
+        capa: "capas/avatares-roblox-v.png",
+        tipo: "Roblox Live",
+        desc: "Quem comenta o nick no chat dança na live com a skin real. Presentes furam a fila e deixam o avatar gigante!"
+      },
+      {
+        slug: "impressora",
+        nome: "Impressora da Live",
+        cat: "launcher",
+        capa: "capas/impressora-v.png",
+        tipo: "Launcher PC",
+        desc: "Imprime fotos de perfil do chat em tempo real conforme enviam presentes e comandos."
+      },
+      {
+        slug: "boy-vs-girl",
+        nome: "Boys vs Girls",
+        cat: "estrategia",
+        capa: "capas/boy-vs-girl-v.png",
+        tipo: "Launcher PC",
+        desc: "Disputa em tempo real de curtidas e presentes entre equipes com ranking automático."
+      },
+      {
+        slug: "jogo-novo",
+        nome: "Batalha pelo Brasil",
+        cat: "estrategia",
+        capa: "capas/jogo-novo-v.png",
+        tipo: "Launcher PC",
+        desc: "A grande disputa dos 4 na sua live impulsionada pelo chat e presentes do TikTok."
+      },
+      {
+        slug: "tower-sky",
+        nome: "Tower Sky 3D",
+        cat: "launcher",
+        capa: "capas/tower-sky-v.png",
+        tipo: "Launcher PC",
+        desc: "Empilhamento de blocos infinito acionado por presentes e interação do chat."
+      },
+      {
+        slug: "flappy-fly",
+        nome: "Flappy Fly Live",
+        cat: "launcher",
+        capa: "capas/flappy-fly-v.png",
+        tipo: "Launcher PC",
+        desc: "O clássico Flappy Bird controlado ao vivo pelos comentários e presentes do público."
+      },
+      {
+        slug: "torre-messi-cr7",
+        nome: "Torre Messi vs CR7",
+        cat: "estrategia",
+        capa: "capas/torre-messi-cr7-v.png",
+        tipo: "Launcher PC",
+        desc: "Batalha dos maiores do futebol decidida pelos presentes enviados na live."
+      }
+    ];
+
+    // Alternar Cadastro / Login
+    window.alternarModoPortao = function() {
+      modoPortao = modoPortao === 'cadastro' ? 'login' : 'cadastro';
+      const isCad = modoPortao === 'cadastro';
+      document.getElementById("portaoSub").textContent = isCad ? "Crie sua conta para acessar o catálogo de jogos." : "Digite seu e-mail e senha para entrar.";
+      document.getElementById("blocoNomePortao").style.display = isCad ? "flex" : "none";
+      document.getElementById("inputNomePortao").required = isCad;
+      document.getElementById("btnPortaoSubmit").textContent = isCad ? "CRIAR CONTA ➔" : "ENTRAR NO PAINEL ➔";
+      document.getElementById("portaoToggleTexto").textContent = isCad ? "Já tem uma conta?" : "Ainda não tem conta?";
+      document.getElementById("portaoToggleLink").textContent = isCad ? "Fazer Login" : "Cadastre-se";
+      document.getElementById("portaoAlert").style.display = "none";
+    };
+
+    // Submeter Formulário
+    window.executarAuth = async function(e) {
+      e.preventDefault();
+      const alertBox = document.getElementById("portaoAlert");
+      alertBox.style.display = "none";
+      const email = document.getElementById("inputEmailPortao").value.trim();
+      const senha = document.getElementById("inputSenhaPortao").value;
+      const nome = document.getElementById("inputNomePortao").value.trim();
+      const btn = document.getElementById("btnPortaoSubmit");
+
+      btn.disabled = true;
+      btn.textContent = "Conectando...";
+
+      try {
+        if (modoPortao === 'cadastro') {
+          const cred = await createUserWithEmailAndPassword(auth, email, senha);
+          await salvarUsuarioFirestore(cred.user.uid, email, nome);
+        } else {
+          await signInWithEmailAndPassword(auth, email, senha);
+        }
+      } catch (err) {
+        alertBox.textContent = traduzirErro(err.code || err.message);
+        alertBox.style.display = "block";
+        btn.disabled = false;
+        btn.textContent = modoPortao === 'cadastro' ? "CRIAR CONTA ➔" : "ENTRAR NO PAINEL ➔";
+      }
+    };
+
+    // Login com Google
+    window.loginComGoogle = async function() {
+      const alertBox = document.getElementById("portaoAlert");
+      alertBox.style.display = "none";
+      try {
+        const cred = await signInWithPopup(auth, googleProvider);
+        await salvarUsuarioFirestore(cred.user.uid, cred.user.email, cred.user.displayName);
+      } catch (err) {
+        if (!err.message.includes("popup-closed")) {
+          alertBox.textContent = traduzirErro(err.code || err.message);
+          alertBox.style.display = "block";
+        }
+      }
+    };
+
+    async function salvarUsuarioFirestore(uid, email, nome) {
+      try {
+        // Checa se o email já tinha permissão pré-cadastrada
+        let liberado = false;
+        let plano = null;
+        let vitalicio = false;
+        let valeAte = null;
+
+        if (email) {
+          const resChecar = await fetch(`${FIRESTORE_URL}/usuarios/${encodeURIComponent(email.toLowerCase())}`);
+          if (resChecar.ok) {
+            const dataPre = await resChecar.json();
+            if (dataPre.fields?.liberado?.booleanValue === true) {
+              liberado = true;
+              plano = dataPre.fields?.plano?.stringValue || "vitalicio";
+              vitalicio = dataPre.fields?.vitalicio?.booleanValue === true;
+              valeAte = dataPre.fields?.valeAte?.stringValue || null;
+            }
+          }
+        }
+
+        const fieldsObj = {
+          email: { stringValue: email || "" },
+          nome: { stringValue: nome || email.split("@")[0] },
+          ultimoAcesso: { stringValue: new Date().toISOString() }
+        };
+
+        if (liberado) {
+          fieldsObj.liberado = { booleanValue: true };
+          if (plano) fieldsObj.plano = { stringValue: plano };
+          if (vitalicio) fieldsObj.vitalicio = { booleanValue: true };
+          if (valeAte) fieldsObj.valeAte = { stringValue: valeAte };
+        }
+
+        await fetch(`${FIRESTORE_URL}/usuarios/${encodeURIComponent(uid)}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ fields: fieldsObj })
+        });
+      } catch (e) {}
+    }
+
+    function traduzirErro(code) {
+      if (code.includes("email-already-in-use")) return "Este e-mail já está cadastrado. Faça login.";
+      if (code.includes("wrong-password") || code.includes("user-not-found") || code.includes("invalid-credential")) return "E-mail ou senha incorretos.";
+      if (code.includes("weak-password")) return "A senha deve ter pelo menos 6 caracteres.";
+      return "Ocorreu um erro ao conectar. Tente novamente.";
+    }
+
+    // Deslogar
+    window.deslogar = function() {
+      signOut(auth);
+    };
+
+    // Ouvir Auth State
+    onAuthStateChanged(auth, async (user) => {
+      window.usuarioAtual = user;
+      const portao = document.getElementById("telaPortaoAuth");
+      const painel = document.getElementById("painelApp");
+
+      if (user) {
+        portao.style.display = "none";
+        painel.style.display = "block";
+
+        const nome = user.displayName || user.email.split("@")[0];
+        document.getElementById("nomeUser").textContent = nome;
+        document.getElementById("avatarUser").textContent = (user.email || 'U')[0].toUpperCase();
+
+        let dadosConta = { liberado: false, plano: "Sem plano ativo", vitalicio: false, valeAte: null };
+
+        // 1. Tenta buscar por UID no Firestore
+        try {
+          const resUid = await fetch(`${FIRESTORE_URL}/usuarios/${encodeURIComponent(user.uid)}`);
+          if (resUid.ok) {
+            const data = await resUid.json();
+            extrairDadosConta(data.fields, dadosConta);
+          }
+        } catch (e) {}
+
+        // 2. Se não liberou por UID, tenta buscar por e-mail
+        if (!dadosConta.liberado && user.email) {
+          try {
+            const resEmail = await fetch(`${FIRESTORE_URL}/usuarios/${encodeURIComponent(user.email.toLowerCase())}`);
+            if (resEmail.ok) {
+              const data = await resEmail.json();
+              extrairDadosConta(data.fields, dadosConta);
+            }
+          } catch (e) {}
+        }
+
+        window.dadosContaAtual = dadosConta;
+        atualizarInterfacePlano(dadosConta, user);
+        renderizarJogos(JOGOS);
+      } else {
+        portao.style.display = "flex";
+        painel.style.display = "none";
+        document.getElementById("btnPortaoSubmit").disabled = false;
+        document.getElementById("btnPortaoSubmit").textContent = modoPortao === 'cadastro' ? "CRIAR CONTA ➔" : "ENTRAR NO PAINEL ➔";
+      }
+    });
+
+    function extrairDadosConta(fields, alvo) {
+      if (!fields) return;
+      const lib = fields.liberado?.booleanValue === true;
+      const vit = fields.vitalicio?.booleanValue === true;
+      const planoStr = fields.plano?.stringValue || fields.nivel?.stringValue || "";
+      const valeAte = fields.valeAte?.stringValue || fields.validoAte?.stringValue || null;
+
+      let estaAtivo = lib || vit || (planoStr !== "" && planoStr !== "null");
+      if (valeAte) {
+        try {
+          if (new Date(valeAte) > new Date()) estaAtivo = true;
+        } catch (e) {}
+      }
+
+      if (estaAtivo) {
+        alvo.liberado = true;
+        alvo.vitalicio = vit;
+        alvo.valeAte = valeAte;
+        
+        if (vit || planoStr.toLowerCase().includes("vitalicio")) {
+          alvo.plano = "Plano Vitalício";
+        } else if (planoStr.toLowerCase().includes("completo") || planoStr.toLowerCase().includes("anual")) {
+          alvo.plano = "Plano Completo";
+        } else if (planoStr.toLowerCase().includes("basico")) {
+          alvo.plano = "Plano Básico";
+        } else {
+          alvo.plano = planoStr || "VIP Ativo";
+        }
+      }
+    }
+
+    function atualizarInterfacePlano(dados, user) {
+      const stEl = document.getElementById("planoUser");
+      const bannerVip = document.getElementById("bannerVipAtivo");
+      const btnSidebarPlanos = document.getElementById("btnSidebarPlanos");
+      const btnMobilePlanos = document.getElementById("btnMobilePlanos");
+      const bannerAulasBloq = document.getElementById("bannerAulasBloqueadas");
+      const bannerAulasLib = document.getElementById("bannerAulasLiberadas");
+
+      if (dados.liberado) {
+        stEl.textContent = `👑 ${dados.plano}`;
+        stEl.style.color = "var(--verde)";
+        stEl.style.fontWeight = "800";
+
+        // Ocultar aba e botões de comprar plano para quem já é VIP
+        if (btnSidebarPlanos) btnSidebarPlanos.style.display = "none";
+        if (btnMobilePlanos) btnMobilePlanos.style.display = "none";
+        document.getElementById("aba-planos").style.display = "none";
+
+        if (bannerVip) {
+          bannerVip.style.display = "block";
+          document.getElementById("vipNomePlano").textContent = dados.plano;
+          document.getElementById("vipEmail").textContent = user.email;
+          document.getElementById("vipValidade").textContent = dados.vitalicio ? "Vitalício (Acesso Permanente)" : (dados.valeAte ? new Date(dados.valeAte).toLocaleDateString('pt-BR') : "Ativo");
+        }
+
+        if (bannerAulasBloq) bannerAulasBloq.style.display = "none";
+        if (bannerAulasLib) bannerAulasLib.style.display = "block";
+      } else {
+        stEl.textContent = "Sem plano ativo";
+        stEl.style.color = "var(--texto-mutado)";
+        if (btnSidebarPlanos) btnSidebarPlanos.style.display = "flex";
+        if (btnMobilePlanos) btnMobilePlanos.style.display = "flex";
+        if (bannerVip) bannerVip.style.display = "none";
+
+        if (bannerAulasBloq) bannerAulasBloq.style.display = "block";
+        if (bannerAulasLib) bannerAulasLib.style.display = "none";
+      }
+
+      renderizarJogos(JOGOS);
+      renderizarAulas(VIDEO_AULAS);
+    }
+
+    // Renderizar Vitrine de Jogos
+    function renderizarJogos(lista) {
+      const grid = document.getElementById("gridJogos");
+      if (!grid) return;
+      grid.innerHTML = "";
+      const isVip = window.dadosContaAtual?.liberado === true;
+      const itens = lista && lista.length ? lista : JOGOS;
+
+      itens.forEach(j => {
+        const card = document.createElement("div");
+        card.className = "game-card";
+        card.onclick = () => window.abrirDetalhesJogo(j.slug);
+        card.innerHTML = `
+          <div class="poster-wrap">
+            <img src="${j.capa}" alt="${j.nome}" class="poster-img" onerror="this.src='logo.png'" />
+            <span class="game-tag-badge ${j.cat === 'roblox' ? 'roblox' : ''}">${j.tipo}</span>
+          </div>
+          <div class="game-info">
+            <h3 class="game-name">${j.nome}</h3>
+            <p class="game-sub">${j.desc}</p>
+            <div class="game-action-row">
+              <span class="game-play-btn" style="color: ${isVip ? 'var(--verde)' : 'var(--ciano)'};">
+                ${isVip ? '✅ Jogar Agora ➔' : 'Ver Jogo ➔'}
+              </span>
+            </div>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    // Lista de Provas Sociais Reais
+    const PROVAS = [
+      { src: "imagens/provas/1778617224481.jpg", tag: "Live com +1.2k Ao Vivo" },
+      { src: "imagens/provas/1778617224557.jpg", tag: "Faturamento em Live" },
+      { src: "imagens/provas/1778617224601.jpg", tag: "Pico de Espectadores" },
+      { src: "imagens/provas/1778617224646.jpg", tag: "Ganhos TikTok Live" },
+      { src: "imagens/provas/1778617224688.jpg", tag: "Comunidade Discord" },
+      { src: "imagens/provas/1778617224729.jpg", tag: "Recorde de Visualizações" },
+      { src: "imagens/provas/1778617224825.jpg", tag: "Público Engajado" },
+      { src: "imagens/provas/1778617224950.jpg", tag: "Live Monetizada" },
+      { src: "imagens/provas/1778617224995.jpg", tag: "Feedback VIP" },
+      { src: "imagens/provas/1778617225045.jpg", tag: "Resultados Streamer" },
+      { src: "imagens/provas/1778617225150.jpg", tag: "Chuva de Presentes" },
+      { src: "imagens/provas/1778617225218.jpg", tag: "Interação no Chat" },
+      { src: "imagens/provas/1778617225268.jpg", tag: "Presentes & Diamantes" },
+      { src: "imagens/provas/1778617225389.jpg", tag: "Metas Atingidas" },
+      { src: "imagens/provas/1778617225603.jpg", tag: "Streamer em Destaque" }
+    ];
+
+    // Renderizar Vitrine de Provas Sociais
+    function renderizarProvas() {
+      const grid = document.getElementById("gridProvas");
+      if (!grid) return;
+      grid.innerHTML = "";
+
+      PROVAS.forEach(p => {
+        const card = document.createElement("div");
+        card.className = "proof-card";
+        card.onclick = () => window.abrirPreviewProva(p.src);
+        card.innerHTML = `
+          <img src="${p.src}" alt="${p.tag}" class="proof-img" loading="lazy" />
+          <div class="proof-overlay-tag">${p.tag}</div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    // Lista de Vídeo Aulas & Tutoriais Oficiais Raven Games (Chaves Protegidas contra Inspecionar)
+    const VIDEO_AULAS = [
+      {
+        id: "aula-1",
+        numero: "01",
+        modulo: "RAVEN GAMES • Tutorial 01",
+        cat: "jogos",
+        tag: "Tutorial 01",
+        titulo: "⚙️ 1. CONFIGURANDO JOGOS",
+        vaultKey: "H3gZMw1vFwJiFQI=",
+        thumb: "imagens/aulas/tutorial-01.jpg",
+        desc: "Aprenda o passo a passo completo para configurar e personalizar todos os jogos dentro do launcher da Raven Games!"
+      },
+      {
+        id: "aula-2",
+        numero: "02",
+        modulo: "RAVEN GAMES • Tutorial 02",
+        cat: "live",
+        tag: "Tutorial 02",
+        titulo: "🔴 2. TUTORIAL DAS LIVES",
+        vaultKey: "KgxkNXY+BCYdbjQ=",
+        thumb: "imagens/aulas/tutorial-02.jpg",
+        desc: "Veja como conectar sua live do TikTok em tempo real com o jogo, configurar seu @ e rodar no TikTok LIVE Studio / OBS!"
+      },
+      {
+        id: "aula-3",
+        numero: "03",
+        modulo: "RAVEN GAMES • Tutorial 03",
+        cat: "roblox",
+        tag: "Tutorial 03",
+        titulo: "🧱 3. PERSONALIZAR MAPA ROBLOX",
+        vaultKey: "JHgxBmMcCRx9Nxo=",
+        thumb: "imagens/aulas/tutorial-03.jpg",
+        desc: "Aprenda o passo a passo completo para abrir no Roblox Studio, editar e personalizar os mapas dos jogos para as suas lives!"
+      },
+      {
+        id: "aula-4",
+        numero: "04",
+        modulo: "RAVEN GAMES • Tutorial 04",
+        cat: "estrategia",
+        tag: "Tutorial 04",
+        titulo: "🔥 4. COMO AQUECER A LIVE",
+        vaultKey: "BiB7FiU2FC4aMyQ=",
+        thumb: "imagens/aulas/tutorial-04.jpg",
+        desc: "Aprenda a melhor estratégia e o método passo a passo para aquecer sua conta e a sua live do TikTok, atrair mais público e reter espectadores desde o primeiro minuto!"
+      }
+    ];
+
+    // Descriptografador Seguro de Stream em Memória (Apenas para Contas VIP Verificadas)
+    function resolverStreamVip(vaultKey) {
+      if (window.dadosContaAtual?.liberado !== true) return null;
+      try {
+        const salt = 'RAVEN_VIP_STREAM_KEY_2026';
+        const raw = atob(vaultKey);
+        let vidId = '';
+        for (let i = 0; i < raw.length; i++) {
+          vidId += String.fromCharCode(raw.charCodeAt(i) ^ salt.charCodeAt(i % salt.length));
+        }
+        return {
+          embedUrl: `https://www.youtube-nocookie.com/embed/${vidId}?autoplay=1&rel=0&modestbranding=1`,
+          watchUrl: `https://youtu.be/${vidId}`
+        };
+      } catch (e) {
+        return null;
+      }
+    }
+
+    // Renderizar Vitrine de Vídeo Aulas
+    function renderizarAulas(lista) {
+      const grid = document.getElementById("gridAulas");
+      if (!grid) return;
+      grid.innerHTML = "";
+      const isVip = window.dadosContaAtual?.liberado === true;
+      const itens = lista && lista.length ? lista : VIDEO_AULAS;
+
+      itens.forEach(a => {
+        const card = document.createElement("div");
+        card.className = "video-card" + (isVip ? "" : " locked");
+        card.onclick = () => isVip ? window.abrirVideoAula(a.id) : window.abrirBloqueioVip(a);
+        card.innerHTML = `
+          <div class="video-thumb-wrap">
+            <img src="${a.thumb}" alt="${a.titulo}" class="video-thumb-img" onerror="this.src='capas/jogo-novo.png'" />
+            <div class="video-play-overlay">
+              <div class="video-play-btn">
+                ${isVip ? `
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
+                  <polygon points="5 3 19 12 5 21 5 3"/>
+                </svg>` : `
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#07090e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                </svg>`}
+              </div>
+            </div>
+            <span class="video-tag-badge">${a.tag}</span>
+            ${isVip ? `
+            <span class="video-duration-badge">
+              <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="5 3 19 12 5 21 5 3"/>
+              </svg>
+              YouTube HD
+            </span>` : `
+            <span class="video-lock-pill">
+              🔒 VIP
+            </span>`}
+          </div>
+          <div class="video-info">
+            <span style="font-size: 0.7rem; font-weight: 800; color: ${isVip ? 'var(--ciano)' : '#fbbf24'}; text-transform: uppercase;">${a.modulo}</span>
+            <h3 class="video-title">${a.titulo}</h3>
+            <p class="video-desc">${a.desc}</p>
+            <div class="video-footer-row">
+              <span>${isVip ? '👉 Assistir Vídeo Aula' : '🔒 Exclusivo para Assinantes'}</span>
+              <span>${isVip ? '➔' : '💎 Assinar'}</span>
+            </div>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    // Filtros de Vídeo Aulas
+    window.filtrarAulas = function(cat, btn) {
+      document.querySelectorAll("#aba-aulas .pill-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      if (cat === 'todos') renderizarAulas(VIDEO_AULAS);
+      else renderizarAulas(VIDEO_AULAS.filter(a => a.cat === cat));
+    };
+
+    // Modal Bloqueio VIP para Não-Assinantes
+    window.abrirBloqueioVip = function(aula) {
+      document.getElementById("modalBloqueioVip").classList.add("open");
+    };
+
+    // Modal Player de Vídeo Aula (Apenas VIP)
+    window.abrirVideoAula = function(id) {
+      const isVip = window.dadosContaAtual?.liberado === true;
+      if (!isVip) {
+        window.abrirBloqueioVip();
+        return;
+      }
+
+      const a = VIDEO_AULAS.find(x => x.id === id);
+      if (!a) return;
+
+      const stream = resolverStreamVip(a.vaultKey);
+      if (!stream) {
+        window.abrirBloqueioVip();
+        return;
+      }
+
+      document.getElementById("modalVideoModulo").textContent = a.modulo;
+      document.getElementById("modalVideoTitulo").textContent = a.titulo;
+      document.getElementById("modalVideoDesc").textContent = a.desc;
+      
+      const ytLink = document.getElementById("modalVideoYtLink");
+      if (ytLink) {
+        ytLink.href = stream.watchUrl;
+      }
+
+      const iframe = document.getElementById("modalVideoIframe");
+      if (iframe) iframe.src = stream.embedUrl;
+      
+      document.getElementById("modalVideoAula").classList.add("open");
+    };
+
+    window.fecharModalVideo = function() {
+      const iframe = document.getElementById("modalVideoIframe");
+      if (iframe) iframe.src = ""; // Destrói o src e para a reprodução imediatamente
+      const ytLink = document.getElementById("modalVideoYtLink");
+      if (ytLink) ytLink.removeAttribute("href"); // Remove o link do DOM
+      document.getElementById("modalVideoAula").classList.remove("open");
+    };
+
+    // Inicialização imediata dos jogos, provas e aulas
+    renderizarJogos(JOGOS);
+    renderizarProvas();
+    renderizarAulas();
+
+    // Filtros de Jogos
+    window.filtrar = function(cat, btn) {
+      document.querySelectorAll("#aba-jogos .pill-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      if (cat === 'todos') renderizarJogos(JOGOS);
+      else renderizarJogos(JOGOS.filter(j => j.cat === cat));
+    };
+
+    // Trocar Abas
+    window.trocarAba = function(aba, btn) {
+      document.getElementById("aba-jogos").style.display = aba === 'jogos' ? 'block' : 'none';
+      document.getElementById("aba-aulas").style.display = aba === 'aulas' ? 'block' : 'none';
+      document.getElementById("aba-planos").style.display = aba === 'planos' ? 'block' : 'none';
+      document.getElementById("aba-provas").style.display = aba === 'provas' ? 'block' : 'none';
+      document.getElementById("aba-downloads").style.display = aba === 'downloads' ? 'block' : 'none';
+
+      document.querySelectorAll(".nav-btn, .m-tab-item").forEach(b => b.classList.remove("active"));
+      if (btn) btn.classList.add("active");
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    // Alternar Ciclo de Faturamento dos Planos (Mensal vs Anual)
+    window.alternarCicloPlanos = function(ciclo, btn) {
+      const gridMensal = document.getElementById("gridPlanosMensal");
+      const gridAnual = document.getElementById("gridPlanosAnual");
+      const btns = document.querySelectorAll(".plans-cycle-toggle .cycle-btn");
+
+      btns.forEach(b => b.classList.remove("active"));
+      if (btn) btn.classList.add("active");
+
+      if (ciclo === 'anual') {
+        if (gridMensal) gridMensal.style.display = 'none';
+        if (gridAnual) gridAnual.style.display = 'grid';
+      } else {
+        if (gridMensal) gridMensal.style.display = 'grid';
+        if (gridAnual) gridAnual.style.display = 'none';
+      }
+    };
+
+    // Modal de Preview de Prova Social
+    window.abrirPreviewProva = function(src) {
+      const img = document.getElementById("modalProvaImg");
+      if (img) img.src = src;
+      document.getElementById("modalProva").classList.add("open");
+    };
+
+    window.fecharModal = function(id) {
+      const el = document.getElementById(id);
+      if (el) el.classList.remove("open");
+    };
+
+    // Modal de Detalhe do Jogo
+    window.abrirDetalhesJogo = function(slug) {
+      const j = JOGOS.find(x => x.slug === slug);
+      if (!j) return;
+      const isVip = window.dadosContaAtual?.liberado === true;
+      const c = document.getElementById("modalJogoConteudo");
+      c.innerHTML = `
+        <div style="display: flex; gap: 16px; margin-bottom: 16px; align-items: center;">
+          <img src="${j.capa}" style="width: 70px; height: 95px; object-fit: cover; border-radius: 8px;" />
+          <div>
+            <span style="font-size: 0.7rem; color: var(--ciano); font-weight: 800;">${j.tipo}</span>
+            <h2 style="font-size: 1.2rem; color: #fff; margin-top: 2px;">${j.nome}</h2>
+            ${isVip ? '<span style="font-size: 0.75rem; color: var(--verde); font-weight: 800;">👑 Jogo Liberado na sua Conta</span>' : ''}
+          </div>
+        </div>
+        <p style="font-size: 0.85rem; color: #cbd5e1; line-height: 1.5; margin-bottom: 20px;">${j.desc}</p>
+        <button onclick="fecharModalJogo(); trocarAba('downloads');" class="btn-buy primary" style="margin-bottom: 10px;">
+          ⬇️ Baixar Launcher para Jogar no PC
+        </button>
+        ${!isVip ? `
+        <button onclick="fecharModalJogo(); trocarAba('planos');" class="btn-buy">
+          💎 Ver Planos de Assinatura
+        </button>` : ''}
+      `;
+      document.getElementById("modalJogo").classList.add("open");
+    };
+
+    window.fecharModalJogo = function() {
+      document.getElementById("modalJogo").classList.remove("open");
+    };
+
+    let checkoutCodigoPendente = null;
+
+    // Abrir Modal de Aviso de Computador antes de ir ao Checkout
+    window.irParaCheckout = function(codigoPP) {
+      checkoutCodigoPendente = codigoPP;
+      document.getElementById("modalAvisoComputador").classList.add("open");
+    };
+
+    // Confirmar e Redirecionar para o Checkout da PerfectPay
+    window.confirmarCheckout = function() {
+      if (!checkoutCodigoPendente) return;
+      const codigoPP = checkoutCodigoPendente;
+      const user = window.usuarioAtual;
+      const base = `https://checkout.ravengames.shop/pay/${codigoPP}`;
+      const params = new URLSearchParams();
+      if (user) {
+        if (user.email) params.append("email", user.email);
+        if (user.displayName) params.append("name", user.displayName);
+        params.append("src", user.uid);
+        params.append("custom", user.uid);
+      }
+      window.location.href = `${base}${base.includes('?') ? '&' : '?'}${params.toString()}`;
+    };
+  </script>
+
+  <!-- Fundo Shader Adaptativo do Portão de Login -->
+  <script>
+    (function initPortaoShader() {
+      const canvas = document.getElementById('portaoShaderCanvas');
+      if (!canvas) return;
+
+      const gl = canvas.getContext('webgl', { 
+        alpha: true, 
+        antialias: false, 
+        powerPreference: 'high-performance' 
+      }) || canvas.getContext('experimental-webgl');
+
+      if (!gl) {
+        canvas.style.display = 'none';
+        return;
+      }
+
+      const vsSource = `
+        attribute vec2 a_position;
+        void main() { gl_Position = vec4(a_position, 0.0, 1.0); }
+      `;
+
+      const fsSource = `
+        precision highp float;
+        uniform vec2 u_resolution;
+        uniform float u_time;
+        uniform vec2 u_mouse;
+        uniform float u_quality;
+
+        float hash(vec3 p) {
+          vec3 q = fract(p * vec3(0.1031, 0.1030, 0.0973));
+          float r = q.x + dot(q, q.yzx + 33.33);
+          return fract((r + q.y) * r);
+        }
+
+        float noise(vec3 p) {
+          vec3 i = floor(p);
+          vec3 f = fract(p);
+          vec3 u = f * f * (3.0 - 2.0 * f);
+          float a = mix(hash(i), hash(i + vec3(1.0, 0.0, 0.0)), u.x);
+          float b = mix(hash(i + vec3(0.0, 1.0, 0.0)), hash(i + vec3(1.0, 1.0, 0.0)), u.x);
+          float c = mix(hash(i + vec3(0.0, 0.0, 1.0)), hash(i + vec3(1.0, 0.0, 1.0)), u.x);
+          float d = mix(hash(i + vec3(0.0, 1.0, 1.0)), hash(i + vec3(1.0, 1.0, 1.0)), u.x);
+          return mix(mix(a, b, u.y), mix(c, d, u.y), u.z);
+        }
+
+        float fbm(vec3 p) {
+          float v = 0.0; float a = 0.5; vec3 q = p;
+          for(int i = 0; i < 4; i++) {
+            v += a * noise(q);
+            q = q * 2.02 + vec3(1.7, 9.2, 3.1);
+            a *= 0.5;
+          }
+          return v;
+        }
+
+        float density(vec3 p, float t) {
+          vec3 drift = vec3(t * 0.07, t * 0.025, t * 0.045);
+          float band = exp(-abs(p.y - 0.32 * sin(p.x * 1.1 + t * 0.25)) * 2.2);
+          float ribbons = fbm(p * 1.5 + drift);
+          return max(0.0, ribbons - 0.44) * band * 2.0;
+        }
+
+        vec3 palette(float t) {
+          vec3 a = vec3(0.0, 0.72, 0.98);
+          vec3 b = vec3(0.38, 0.22, 0.88);
+          vec3 c = vec3(0.02, 0.88, 0.65);
+          return mix(mix(a, b, smoothstep(0.0, 0.55, t)), c, smoothstep(0.5, 1.0, t));
+        }
+
+        vec3 tonemapAces(vec3 col) {
+          float a = 2.51; float b = 0.03; float c = 2.43; float d = 0.59; float e = 0.14;
+          return clamp((col * (a * col + b)) / (col * (c * col + d) + e), 0.0, 1.0);
+        }
+
+        void main() {
+          vec2 uv = gl_FragCoord.xy / u_resolution.xy;
+          float aspect = u_resolution.x / u_resolution.y;
+          vec2 screen = vec2((uv.x - 0.5) * aspect, uv.y - 0.5) * 2.0;
+          
+          vec2 m = (u_mouse / u_resolution.xy - 0.5) * 0.2;
+          screen += m;
+
+          vec3 origin = vec3(0.0, 0.0, -3.0);
+          vec3 direction = normalize(vec3(screen, 1.6));
+
+          int maxSteps = u_quality > 0.75 ? 24 : 12;
+          float stepsF = float(maxSteps);
+          float stepSize = 4.5 / stepsF;
+          vec3 accumulated = vec3(0.0);
+          float transmittance = 1.0;
+          float t = 0.6;
+
+          for(int i = 0; i < 24; i++) {
+            if (i >= maxSteps) break;
+            vec3 p = origin + direction * t;
+            float d = density(p, u_time);
+            if (d > 0.001) {
+              vec3 glow = palette(clamp(d * 0.85 + p.y * 0.25 + 0.35, 0.0, 1.0));
+              float absorb = exp(-d * stepSize * 1.6);
+              accumulated += glow * d * transmittance * stepSize * 1.55;
+              transmittance *= absorb;
+            }
+            t += stepSize;
+          }
+
+          vec3 sky = mix(vec3(0.027, 0.035, 0.06), vec3(0.012, 0.015, 0.028), uv.y);
+          vec3 col = sky * transmittance + accumulated;
+
+          vec2 starGrid = uv * vec2(120.0, 70.0);
+          vec2 cell = floor(starGrid);
+          float seed = hash(vec3(cell, 7.0));
+          vec2 local = fract(starGrid) - vec2(hash(vec3(cell, 11.0)), hash(vec3(cell, 13.0)));
+          float star = step(0.983, seed) * smoothstep(0.08, 0.0, length(local)) * (0.3 + 0.7 * sin(u_time * 2.2 + seed * 10.0));
+          col += vec3(star) * 0.95 * transmittance;
+
+          vec2 centered = uv - 0.5;
+          float vignette = 1.0 - dot(centered, centered) * 0.65;
+          col = tonemapAces(col * vignette);
+
+          gl_FragColor = vec4(col, 1.0);
+        }
+      `;
+
+      function createShader(gl, type, source) {
+        const shader = gl.createShader(type);
+        gl.shaderSource(shader, source);
+        gl.compileShader(shader);
+        if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) return null;
+        return shader;
+      }
+
+      const vs = createShader(gl, gl.VERTEX_SHADER, vsSource);
+      const fs = createShader(gl, gl.FRAGMENT_SHADER, fsSource);
+      if (!vs || !fs) return;
+
+      const program = gl.createProgram();
+      gl.attachShader(program, vs);
+      gl.attachShader(program, fs);
+      gl.linkProgram(program);
+      if (!gl.getProgramParameter(program, gl.LINK_STATUS)) return;
+      gl.useProgram(program);
+
+      const posBuffer = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, posBuffer);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, -1,1, 1,-1, 1,1]), gl.STATIC_DRAW);
+
+      const aPos = gl.getAttribLocation(program, 'a_position');
+      gl.enableVertexAttribArray(aPos);
+      gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0);
+
+      const uRes = gl.getUniformLocation(program, 'u_resolution');
+      const uTime = gl.getUniformLocation(program, 'u_time');
+      const uMouse = gl.getUniformLocation(program, 'u_mouse');
+      const uQual = gl.getUniformLocation(program, 'u_quality');
+
+      let currentQuality = 1.0;
+      let targetDpr = Math.min(window.devicePixelRatio || 1, 1.5);
+      let mouseX = window.innerWidth / 2;
+      let mouseY = window.innerHeight / 2;
+      let targetMouseX = mouseX;
+      let targetMouseY = mouseY;
+      let lastTime = performance.now();
+      let frameTimes = [];
+
+      window.addEventListener('mousemove', (e) => {
+        targetMouseX = e.clientX;
+        targetMouseY = e.clientY;
+      }, { passive: true });
+
+      function resize() {
+        const rect = canvas.getBoundingClientRect();
+        if (rect.width <= 0 || rect.height <= 0) return;
+        const width = Math.floor(rect.width * targetDpr * currentQuality);
+        const height = Math.floor(rect.height * targetDpr * currentQuality);
+
+        if (canvas.width !== width || canvas.height !== height) {
+          canvas.width = Math.max(1, width);
+          canvas.height = Math.max(1, height);
+          gl.viewport(0, 0, canvas.width, canvas.height);
+        }
+      }
+
+      window.addEventListener('resize', resize, { passive: true });
+      resize();
+
+      function render(now) {
+        const portao = document.getElementById('telaPortaoAuth');
+        if (!portao || portao.style.display === 'none') return; // Pausa se já logou
+
+        requestAnimationFrame(render);
+
+        const delta = now - lastTime;
+        lastTime = now;
+        frameTimes.push(delta);
+        if (frameTimes.length > 60) {
+          frameTimes.shift();
+          const avgDelta = frameTimes.reduce((a, b) => a + b, 0) / frameTimes.length;
+          if (avgDelta > 22 && currentQuality > 0.5) {
+            currentQuality = 0.5;
+            resize();
+          }
+        }
+
+        mouseX += (targetMouseX - mouseX) * 0.05;
+        mouseY += (targetMouseY - mouseY) * 0.05;
+
+        gl.uniform2f(uRes, canvas.width, canvas.height);
+        gl.uniform1f(uTime, now * 0.001);
+        gl.uniform2f(uMouse, mouseX, mouseY);
+        gl.uniform1f(uQual, currentQuality);
+
+        gl.drawArrays(gl.TRIANGLES, 0, 6);
+      }
+
+      requestAnimationFrame(render);
+    })();
+  </script>
+</body>
+</html>
