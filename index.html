@@ -8,8 +8,23 @@
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
   <link rel="apple-touch-icon" href="favicon.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <!-- Meta Pixel Code -->
+  <script>
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '3373496012857126');
+  fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=3373496012857126&ev=PageView&noscript=1"
+  /></noscript>
+  <!-- End Meta Pixel Code -->
   <style>
     :root {
       --bg-main: #07090e;
@@ -470,6 +485,294 @@
       transform: translateY(-2px);
     }
 
+    /* ================= SHINY CTA BUTTON ================= */
+    @property --gradient-angle {
+      syntax: "<angle>";
+      initial-value: 0deg;
+      inherits: false;
+    }
+
+    @property --gradient-angle-offset {
+      syntax: "<angle>";
+      initial-value: 0deg;
+      inherits: false;
+    }
+
+    @property --gradient-percent {
+      syntax: "<percentage>";
+      initial-value: 5%;
+      inherits: false;
+    }
+
+    @property --gradient-shine {
+      syntax: "<color>";
+      initial-value: white;
+      inherits: false;
+    }
+
+    .shiny-cta {
+      --shiny-cta-bg: #07090e;
+      --shiny-cta-bg-subtle: rgba(255, 255, 255, 0.12);
+      --shiny-cta-fg: #ffffff;
+      --shiny-cta-highlight: #00d2ff;
+      --shiny-cta-highlight-subtle: #84d8ff;
+      --animation: gradient-angle linear infinite;
+      --duration: 3s;
+      --shadow-size: 2px;
+      --transition: 800ms cubic-bezier(0.25, 1, 0.5, 1);
+      
+      isolation: isolate;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      outline-offset: 4px;
+      padding: 0.95rem 1.85rem;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.95rem;
+      line-height: 1.2;
+      font-weight: 600;
+      border: 1px solid transparent;
+      border-radius: 360px;
+      color: var(--shiny-cta-fg);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      background: linear-gradient(var(--shiny-cta-bg), var(--shiny-cta-bg)) padding-box,
+        conic-gradient(
+          from calc(var(--gradient-angle) - var(--gradient-angle-offset)),
+          transparent,
+          var(--shiny-cta-highlight) var(--gradient-percent),
+          var(--gradient-shine) calc(var(--gradient-percent) * 2),
+          var(--shiny-cta-highlight) calc(var(--gradient-percent) * 3),
+          transparent calc(var(--gradient-percent) * 4)
+        ) border-box;
+      box-shadow: inset 0 0 0 1px var(--shiny-cta-bg-subtle), 0 0 20px rgba(0, 210, 255, 0.12);
+      transition: var(--transition);
+      transition-property: --gradient-angle-offset, --gradient-percent, --gradient-shine;
+    }
+
+    .shiny-cta::before,
+    .shiny-cta::after,
+    .shiny-cta span::before {
+      content: "";
+      pointer-events: none;
+      position: absolute;
+      inset-inline-start: 50%;
+      inset-block-start: 50%;
+      translate: -50% -50%;
+      z-index: -1;
+    }
+
+    .shiny-cta:active {
+      translate: 0 1px;
+    }
+
+    /* Dots pattern */
+    .shiny-cta::before {
+      --size: calc(100% - var(--shadow-size) * 3);
+      --position: 2px;
+      --space: calc(var(--position) * 2);
+      width: var(--size);
+      height: var(--size);
+      background: radial-gradient(
+        circle at var(--position) var(--position),
+        white calc(var(--position) / 4),
+        transparent 0
+      ) padding-box;
+      background-size: var(--space) var(--space);
+      background-repeat: space;
+      mask-image: conic-gradient(
+        from calc(var(--gradient-angle) + 45deg),
+        black,
+        transparent 10% 90%,
+        black
+      );
+      -webkit-mask-image: conic-gradient(
+        from calc(var(--gradient-angle) + 45deg),
+        black,
+        transparent 10% 90%,
+        black
+      );
+      border-radius: inherit;
+      opacity: 0.4;
+      z-index: -1;
+    }
+
+    /* Inner shimmer */
+    .shiny-cta::after {
+      --animation: shimmer linear infinite;
+      width: 100%;
+      aspect-ratio: 1;
+      background: linear-gradient(
+        -50deg,
+        transparent,
+        var(--shiny-cta-highlight),
+        transparent
+      );
+      mask-image: radial-gradient(circle at bottom, transparent 40%, black);
+      -webkit-mask-image: radial-gradient(circle at bottom, transparent 40%, black);
+      opacity: 0.6;
+    }
+
+    .shiny-cta span {
+      z-index: 1;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .shiny-cta span::before {
+      --size: calc(100% + 1rem);
+      width: var(--size);
+      height: var(--size);
+      box-shadow: inset 0 -1ex 2rem 4px var(--shiny-cta-highlight);
+      opacity: 0;
+      transition: opacity var(--transition);
+      animation: calc(var(--duration) * 1.5) breathe linear infinite;
+    }
+
+    /* Animate */
+    .shiny-cta,
+    .shiny-cta::before,
+    .shiny-cta::after {
+      animation: var(--animation) var(--duration),
+        var(--animation) calc(var(--duration) / 0.4) reverse paused;
+      animation-composition: add;
+    }
+
+    .shiny-cta:is(:hover, :focus-visible) {
+      --gradient-percent: 20%;
+      --gradient-angle-offset: 95deg;
+      --gradient-shine: var(--shiny-cta-highlight-subtle);
+      transform: translateY(-2px);
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.25), 0 0 30px rgba(0, 210, 255, 0.35);
+    }
+
+    .shiny-cta:is(:hover, :focus-visible),
+    .shiny-cta:is(:hover, :focus-visible)::before,
+    .shiny-cta:is(:hover, :focus-visible)::after {
+      animation-play-state: running;
+    }
+
+    .shiny-cta:is(:hover, :focus-visible) span::before {
+      opacity: 1;
+    }
+
+    /* Variante Azul / Ciano Primária */
+    .shiny-cta.primary {
+      --shiny-cta-bg: #00d2ff;
+      --shiny-cta-bg-subtle: #0099ff;
+      --shiny-cta-fg: #07090e;
+      --shiny-cta-highlight: #ffffff;
+      --shiny-cta-highlight-subtle: #ffffff;
+      font-weight: 800;
+      background: linear-gradient(135deg, #00d2ff 0%, #0099ff 100%) padding-box,
+        conic-gradient(
+          from calc(var(--gradient-angle) - var(--gradient-angle-offset)),
+          transparent,
+          #ffffff var(--gradient-percent),
+          #b8f1ff calc(var(--gradient-percent) * 2),
+          #ffffff calc(var(--gradient-percent) * 3),
+          transparent calc(var(--gradient-percent) * 4)
+        ) border-box;
+      box-shadow: 0 0 25px rgba(0, 210, 255, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+    }
+
+    .shiny-cta.primary::before {
+      background: radial-gradient(
+        circle at var(--position) var(--position),
+        rgba(0, 0, 0, 0.25) calc(var(--position) / 4),
+        transparent 0
+      ) padding-box;
+    }
+
+    .shiny-cta.primary::after {
+      background: linear-gradient(
+        -50deg,
+        transparent,
+        rgba(255, 255, 255, 0.65),
+        transparent
+      );
+    }
+
+    .shiny-cta.primary:is(:hover, :focus-visible) {
+      box-shadow: 0 8px 35px rgba(0, 210, 255, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+      transform: translateY(-2px);
+    }
+
+    .shiny-cta.primary span::before {
+      box-shadow: inset 0 -1ex 2rem 4px rgba(255, 255, 255, 0.5);
+    }
+
+    /* Variante Branca com Luz Ciano/Azul */
+    .shiny-cta.white {
+      --shiny-cta-bg: #ffffff;
+      --shiny-cta-bg-subtle: #e2e8f0;
+      --shiny-cta-fg: #07090e;
+      --shiny-cta-highlight: #00d2ff;
+      --shiny-cta-highlight-subtle: #38bdf8;
+      font-weight: 800;
+      background: linear-gradient(#ffffff, #ffffff) padding-box,
+        conic-gradient(
+          from calc(var(--gradient-angle) - var(--gradient-angle-offset)),
+          transparent,
+          #00d2ff var(--gradient-percent),
+          #38bdf8 calc(var(--gradient-percent) * 2),
+          #00d2ff calc(var(--gradient-percent) * 3),
+          transparent calc(var(--gradient-percent) * 4)
+        ) border-box;
+      box-shadow: 0 0 25px rgba(255, 255, 255, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    }
+
+    .shiny-cta.white::before {
+      background: radial-gradient(
+        circle at var(--position) var(--position),
+        rgba(0, 0, 0, 0.15) calc(var(--position) / 4),
+        transparent 0
+      ) padding-box;
+    }
+
+    .shiny-cta.white::after {
+      background: linear-gradient(
+        -50deg,
+        transparent,
+        rgba(0, 210, 255, 0.45),
+        transparent
+      );
+    }
+
+    .shiny-cta.white:is(:hover, :focus-visible) {
+      box-shadow: 0 8px 35px rgba(255, 255, 255, 0.6), 0 0 30px rgba(0, 210, 255, 0.4);
+      transform: translateY(-2px);
+    }
+
+    .shiny-cta.white span::before {
+      box-shadow: inset 0 -1ex 2rem 4px rgba(0, 210, 255, 0.3);
+    }
+
+    @keyframes gradient-angle {
+      to {
+        --gradient-angle: 360deg;
+      }
+    }
+
+    @keyframes shimmer {
+      to {
+        rotate: 360deg;
+      }
+    }
+
+    @keyframes breathe {
+      from, to {
+        scale: 1;
+      }
+      50% {
+        scale: 1.2;
+      }
+    }
+
     .btn-launcher {
       display: inline-flex;
       align-items: center;
@@ -641,27 +944,33 @@
     </p>
 
     <div class="cta-group">
-      <a href="painel.html?cadastro=1" class="btn-primary" style="background: linear-gradient(135deg, #00d2ff, #0099ff); color: #07090e; font-weight: 800; box-shadow: 0 0 25px rgba(0, 210, 255, 0.4); border: none;">
-        Criar Conta / Cadastrar
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="5" y1="12" x2="19" y2="12"></line>
-          <polyline points="12 5 19 12 12 19"></polyline>
-        </svg>
+      <a href="painel.html?cadastro=1" class="shiny-cta primary">
+        <span>
+          Criar Conta / Cadastrar
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </span>
       </a>
 
-      <a href="painel.html" class="btn-secondary">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="2" y="6" width="20" height="12" rx="2"></rect>
-          <line x1="6" y1="12" x2="10" y2="12"></line>
-          <line x1="8" y1="10" x2="8" y2="14"></line>
-          <line x1="15" y1="13" x2="15.01" y2="13"></line>
-          <line x1="18" y1="11" x2="18.01" y2="11"></line>
-        </svg>
-        Ver Vitrine de Jogos
+      <a href="painel.html" class="shiny-cta">
+        <span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="6" width="20" height="12" rx="2"></rect>
+            <line x1="6" y1="12" x2="10" y2="12"></line>
+            <line x1="8" y1="10" x2="8" y2="14"></line>
+            <line x1="15" y1="13" x2="15.01" y2="13"></line>
+            <line x1="18" y1="11" x2="18.01" y2="11"></line>
+          </svg>
+          Ver Vitrine de Jogos
+        </span>
       </a>
 
-      <a href="https://discord.gg/4CCx9Cw2n9" target="_blank" rel="noopener noreferrer" class="btn-secondary">
-        Entrar na Comunidade
+      <a href="https://discord.gg/4CCx9Cw2n9" target="_blank" rel="noopener noreferrer" class="shiny-cta">
+        <span>
+          Entrar na Comunidade
+        </span>
       </a>
     </div>
   </main>
@@ -1161,7 +1470,7 @@
       </button>
       
       <div class="car2-stage">
-        <div class="car-slide"><img src="imagens/provas/1778617224481.jpg" alt="Resultado live 1" loading="lazy"></div>
+        <div class="car-slide active"><img src="imagens/provas/1778617224481.jpg" alt="Resultado live 1" loading="lazy"></div>
         <div class="car-slide"><img src="imagens/provas/1778617224557.jpg" alt="Resultado live 2" loading="lazy"></div>
         <div class="car-slide"><img src="imagens/provas/1778617224601.jpg" alt="Resultado live 3" loading="lazy"></div>
         <div class="car-slide"><img src="imagens/provas/1778617224646.jpg" alt="Resultado live 4" loading="lazy"></div>
@@ -1185,7 +1494,7 @@
       </button>
     </div>
 
-    <div class="car2-counter" id="car2counter">5 / 15</div>
+    <div class="car2-counter" id="car2counter">1 / 15</div>
 
     <div class="car2-dots" id="car2dots"></div>
   </section>
@@ -1324,6 +1633,73 @@
       }
     }
   </style>
+
+  <script>
+    (function initCar2() {
+      const slides = document.querySelectorAll('.car2-stage .car-slide');
+      const prevBtn = document.getElementById('car2prev');
+      const nextBtn = document.getElementById('car2next');
+      const counter = document.getElementById('car2counter');
+      const dotsContainer = document.getElementById('car2dots');
+      if (!slides.length) return;
+
+      let currentIndex = 0;
+      const total = slides.length;
+
+      // Criar dots
+      if (dotsContainer) {
+        dotsContainer.innerHTML = '';
+        slides.forEach((_, idx) => {
+          const dot = document.createElement('button');
+          dot.className = `car2-dot ${idx === 0 ? 'active' : ''}`;
+          dot.setAttribute('aria-label', `Ir para slide ${idx + 1}`);
+          dot.addEventListener('click', () => goToSlide(idx));
+          dotsContainer.appendChild(dot);
+        });
+      }
+
+      function updateUI() {
+        slides.forEach((slide, idx) => {
+          slide.classList.toggle('active', idx === currentIndex);
+        });
+        if (counter) {
+          counter.textContent = `${currentIndex + 1} / ${total}`;
+        }
+        if (dotsContainer) {
+          const dots = dotsContainer.querySelectorAll('.car2-dot');
+          dots.forEach((dot, idx) => {
+            dot.classList.toggle('active', idx === currentIndex);
+          });
+        }
+      }
+
+      function goToSlide(idx) {
+        currentIndex = (idx + total) % total;
+        updateUI();
+      }
+
+      if (prevBtn) prevBtn.addEventListener('click', () => goToSlide(currentIndex - 1));
+      if (nextBtn) nextBtn.addEventListener('click', () => goToSlide(currentIndex + 1));
+
+      // Touch swipe
+      const stage = document.querySelector('.car2-stage');
+      if (stage) {
+        let touchStartX = 0;
+        stage.addEventListener('touchstart', (e) => {
+          touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+        stage.addEventListener('touchend', (e) => {
+          const diff = e.changedTouches[0].screenX - touchStartX;
+          if (Math.abs(diff) > 40) {
+            if (diff < 0) goToSlide(currentIndex + 1);
+            else goToSlide(currentIndex - 1);
+          }
+        }, { passive: true });
+      }
+
+      updateUI();
+    })();
+  </script>
 
   <!-- ================= SEÇÃO: PERGUNTAS FREQUENTES (FAQ) ================= -->
   <section class="faq-section" id="faq">
@@ -1503,20 +1879,24 @@
 
       <!-- Primary Action Buttons -->
       <div class="footer-btn-group">
-        <a href="https://discord.gg/4CCx9Cw2n9" target="_blank" rel="noopener noreferrer" class="footer-pill-btn primary">
-          <span>Entrar na comunidade</span>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="5" y1="12" x2="19" y2="12"></line>
-            <polyline points="12 5 19 12 12 19"></polyline>
-          </svg>
+        <a href="https://discord.gg/4CCx9Cw2n9" target="_blank" rel="noopener noreferrer" class="shiny-cta white">
+          <span>
+            Entrar na comunidade
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </span>
         </a>
 
-        <a href="painel.html" class="footer-pill-btn secondary" title="Acessar conta ou cadastrar">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-            <circle cx="12" cy="7" r="4"></circle>
-          </svg>
-          <span>Acessar conta ou cadastrar</span>
+        <a href="painel.html" class="shiny-cta" title="Acessar conta ou cadastrar">
+          <span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+            Acessar conta ou cadastrar
+          </span>
         </a>
       </div>
 
@@ -1901,10 +2281,12 @@
 
     .footer-btn-group {
       display: flex;
-      flex-wrap: wrap;
+      flex-direction: column;
+      align-items: center;
       justify-content: center;
-      gap: 1.25rem;
-      margin-top: 0.25rem;
+      gap: 1rem;
+      margin-top: 0.5rem;
+      width: 100%;
     }
 
     .footer-pill-btn {

@@ -7,7 +7,23 @@
   <link rel="icon" type="image/png" href="favicon.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <!-- Meta Pixel Code -->
+  <script>
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '3373496012857126');
+  fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=3373496012857126&ev=PageView&noscript=1"
+  /></noscript>
+  <!-- End Meta Pixel Code -->
   <style>
     :root {
       --fundo: #0e1117;
@@ -821,26 +837,58 @@
       color: #ffffff;
     }
 
+    .plan-tag-no {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(239, 68, 68, 0.12);
+      border: 1px solid rgba(239, 68, 68, 0.35);
+      color: #f87171;
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 8px 12px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+      width: 100%;
+    }
+
+    .plan-tag-yes {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      color: #34d399;
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 8px 12px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+      width: 100%;
+    }
+
     .btn-buy {
       width: 100%;
       padding: 14px;
-      border-radius: 12px;
-      font-size: 0.9rem;
-      font-weight: 800;
-      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 10px;
+      font-size: 0.92rem;
+      font-weight: 900;
+      letter-spacing: 0.05em;
+      border: none;
       cursor: pointer;
-      background: rgba(255, 255, 255, 0.08);
-      color: #ffffff;
+      background: linear-gradient(135deg, #00d2ff 0%, #00a8ff 100%);
+      color: #07090e;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
+      box-shadow: 0 4px 20px rgba(0, 210, 255, 0.35);
       transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .btn-buy:hover {
-      background: rgba(255, 255, 255, 0.15);
-      border-color: rgba(255, 255, 255, 0.3);
+      background: linear-gradient(135deg, #33dcff 0%, #00c3ff 100%);
+      box-shadow: 0 6px 28px rgba(0, 210, 255, 0.6);
       transform: translateY(-2px);
     }
 
@@ -1781,100 +1829,110 @@
           <div class="plan-box">
             <div class="plan-head-row">
               <div>
-                <h3 class="plan-box-title">Básico Mensal</h3>
-                <p class="plan-box-desc">Jogos clássicos do launcher para transmissões interativas.</p>
+                <h3 class="plan-box-title">BÁSICO · MENSAL</h3>
               </div>
-              <span class="plan-box-icon">🎮</span>
             </div>
 
             <div class="plan-price-wrap">
               <div class="plan-price-val">
                 <span>R$ 59,90</span>
-                <span class="subtext">/ mês</span>
+                <span class="subtext">por mês</span>
               </div>
-              <div class="plan-price-installment">Cobrança mensal recorrente</div>
             </div>
+
+            <div class="plan-tag-no">✕ NÃO inclui os jogos de Roblox</div>
 
             <ul class="plan-box-list">
               <li>
                 <svg class="plan-check-svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
-                <span>Todos os jogos do launcher inclusos</span>
+                <span>Todos os jogos dentro do launcher</span>
               </li>
               <li>
                 <svg class="plan-check-svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
-                <span>Painel de personalização em todos os jogos</span>
+                <span>Painel de personalização em todos eles</span>
               </li>
               <li>
                 <svg class="plan-check-svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
-                <span>Studio Mode integrado para gerenciar sua live</span>
+                <span>Cada jogo novo do launcher incluído automaticamente</span>
               </li>
               <li>
                 <svg class="plan-check-svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
-                <span>Overlays transparentes prontas para OBS Studio</span>
+                <span>Studio Mode para rodar a sua live</span>
               </li>
               <li>
                 <svg class="plan-check-svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
-                <span>Novos jogos lançados entram automaticamente</span>
+                <span>Overlays prontas para OBS</span>
               </li>
               <li>
                 <svg class="plan-check-svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
-                <span>Sem fidelidade • Cancele quando quiser</span>
+                <span>Cancele quando quiser</span>
               </li>
             </ul>
 
             <button class="btn-buy" onclick="irParaCheckout('PPU38CQFES6')">
-              Assinar Básico Mensal ➔
+              ASSINAR
             </button>
           </div>
 
           <!-- Completo Mensal (DESTAQUE MENSAL) -->
           <div class="plan-box featured">
-            <div class="plan-badge-top">🔥 MAIS POPULAR</div>
+            <div class="plan-badge-top">MAIS POPULAR</div>
             <div class="plan-head-row">
               <div>
-                <h3 class="plan-box-title" style="color: var(--ciano);">Completo Mensal</h3>
-                <p class="plan-box-desc">Roblox Live com Skins Reais + Launcher completo.</p>
+                <h3 class="plan-box-title" style="color: var(--ciano);">COMPLETO · MENSAL</h3>
               </div>
-              <span class="plan-box-icon">👑</span>
             </div>
 
             <div class="plan-price-wrap">
               <div class="plan-price-val">
                 <span>R$ 129,90</span>
-                <span class="subtext">/ mês</span>
+                <span class="subtext">por mês</span>
               </div>
-              <div class="plan-price-installment">Roblox + Launcher Liberados</div>
             </div>
+
+            <div class="plan-tag-yes">✓ INCLUI os jogos de Roblox</div>
 
             <ul class="plan-box-list">
               <li>
                 <svg class="plan-check-svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
-                <span><strong>Jogos de Roblox Live inclusos (com Skins Reais)</strong></span>
+                <span>Os jogos de Roblox para live, inclusos</span>
               </li>
               <li>
                 <svg class="plan-check-svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
-                <span>Ponte do TikTok e painel de comandos automáticos</span>
+                <span>Painel da live e ponte do TikTok abrem sozinhos</span>
               </li>
               <li>
                 <svg class="plan-check-svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
-                <span>Todos os jogos do launcher sem limitações</span>
+                <span>Cada um é vendido avulso por R$ 300+ / US$ 59+</span>
               </li>
               <li>
                 <svg class="plan-check-svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
-                <span>Studio Mode + Overlays transparentes OBS</span>
+                <span>Todos os jogos dentro do launcher</span>
               </li>
               <li>
                 <svg class="plan-check-svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
-                <span>Acesso a todas as Vídeo Aulas e tutoriais</span>
+                <span>Painel de personalização em todos eles</span>
               </li>
               <li>
                 <svg class="plan-check-svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
-                <span>Suporte via Discord da Comunidade</span>
+                <span>Cada jogo novo do launcher incluído automaticamente</span>
+              </li>
+              <li>
+                <svg class="plan-check-svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                <span>Studio Mode para rodar a sua live</span>
+              </li>
+              <li>
+                <svg class="plan-check-svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                <span>Overlays prontas para OBS</span>
+              </li>
+              <li>
+                <svg class="plan-check-svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                <span>Cancele quando quiser</span>
               </li>
             </ul>
 
             <button class="btn-buy primary" onclick="irParaCheckout('PPU38CQFES8')">
-              Assinar Completo Mensal ➔
+              ASSINAR
             </button>
           </div>
         </div>
@@ -1885,94 +1943,132 @@
           <div class="plan-box">
             <div class="plan-head-row">
               <div>
-                <h3 class="plan-box-title">Básico Anual</h3>
-                <p class="plan-box-desc">Economize 4,5 meses • Pague 1x e use o ano todo.</p>
+                <h3 class="plan-box-title">BÁSICO · ANUAL</h3>
               </div>
-              <span class="plan-box-icon">⚡</span>
             </div>
 
             <div class="plan-price-wrap">
               <div class="plan-price-val">
-                <span>12x R$ 30,02</span>
+                <span>R$ 30,02</span>
+                <span class="subtext">por mês</span>
               </div>
-              <div class="plan-price-installment">ou R$ 299,00 à vista no Pix</div>
+              <div class="plan-price-installment" style="color: var(--ciano); font-size: 0.8rem; font-weight: 600; margin-top: 6px; line-height: 1.4;">
+                R$ 299,00 em pagamento único, uma vez por ano — 58% de desconto
+              </div>
             </div>
+
+            <div class="plan-tag-no">✕ NÃO inclui os jogos de Roblox</div>
 
             <ul class="plan-box-list">
               <li>
                 <svg class="plan-check-svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
-                <span><strong>1 Ano Inteiro de Acesso</strong> sem mensalidades</span>
+                <span>Tudo do plano mensal, mais:</span>
               </li>
               <li>
                 <svg class="plan-check-svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
-                <span>Todos os jogos do launcher inclusos</span>
+                <span>4,5 meses grátis</span>
               </li>
               <li>
                 <svg class="plan-check-svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
-                <span>Painel de personalização e Studio Mode</span>
+                <span>Pague uma vez só, sem cobrança mensal</span>
               </li>
               <li>
                 <svg class="plan-check-svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
-                <span>Overlays transparentes prontas para OBS</span>
+                <span>Todos os jogos dentro do launcher</span>
               </li>
               <li>
                 <svg class="plan-check-svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
-                <span>Novos jogos adicionados durante 365 dias</span>
+                <span>Painel de personalização em todos eles</span>
+              </li>
+              <li>
+                <svg class="plan-check-svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                <span>Cada jogo novo do launcher incluído automaticamente</span>
+              </li>
+              <li>
+                <svg class="plan-check-svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                <span>Studio Mode para rodar a sua live</span>
+              </li>
+              <li>
+                <svg class="plan-check-svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                <span>Overlays prontas para OBS</span>
               </li>
             </ul>
 
             <button class="btn-buy" onclick="irParaCheckout('PPU38CQFES7')">
-              Assinar Básico Anual ➔
+              ASSINAR
             </button>
           </div>
 
           <!-- Completo Anual (MAIOR DESTAQUE) -->
           <div class="plan-box featured">
-            <div class="plan-badge-top">💎 MAIS RECOMENDADO • MELHOR CUSTO-BENEFÍCIO</div>
+            <div class="plan-badge-top">MAIS RECOMENDADO • 68% OFF</div>
             <div class="plan-head-row">
               <div>
-                <h3 class="plan-box-title" style="color: var(--ciano);">Completo Anual</h3>
-                <p class="plan-box-desc">Roblox + Launcher + Cargo VIP Discord • Economize R$ 1.059</p>
+                <h3 class="plan-box-title" style="color: var(--ciano);">COMPLETO · ANUAL</h3>
               </div>
-              <span class="plan-box-icon">🚀</span>
             </div>
 
             <div class="plan-price-wrap">
               <div class="plan-price-val">
-                <span>12x R$ 50,10</span>
+                <span>R$ 50,10</span>
+                <span class="subtext">por mês</span>
               </div>
-              <div class="plan-price-installment">ou R$ 499,00 à vista no Pix (Acesso 1 Ano)</div>
+              <div class="plan-price-installment" style="color: var(--ciano); font-size: 0.8rem; font-weight: 600; margin-top: 6px; line-height: 1.4;">
+                R$ 499,00 em pagamento único, uma vez por ano — 68% de desconto
+              </div>
             </div>
+
+            <div class="plan-tag-yes">✓ INCLUI os jogos de Roblox</div>
 
             <ul class="plan-box-list">
               <li>
                 <svg class="plan-check-svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
-                <span><strong>Jogos de Roblox Live inclusos (com Skins Reais)</strong></span>
+                <span>Tudo do plano mensal completo, mais:</span>
               </li>
               <li>
                 <svg class="plan-check-svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
-                <span>Ponte do TikTok e automação de danças/presentes</span>
+                <span>4,3 meses grátis</span>
               </li>
               <li>
                 <svg class="plan-check-svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
-                <span><strong>1 Ano de Acesso Total</strong> a tudo na plataforma</span>
+                <span>Pague uma vez só, sem cobrança mensal</span>
               </li>
               <li>
                 <svg class="plan-check-svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
-                <span>Acesso irrestrito a todas as Vídeo Aulas & Tutoriais</span>
+                <span>Os jogos de Roblox para live, inclusos</span>
               </li>
               <li>
                 <svg class="plan-check-svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
-                <span><strong>Cargo VIP Exclusivo + Suporte Prioritário</strong> no Discord</span>
+                <span>Painel da live e ponte do TikTok abrem sozinhos</span>
               </li>
               <li>
                 <svg class="plan-check-svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
-                <span>Atualizações automáticas de todos os jogos</span>
+                <span>Cada um é vendido avulso por R$ 300+ / US$ 59+</span>
+              </li>
+              <li>
+                <svg class="plan-check-svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                <span>Todos os jogos dentro do launcher</span>
+              </li>
+              <li>
+                <svg class="plan-check-svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                <span>Painel de personalização em todos eles</span>
+              </li>
+              <li>
+                <svg class="plan-check-svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                <span>Cada jogo novo do launcher incluído automaticamente</span>
+              </li>
+              <li>
+                <svg class="plan-check-svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                <span>Studio Mode para rodar a sua live</span>
+              </li>
+              <li>
+                <svg class="plan-check-svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                <span>Overlays prontas para OBS</span>
               </li>
             </ul>
 
             <button class="btn-buy primary" onclick="irParaCheckout('PPU38CQFESB')">
-              Garantir Completo Anual ➔
+              ASSINAR
             </button>
           </div>
         </div>
@@ -2297,6 +2393,9 @@
         if (modoPortao === 'cadastro') {
           const cred = await createUserWithEmailAndPassword(auth, email, senha);
           await salvarUsuarioFirestore(cred.user.uid, email, nome);
+          if (typeof fbq === 'function') {
+            fbq('track', 'CompleteRegistration', { status: true });
+          }
         } else {
           await signInWithEmailAndPassword(auth, email, senha);
         }
@@ -2837,6 +2936,12 @@
     window.confirmarCheckout = function() {
       if (!checkoutCodigoPendente) return;
       const codigoPP = checkoutCodigoPendente;
+      if (typeof fbq === 'function') {
+        fbq('track', 'InitiateCheckout', { 
+          content_name: codigoPP,
+          content_category: 'Planos Raven Games'
+        });
+      }
       const user = window.usuarioAtual;
       const base = `https://checkout.ravengames.shop/pay/${codigoPP}`;
       const params = new URLSearchParams();
