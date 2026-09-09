@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Diretrizes Oficiais do TikTok para Jogos Interativos e Regras de Presentes (Guia 2026)</title>
+  <meta name="description" content="Conheça as regras oficiais do TikTok para transmissões com jogos interativos e doações de presentes. Aprenda as 4 regras de ouro para nunca tomar aviso ou strike." />
+  <link rel="icon" type="image/png" href="favicon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Schema.org JSON-LD para SEO & IA Search -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Article",
+        "headline": "Diretrizes Oficiais do TikTok para Jogos Interativos e Regras de Presentes (Guia 2026)",
+        "description": "Manual técnico de conformidade e integridade para streamers de jogos interativos no TikTok LIVE. Saiba o que é permitido e como proteger sua conta contra penalidades.",
+        "author": {
+          "@type": "Organization",
+          "name": "Raven Games Compliance Team"
+        },
+        "publisher": {
+          "@type": "Organization",
+          "name": "Raven Games",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://ravengames.shop/logo.png"
+          }
+        },
+        "datePublished": "2026-09-09",
+        "dateModified": "2026-09-09"
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Jogos interativos são permitidos nas diretrizes do TikTok?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Sim. O TikTok apoia transmissões de jogos interativos desde que o entretenimento seja puramente lúdico. O que é terminantemente proibido são promessas de retorno financeiro para quem doa presentes (rifas, sorteios em dinheiro ou mecânicas de cassino)."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "O que causa strike ou derrubada de live interativa?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Os principais motivos de strike são: tela estática/congelada por mais de 10 minutos (inatividade), transmissão de vídeos gravados fingindo ser ao vivo (conteúdo não autêntico), promessas de Pix em troca de presentes e palavras de ódio ou palavrões não moderados no chat."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Como a Raven Games protege o criador contra strikes?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "A Raven Games conta com um Motor Anti-Inatividade patenteado que movimenta a tela com desafios visuais mesmo se o chat silenciar, além de rodar em 60 FPS reais locais e realizar apenas leitura pública de eventos sem injeção de código externo."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    :root {
+      --fundo: #0a0d14;
+      --fundo-card: #121722;
+      --fundo-card-hover: #171f2e;
+      --borda: rgba(255, 255, 255, 0.08);
+      --texto: #f8fafc;
+      --texto-mutado: #94a3b8;
+      --ciano: #00d2ff;
+      --ciano-glow: rgba(0, 210, 255, 0.25);
+      --verde: #10b981;
+      --vermelho: #ef4444;
+      --amarelo: #f59e0b;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    body {
+      background: var(--fundo);
+      color: var(--texto);
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Site Header */
+    header.site-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(10, 13, 20, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--borda);
+      padding: 14px 24px;
+    }
+
+    .header-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: #fff;
+      font-weight: 800;
+      font-size: 1.15rem;
+    }
+
+    .logo-link img {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+    }
+
+    .logo-link span {
+      color: var(--ciano);
+    }
+
+    /* Article Container */
+    .article-container {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 40px 20px 80px;
+    }
+
+    .breadcrumb {
+      font-size: 0.82rem;
+      color: var(--texto-mutado);
+      margin-bottom: 20px;
+    }
+
+    .breadcrumb a {
+      color: var(--ciano);
+      text-decoration: none;
+    }
+
+    h1.article-title {
+      font-size: 2.35rem;
+      font-weight: 800;
+      line-height: 1.25;
+      margin-bottom: 16px;
+      letter-spacing: -0.02em;
+    }
+
+    .article-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      font-size: 0.84rem;
+      color: var(--texto-mutado);
+      margin-bottom: 30px;
+      border-bottom: 1px solid var(--borda);
+      padding-bottom: 18px;
+    }
+
+    /* BLUF Box */
+    .bluf-box {
+      background: linear-gradient(135deg, rgba(0, 210, 255, 0.12) 0%, rgba(18, 23, 34, 0.85) 100%);
+      border: 1px solid rgba(0, 210, 255, 0.35);
+      border-left: 5px solid var(--ciano);
+      border-radius: 14px;
+      padding: 22px 24px;
+      margin-bottom: 36px;
+    }
+
+    .bluf-box strong {
+      color: var(--ciano);
+      font-weight: 800;
+      display: block;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      font-size: 0.8rem;
+      letter-spacing: 0.05em;
+    }
+
+    .bluf-box p {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: #fff;
+      line-height: 1.6;
+    }
+
+    /* Content Typography */
+    .content-body h2 {
+      font-size: 1.6rem;
+      font-weight: 800;
+      margin: 38px 0 16px;
+      color: #fff;
+      border-bottom: 1px solid var(--borda);
+      padding-bottom: 8px;
+    }
+
+    .content-body h3 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin: 26px 0 12px;
+      color: var(--ciano);
+    }
+
+    .content-body p {
+      margin-bottom: 18px;
+      color: #cbd5e1;
+      font-size: 1rem;
+    }
+
+    .content-body ul, .content-body ol {
+      margin: 0 0 22px 24px;
+      color: #cbd5e1;
+    }
+
+    .content-body li {
+      margin-bottom: 10px;
+    }
+
+    /* Golden Rules Cards */
+    .rule-card {
+      background: var(--fundo-card);
+      border: 1px solid var(--borda);
+      border-radius: 14px;
+      padding: 22px;
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .rule-card.warning {
+      border-left: 5px solid var(--amarelo);
+    }
+
+    .rule-card.danger {
+      border-left: 5px solid var(--vermelho);
+    }
+
+    .rule-card.success {
+      border-left: 5px solid var(--verde);
+    }
+
+    .rule-num {
+      display: inline-block;
+      font-size: 0.76rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 6px;
+    }
+
+    .rule-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 10px;
+    }
+
+    /* Table */
+    .table-wrap {
+      overflow-x: auto;
+      margin: 26px 0 34px;
+      border-radius: 12px;
+      border: 1px solid var(--borda);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      background: var(--fundo-card);
+      font-size: 0.9rem;
+    }
+
+    th {
+      background: rgba(0, 210, 255, 0.12);
+      color: var(--ciano);
+      padding: 14px 16px;
+      font-weight: 800;
+      border-bottom: 1px solid var(--borda);
+      white-space: nowrap;
+    }
+
+    td {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--borda);
+      color: #e2e8f0;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* FAQ Box */
+    .faq-item {
+      background: var(--fundo-card);
+      border: 1px solid var(--borda);
+      border-radius: 12px;
+      padding: 18px 20px;
+      margin-bottom: 14px;
+    }
+
+    .faq-item h4 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+
+    .faq-item p {
+      color: var(--texto-mutado);
+      font-size: 0.92rem;
+      margin: 0;
+    }
+
+    /* CTA Section */
+    .article-cta {
+      background: linear-gradient(135deg, #121826 0%, #151d2e 100%);
+      border: 1px solid rgba(0, 210, 255, 0.4);
+      border-radius: 16px;
+      padding: 34px 28px;
+      text-align: center;
+      margin: 44px 0;
+      box-shadow: 0 14px 35px rgba(0, 0, 0, 0.6);
+    }
+
+    .article-cta h3 {
+      font-size: 1.45rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 10px;
+    }
+
+    .article-cta p {
+      color: var(--texto-mutado);
+      font-size: 0.94rem;
+      margin-bottom: 22px;
+    }
+
+    .btn-cta {
+      display: inline-block;
+      background: var(--ciano);
+      color: #07090e;
+      font-size: 0.95rem;
+      font-weight: 800;
+      padding: 13px 30px;
+      border-radius: 10px;
+      text-decoration: none;
+      box-shadow: 0 4px 16px var(--ciano-glow);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .btn-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 22px var(--ciano-glow);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Site Header -->
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="index.html" class="logo-link">
+        <img src="logo.png" alt="Raven Games Logo" />
+        <div>RAVEN <span>GAMES</span></div>
+      </a>
+      <a href="index.html#planos" style="color: var(--ciano); text-decoration: none; font-weight: 700; font-size: 0.88rem;">Conhecer o Software ➔</a>
+    </div>
+  </header>
+
+  <!-- Main Article -->
+  <main class="article-container">
+    <div class="breadcrumb">
+      <a href="blog.html">Blog</a> ➔ <a href="blog.html">Segurança & Regras</a> ➔ <span>Diretrizes de Jogos Interativos</span>
+    </div>
+
+    <h1 class="article-title">Diretrizes Oficiais do TikTok para Jogos Interativos e Regras de Presentes (Guia 2026)</h1>
+
+    <div class="article-meta">
+      <span>⚖️ Compliance & Diretrizes da Comunidade</span>
+      <span>•</span>
+      <span>⏱️ Leitura: 7 minutos</span>
+      <span>•</span>
+      <span>📅 Atualizado em Setembro de 2026</span>
+    </div>
+
+    <!-- BLUF Direct Answer -->
+    <div class="bluf-box">
+      <strong>RESPOSTA DIRETA (O RESUMO EM 43 PALAVRAS):</strong>
+      <p>
+        Jogos interativos no TikTok são <strong>100% permitidos e incentivados</strong> pela plataforma, desde que o envio de presentes sirva exclusivamente como gatilho de entretenimento visual na tela. O algoritmo pune apenas quem promete dinheiro de volta aos doadores (rifas ou apostas) ou transmite telas estáticas.
+      </p>
+    </div>
+
+    <div class="content-body">
+      <h2>O Que a Política de Integridade do TikTok Diz Sobre Presentes Virtuais?</h2>
+      <p>
+        O modelo econômico do TikTok LIVE é fundamentado na circulação de <strong>Bens Virtuais (Virtual Items & Gifts)</strong>. A cada presente que um espectador compra para enviar na live, o TikTok retém uma porcentagem da moeda e repassa os diamantes para o criador da transmissão.
+      </p>
+      <p>
+        Portanto, o TikTok <strong>deseja ativamente</strong> que as transmissões gerem incentivos reais para os espectadores enviarem presentes. O que o documento oficial de <em>Diretrizes da Comunidade (Seção: Integridade e Autenticidade)</em> proíbe expressamente são as seguintes condutas:
+      </p>
+      <ul>
+        <li><strong>Proibição de Jogos de Azar e Rifas (Gambling & Lotteries):</strong> Qualquer promessa explícita de que quem enviar uma Rosa participará de um sorteio de Pix ou receberá prêmios em dinheiro é considerada contravenção e acarreta encerramento imediato da live.</li>
+        <li><strong>Proibição de Fraude de Engajamento:</strong> Estimular o envio de presentes alegando falsas emergências ou promessas que não serão cumpridas.</li>
+        <li><strong>Proibição de Conteúdo Não Autêntico:</strong> Tentar simular presença ao vivo através de vídeos pré-gravados (o famoso "vídeo em loop").</li>
+      </ul>
+      <p>
+        Jogos como <strong>Flappy Bird da Live</strong>, <strong>Tower Sky</strong> ou <strong>Batalha dos Nicks do Roblox</strong> da Raven Games se enquadram como <em>Gamified Viewer Interaction</em> (Interação Gamificada de Espectadores). O presente é uma moeda lúdica usada para interagir com o ambiente 3D do jogo — exatamente como os jogos de fliperama funcionam há décadas.
+      </p>
+
+      <h2>As 4 Regras de Ouro para Nunca Tomar Strike ou Suspensão</h2>
+      <p>
+        Seguindo rigorosamente estas quatro regras simples estabelecidas pela equipe de compliance da Raven Games, sua conta operará com índice de segurança de 100%, transmitindo dia e noite sem qualquer interrupção:
+      </p>
+
+      <!-- Regra 1 -->
+      <div class="rule-card danger">
+        <span class="rule-num" style="color: var(--vermelho);">Regra de Ouro #1 • Risco Crítico</span>
+        <h3 class="rule-title">Nunca Prometa Retorno Financeiro aos Doadores</h3>
+        <p>
+          Jamais coloque no título ou nos banners da tela frases do tipo: <em>"Quem mandar Galáxia ganha Pix de R$ 50"</em> ou <em>"Top 1 doador ganha iPhone"</em>. Essa prática configura sorteio não regulamentado pelo Ministério da Fazenda e viola os termos globais do TikTok.
+        </p>
+        <p>
+          <strong>Como fazer certo:</strong> Deixe o entretenimento ser o prêmio! O espectador envia o presente para ver o avatar dele dançar na tela, derrubar o pássaro do rival ou subir no pódio de pontuação do jogo.
+        </p>
+      </div>
+
+      <!-- Regra 2 -->
+      <div class="rule-card warning">
+        <span class="rule-num" style="color: var(--amarelo);">Regra de Ouro #2 • Algoritmo Anti-Queda</span>
+        <h3 class="rule-title">Mantenha a Tela em Constante Movimento (Anti-Inatividade)</h3>
+        <p>
+          O sistema de inteligência artificial do TikTok monitora os pixels da transmissão. Se o jogo ficar estático sem alteração visual por mais de 5 a 10 minutos (por exemplo, em horários da madrugada quando o chat diminui o ritmo), a live recebe aviso de "Transmissão Inativa".
+        </p>
+        <p>
+          <strong>A Solução da Raven Games:</strong> Nosso software possui um <em>Motor Anti-Inatividade</em> embutido. Quando os comentários diminuem, o próprio jogo dispara animações autônomas, desafios sonoros e eventos programados para manter o algoritmo do TikTok ativo e recomendando sua live na aba <em>Para Você</em>.
+        </p>
+      </div>
+
+      <!-- Regra 3 -->
+      <div class="rule-card success">
+        <span class="rule-num" style="color: var(--verde);">Regra de Ouro #3 • Renderização Nativa em Tempo Real</span>
+        <h3 class="rule-title">Transmita Jogos Nativos a 60 FPS (Zero Vídeo Gravado)</h3>
+        <p>
+          O TikTok consegue identificar com facilidade transmissões que rodam arquivos de vídeo (MP4) em loop contínuo através da análise de metadados dos frames de vídeo.
+        </p>
+        <p>
+          Os jogos da Raven Games são <strong>aplicações executáveis nativas</strong> que renderizam cada frame em tempo real na GPU do seu computador. Não há arquivos gravados; a física, os obstáculos e os avatares respondem instantaneamente aos impulsos de cada segundo da transmissão.
+        </p>
+      </div>
+
+      <!-- Regra 4 -->
+      <div class="rule-card warning">
+        <span class="rule-num" style="color: var(--ciano);">Regra de Ouro #4 • Moderação de Nomes e Palavras Proibidas</span>
+        <h3 class="rule-title">Filtre Palavrões e Termos Tóxicos do Chat</h3>
+        <p>
+          Em jogos como os Avatares do Roblox, onde o nome de usuário do espectador aparece impresso na tela do jogo, usuários mal-intencionados podem criar contas com apelidos ofensivos para tentar derrubar a sua live.
+        </p>
+        <p>
+          <strong>Como se proteger:</strong> No painel do TikTok LIVE Studio e no painel do Raven Games, ative a lista de bloqueio de palavras-chave sensíveis (termos de ódio, conteúdo explícito ou violência). O software descarta automaticamente a exibição de apelidos impróprios.
+        </p>
+      </div>
+
+      <h2>Tabela de Auditoria: O que Pode vs. O que Dá Strike Imediato</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Ação na Transmissão</th>
+              <th>Status Oficial no TikTok</th>
+              <th>Severidade do Risco</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Jogos da Raven Games interagindo com Rosas e Presentes</td>
+              <td>✅ 100% Permitido e Faturável</td>
+              <td>Sem risco (Conforme)</td>
+            </tr>
+            <tr>
+              <td>Placar de pontuação com Top Apoiadores do Chat</td>
+              <td>✅ Totalmente Permitido</td>
+              <td>Sem risco (Incentivo sadio)</td>
+            </tr>
+            <tr>
+              <td>Prometer Pix, dinheiro real ou rifas por presentes</td>
+              <td>❌ Proibido (Violação de Integridade)</td>
+              <td>Banimento Permanente</td>
+            </tr>
+            <tr>
+              <td>Tela pausada ou preta sem som por 15 minutos</td>
+              <td>❌ Proibido (Inatividade de Transmissão)</td>
+              <td>Queda da Live (Strike temporário)</td>
+            </tr>
+            <tr>
+              <td>Rodar vídeo MP4 fingindo ser jogo em tempo real</td>
+              <td>❌ Proibido (Conteúdo Não Autêntico)</td>
+              <td>Suspensão da Conta</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- CTA Box -->
+      <div class="article-cta">
+        <h3>Transmita com Segurança Blindada e Suporte Especializado</h3>
+        <p>O software da Raven Games é desenvolvido seguindo cada linha dos termos de serviço do TikTok para garantir tranquilidade absoluta.</p>
+        <a href="index.html#planos" class="btn-cta">CONHECER OS PLANOS DA RAVEN GAMES</a>
+      </div>
+
+      <h2>Perguntas Frequentes Sobre Diretrizes do TikTok (FAQ)</h2>
+      <div class="faq-item">
+        <h4>1. O TikTok cobra comissão sobre os presentes que o jogo interativo recebe?</h4>
+        <p>Sim. Como em qualquer live, o TikTok fica com aproximadamente 50% do valor bruto do presente e credita os outros 50% em diamantes líquidos na sua carteira de criador, que você saca via Pix.</p>
+      </div>
+      <div class="faq-item">
+        <h4>2. Posso deixar a live interativa rodando de madrugada enquanto durmo?</h4>
+        <p>Sim! Desde que você utilize um software com proteção anti-inatividade como a Raven Games e mantenha o chat moderado, a live continuará operando e monetizando sem necessidade de intervenção humana.</p>
+      </div>
+      <div class="faq-item">
+        <h4>3. Já tomei aviso no passado em outra live. Posso começar agora com a Raven Games?</h4>
+        <p>Sim. Os avisos expiram gradualmente após 90 dias nas diretrizes do TikTok. Ao migrar para a estrutura segura da Raven Games, sua transmissão opera sob conformidade técnica plena.</p>
+      </div>
+
+    </div>
+  </main>
+
+</body>
+</html>
