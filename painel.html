@@ -1542,6 +1542,215 @@
       .game-info { padding: 10px; }
       .game-name { font-size: 0.85rem; }
     }
+    /* ================= NOTIFICAÇÕES LIVE ================= */
+    .notif-container {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      margin-top: 10px;
+    }
+
+    .notif-hero-card {
+      background: linear-gradient(135deg, rgba(24, 29, 44, 0.95), rgba(15, 23, 42, 0.95));
+      border: 1px solid rgba(0, 210, 255, 0.25);
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), 0 0 20px rgba(0, 210, 255, 0.08);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .notif-status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 6px 14px;
+      border-radius: 999px;
+      width: fit-content;
+    }
+
+    .notif-status-badge.online {
+      background: rgba(16, 185, 129, 0.15);
+      color: #10b981;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .notif-status-badge.offline {
+      background: rgba(245, 158, 11, 0.15);
+      color: #f59e0b;
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+
+    .notif-live-indicator {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: currentColor;
+      box-shadow: 0 0 8px currentColor;
+      animation: pulseNotif 1.5s infinite;
+    }
+
+    @keyframes pulseNotif {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.35; transform: scale(0.8); }
+    }
+
+    .notif-controls-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .notif-action-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      border-radius: 10px;
+      font-size: 0.84rem;
+      font-weight: 800;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+    }
+
+    .notif-action-btn.primary {
+      background: var(--ciano);
+      color: #07090e;
+      box-shadow: 0 4px 14px var(--ciano-glow);
+    }
+
+    .notif-action-btn.primary:hover {
+      transform: translateY(-2px);
+    }
+
+    .notif-action-btn.secondary {
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+      border: 1px solid var(--borda);
+    }
+
+    .notif-action-btn.secondary:hover {
+      background: rgba(255, 255, 255, 0.14);
+    }
+
+    .notif-toggle-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 12px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--borda);
+      border-radius: 8px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--texto-mutado);
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.2s;
+    }
+
+    .notif-toggle-pill.active {
+      background: rgba(0, 210, 255, 0.14);
+      border-color: rgba(0, 210, 255, 0.45);
+      color: var(--ciano);
+    }
+
+    .notif-webhook-box {
+      background: #090c12;
+      border: 1px solid var(--borda);
+      border-radius: 12px;
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .notif-webhook-input-wrap {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .notif-webhook-input {
+      flex: 1;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--borda);
+      color: var(--ciano);
+      font-family: monospace;
+      font-size: 0.82rem;
+      padding: 9px 12px;
+      border-radius: 8px;
+      outline: none;
+    }
+
+    .notif-feed-wrap {
+      background: var(--fundo-card);
+      border: 1px solid var(--borda);
+      border-radius: 16px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .notif-feed-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .notif-feed-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-height: 480px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    .notif-gift-card {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-left: 4px solid var(--ciano);
+      border-radius: 12px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      animation: slideInGift 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: background 0.2s;
+    }
+
+    .notif-gift-card:hover {
+      background: rgba(255, 255, 255, 0.07);
+    }
+
+    @keyframes slideInGift {
+      from { opacity: 0; transform: translateY(-8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .notif-gift-text {
+      font-size: 0.92rem;
+      font-weight: 800;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .notif-gift-time {
+      font-size: 0.72rem;
+      color: var(--texto-mutado);
+    }
   </style>
 </head>
 <body>
@@ -1626,6 +1835,11 @@
         <button class="nav-btn" onclick="trocarAba('downloads', this)">
           <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
           <span>Baixar App (PC/Mac)</span>
+        </button>
+
+        <button class="nav-btn" onclick="trocarAba('notificacoes', this)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+          <span>Notificações Live 🔔</span>
         </button>
 
         <span class="nav-label" style="margin-top: 14px;">COMUNIDADE</span>
@@ -2118,6 +2332,92 @@
           </div>
         </div>
       </section>
+
+      <!-- SEÇÃO NOTIFICAÇÕES LIVE (CELULAR / WEBAPP) -->
+      <section id="aba-notificacoes" style="display: none;">
+        <div class="catalog-header">
+          <div>
+            <h1 class="catalog-title">Notificações da Live no Celular 🔔</h1>
+            <p style="font-size: 0.8rem; color: var(--texto-mutado); margin-top: 4px;">Receba alertas instantâneos no seu celular a cada presente enviado na live (100% em tempo real, sem banco de dados).</p>
+          </div>
+        </div>
+
+        <div class="notif-container">
+          <!-- Card de Status e Ações Principais -->
+          <div class="notif-hero-card">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+              <div id="notifStatusBadge" class="notif-status-badge online">
+                <span class="notif-live-indicator"></span>
+                <span id="notifStatusTexto">Conectado ao Feed em Tempo Real</span>
+              </div>
+              <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                <button class="notif-toggle-pill active" id="notifSomToggle" onclick="alternarSomNotif()">
+                  <span>🔊 Som Ativado</span>
+                </button>
+                <button class="notif-toggle-pill active" id="notifVibraToggle" onclick="alternarVibraNotif()">
+                  <span>📳 Vibração Ativada</span>
+                </button>
+              </div>
+            </div>
+
+            <p style="font-size: 0.84rem; color: #cbd5e1; line-height: 1.5;">
+              Quando alguém mandar presente na sua live pelo app do PC, este painel receberá o alerta na hora. Deixe esta tela aberta no seu celular ou ative as notificações do navegador para receber em segundo plano.
+            </p>
+
+            <div class="notif-controls-row">
+              <button class="notif-action-btn primary" id="btnPedirPermissaoNotif" onclick="solicitarPermissaoNavegador()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 16px; height: 16px;"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                <span>Ativar Alertas no Celular</span>
+              </button>
+
+              <button class="notif-action-btn secondary" onclick="dispararTesteNotificacaoWeb()">
+                <span>⚡ Testar Notificação</span>
+              </button>
+            </div>
+
+            <!-- Configuração de Webhook / Tópico -->
+            <div class="notif-webhook-box">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 0.76rem; font-weight: 800; color: var(--ciano); text-transform: uppercase; letter-spacing: 0.05em;">SEU WEBHOOK PESSOAL (NTFY / LIVESTREAM)</span>
+                <span style="font-size: 0.72rem; color: var(--texto-mutado);">Já configurado automaticamente</span>
+              </div>
+              <div class="notif-webhook-input-wrap">
+                <input type="text" id="notifWebhookUrlDisplay" class="notif-webhook-input" readonly value="https://ntfy.sh/raven_live_stream" />
+                <button class="notif-action-btn secondary" id="btnCopiarWebhook" onclick="copiarWebhookNotif()" style="padding: 8px 14px; font-size: 0.78rem;">
+                  <span>Copiar</span>
+                </button>
+              </div>
+              <p style="font-size: 0.72rem; color: var(--texto-mutado); margin-top: 2px;">
+                💡 Se preferir receber mesmo com o navegador fechado no celular, instale o app grátis <strong>ntfy</strong> (Play Store / App Store) e adicione o tópico: <code id="notifTopicoNomeDisplay" style="color: var(--ciano); font-weight: 700;">raven_live</code>
+              </p>
+            </div>
+          </div>
+
+          <!-- Feed em Tempo Real dos Presentes Recebidos -->
+          <div class="notif-feed-wrap">
+            <div class="notif-feed-header">
+              <div>
+                <h3 style="font-size: 1rem; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 8px;">
+                  <span>🎁 Feed ao Vivo de Presentes</span>
+                  <span id="notifFeedContador" style="background: rgba(0, 210, 255, 0.15); color: var(--ciano); padding: 2px 8px; border-radius: 999px; font-size: 0.72rem;">0 recebidos</span>
+                </h3>
+                <p style="font-size: 0.74rem; color: var(--texto-mutado); margin-top: 2px;">Exibindo os presentes que chegam durante sua live (não gravamos nada em banco de dados).</p>
+              </div>
+              <button onclick="limparFeedPresentes()" style="background: none; border: 1px solid var(--borda); color: var(--texto-mutado); font-size: 0.74rem; font-weight: 700; padding: 5px 10px; border-radius: 6px; cursor: pointer;">
+                Limpar Feed
+              </button>
+            </div>
+
+            <div id="notifFeedLista" class="notif-feed-list">
+              <div id="notifFeedVazio" style="text-align: center; padding: 36px 16px; color: var(--texto-mutado); font-size: 0.82rem;">
+                <div style="font-size: 2rem; margin-bottom: 8px; opacity: 0.6;">✨</div>
+                Aguardando presentes da live...<br>
+                <span style="font-size: 0.72rem; opacity: 0.7;">Assim que um presente cair na transmissão, ele aparecerá aqui instantaneamente!</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     </main>
 
     <!-- Mobile Bottom Bar -->
@@ -2133,6 +2433,10 @@
       <button class="m-tab-item" id="btnMobilePlanos" onclick="trocarAba('planos', this)">
         <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
         <span>Planos</span>
+      </button>
+      <button class="m-tab-item" onclick="trocarAba('notificacoes', this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+        <span>Alertas</span>
       </button>
       <button class="m-tab-item" onclick="trocarAba('provas', this)">
         <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
@@ -2515,7 +2819,13 @@
         window.dadosContaAtual = dadosConta;
         atualizarInterfacePlano(dadosConta, user);
         renderizarJogos(JOGOS);
+        if (typeof inicializarNotificacoesLive === "function") {
+          inicializarNotificacoesLive(user);
+        }
       } else {
+        if (typeof desconectarNotificacoesLive === "function") {
+          desconectarNotificacoesLive();
+        }
         portao.style.display = "flex";
         painel.style.display = "none";
         document.getElementById("btnPortaoSubmit").disabled = false;
@@ -2857,6 +3167,8 @@
       document.getElementById("aba-planos").style.display = aba === 'planos' ? 'block' : 'none';
       document.getElementById("aba-provas").style.display = aba === 'provas' ? 'block' : 'none';
       document.getElementById("aba-downloads").style.display = aba === 'downloads' ? 'block' : 'none';
+      const abaNotif = document.getElementById("aba-notificacoes");
+      if (abaNotif) abaNotif.style.display = aba === 'notificacoes' ? 'block' : 'none';
 
       document.querySelectorAll(".nav-btn, .m-tab-item").forEach(b => b.classList.remove("active"));
       if (btn) btn.classList.add("active");
@@ -2952,6 +3264,260 @@
         params.append("custom", user.uid);
       }
       window.location.href = `${base}${base.includes('?') ? '&' : '?'}${params.toString()}`;
+    };
+
+    // ================= CONTROLE DE NOTIFICAÇÕES LIVE (CELULAR / WEBAPP) =================
+    let topicoNotifAtual = null;
+    let eventSourceNotif = null;
+    let somNotifAtivo = true;
+    let vibraNotifAtivo = true;
+    let contadorPresentes = 0;
+
+    window.inicializarNotificacoesLive = function(user) {
+      if (!user) return;
+      const uidLimpo = String(user.uid || "").replace(/[^a-zA-Z0-9_-]/g, "").slice(0, 16);
+      topicoNotifAtual = `raven_live_${uidLimpo}`;
+
+      const inputUrl = document.getElementById("notifWebhookUrlDisplay");
+      const labelTopico = document.getElementById("notifTopicoNomeDisplay");
+      if (inputUrl) inputUrl.value = `https://ntfy.sh/${topicoNotifAtual}`;
+      if (labelTopico) labelTopico.textContent = topicoNotifAtual;
+
+      conectarSseNotificacoes(topicoNotifAtual);
+    };
+
+    window.desconectarNotificacoesLive = function() {
+      if (eventSourceNotif) {
+        try { eventSourceNotif.close(); } catch(e) {}
+        eventSourceNotif = null;
+      }
+      atualizarBadgeStatus(false, "Desconectado");
+    };
+
+    function atualizarBadgeStatus(online, texto) {
+      const badge = document.getElementById("notifStatusBadge");
+      const txt = document.getElementById("notifStatusTexto");
+      if (!badge || !txt) return;
+
+      if (online) {
+        badge.className = "notif-status-badge online";
+        txt.textContent = texto || "Conectado ao Feed em Tempo Real";
+      } else {
+        badge.className = "notif-status-badge offline";
+        txt.textContent = texto || "Reconectando feed da live...";
+      }
+    }
+
+    function conectarSseNotificacoes(topico) {
+      if (!topico) return;
+      if (eventSourceNotif) {
+        try { eventSourceNotif.close(); } catch(e) {}
+        eventSourceNotif = null;
+      }
+
+      try {
+        eventSourceNotif = new EventSource(`https://ntfy.sh/${topico}/sse`);
+
+        eventSourceNotif.onopen = function() {
+          atualizarBadgeStatus(true, "🟢 Ouvindo presentes em tempo real");
+        };
+
+        eventSourceNotif.onerror = function() {
+          atualizarBadgeStatus(false, "🟡 Reconectando ao feed da live...");
+        };
+
+        eventSourceNotif.onmessage = function(e) {
+          try {
+            const data = JSON.parse(e.data);
+            if (data.event === "message" && data.message) {
+              window.processarNovoPresente(data.message);
+            }
+          } catch (err) {}
+        };
+      } catch (err) {
+        atualizarBadgeStatus(false, "Falha ao conectar feed");
+      }
+    }
+
+    function tocarSomChime() {
+      if (!somNotifAtivo) return;
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return;
+        const ctx = new AudioCtx();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(880, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(1760, ctx.currentTime + 0.12);
+
+        gain.gain.setValueAtTime(0.3, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.35);
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        osc.start();
+        osc.stop(ctx.currentTime + 0.35);
+      } catch (e) {}
+    }
+
+    function vibrarCelular() {
+      if (!vibraNotifAtivo) return;
+      try {
+        if ("vibrate" in navigator) {
+          navigator.vibrate([120, 80, 120]);
+        }
+      } catch (e) {}
+    }
+
+    window.processarNovoPresente = function(textoMensagem) {
+      contadorPresentes++;
+      const contadorEl = document.getElementById("notifFeedContador");
+      if (contadorEl) contadorEl.textContent = `${contadorPresentes} recebido${contadorPresentes > 1 ? "s" : ""}`;
+
+      const vazio = document.getElementById("notifFeedVazio");
+      if (vazio) vazio.style.display = "none";
+
+      const lista = document.getElementById("notifFeedLista");
+      if (lista) {
+        const card = document.createElement("div");
+        card.className = "notif-gift-card";
+        
+        const agora = new Date();
+        const hora = agora.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+
+        card.innerHTML = `
+          <div class="notif-gift-text">
+            <span style="font-size: 1.15rem;">🎁</span>
+            <span>${textoMensagem}</span>
+          </div>
+          <span class="notif-gift-time">${hora}</span>
+        `;
+
+        lista.insertBefore(card, lista.firstChild);
+
+        // Mantém apenas os últimos 50 presentes na tela (memória ultra-leve)
+        while (lista.children.length > 51) {
+          lista.removeChild(lista.lastChild);
+        }
+      }
+
+      tocarSomChime();
+      vibrarCelular();
+
+      // Dispara notificação nativa do navegador/celular se autorizado
+      if ("Notification" in window && Notification.permission === "granted") {
+        try {
+          new Notification("Raven Games Live", {
+            body: textoMensagem,
+            icon: "logo.png",
+            badge: "logo.png"
+          });
+        } catch (e) {}
+      }
+    };
+
+    window.solicitarPermissaoNavegador = async function() {
+      const btn = document.getElementById("btnPedirPermissaoNotif");
+      if (!("Notification" in window)) {
+        alert("Seu navegador não suporta notificações de sistema. Mas o feed e o som ao vivo funcionam perfeitamente!");
+        return;
+      }
+
+      try {
+        const permissao = await Notification.requestPermission();
+        if (permissao === "granted") {
+          if (btn) {
+            btn.innerHTML = `<span>✅ Alertas Ativados com Sucesso</span>`;
+            btn.style.background = "#10b981";
+            btn.style.boxShadow = "0 4px 14px rgba(16, 185, 129, 0.3)";
+          }
+          new Notification("Raven Games 🔔", {
+            body: "Notificações da live ativadas no seu celular!",
+            icon: "logo.png"
+          });
+        } else {
+          alert("Permissão de notificação não foi concedida. Os alertas sonoros e o feed ao vivo continuarão funcionando na tela!");
+        }
+      } catch (e) {}
+    };
+
+    window.alternarSomNotif = function() {
+      somNotifAtivo = !somNotifAtivo;
+      const btn = document.getElementById("notifSomToggle");
+      if (btn) {
+        btn.className = `notif-toggle-pill ${somNotifAtivo ? "active" : ""}`;
+        btn.innerHTML = `<span>${somNotifAtivo ? "🔊 Som Ativado" : "🔇 Som Mudo"}</span>`;
+      }
+      if (somNotifAtivo) tocarSomChime();
+    };
+
+    window.alternarVibraNotif = function() {
+      vibraNotifAtivo = !vibraNotifAtivo;
+      const btn = document.getElementById("notifVibraToggle");
+      if (btn) {
+        btn.className = `notif-toggle-pill ${vibraNotifAtivo ? "active" : ""}`;
+        btn.innerHTML = `<span>${vibraNotifAtivo ? "📳 Vibração Ativada" : "📴 Vibração Desativada"}</span>`;
+      }
+      if (vibraNotifAtivo) vibrarCelular();
+    };
+
+    window.copiarWebhookNotif = function() {
+      const input = document.getElementById("notifWebhookUrlDisplay");
+      const btn = document.getElementById("btnCopiarWebhook");
+      if (!input) return;
+
+      navigator.clipboard.writeText(input.value).then(() => {
+        if (btn) {
+          const original = btn.innerHTML;
+          btn.innerHTML = `<span>Copiado! ✓</span>`;
+          btn.style.borderColor = "var(--ciano)";
+          setTimeout(() => {
+            btn.innerHTML = original;
+            btn.style.borderColor = "var(--borda)";
+          }, 2000);
+        }
+      }).catch(() => {
+        input.select();
+        document.execCommand("copy");
+      });
+    };
+
+    window.limparFeedPresentes = function() {
+      contadorPresentes = 0;
+      const contadorEl = document.getElementById("notifFeedContador");
+      if (contadorEl) contadorEl.textContent = "0 recebidos";
+
+      const lista = document.getElementById("notifFeedLista");
+      if (lista) {
+        lista.innerHTML = `
+          <div id="notifFeedVazio" style="text-align: center; padding: 36px 16px; color: var(--texto-mutado); font-size: 0.82rem;">
+            <div style="font-size: 2rem; margin-bottom: 8px; opacity: 0.6;">✨</div>
+            Aguardando presentes da live...<br>
+            <span style="font-size: 0.72rem; opacity: 0.7;">Assim que um presente cair na transmissão, ele aparecerá aqui instantaneamente!</span>
+          </div>
+        `;
+      }
+    };
+
+    window.dispararTesteNotificacaoWeb = async function() {
+      const textoExemplo = "Presente: 1x galaxia (💎+1000)";
+      if (topicoNotifAtual) {
+        try {
+          fetch(`https://ntfy.sh/${topicoNotifAtual}`, {
+            method: "POST",
+            body: textoExemplo,
+            headers: {
+              "Title": "Raven Live 🎁",
+              "Priority": "default"
+            }
+          }).catch(() => {});
+        } catch (e) {}
+      }
+      // Processa imediatamente para feedback instantâneo na tela
+      window.processarNovoPresente(textoExemplo);
     };
   </script>
 
