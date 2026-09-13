@@ -436,6 +436,139 @@
       box-shadow: 0 6px 20px rgba(0, 210, 255, 0.12);
     }
 
+    .header-top-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      margin-bottom: 0.4rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    /* Language Switcher Pill */
+    .header-right-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+    }
+
+    .lang-switcher-wrap {
+      position: relative;
+      user-select: none;
+    }
+
+    .lang-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      background: rgba(18, 24, 38, 0.75);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #ffffff;
+      padding: 0.52rem 0.85rem;
+      border-radius: 12px;
+      font-size: 0.86rem;
+      font-weight: 800;
+      font-family: inherit;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .lang-btn:hover {
+      background: rgba(26, 35, 54, 0.95);
+      border-color: rgba(0, 210, 255, 0.4);
+      color: #00d2ff;
+      box-shadow: 0 6px 20px rgba(0, 210, 255, 0.15);
+      transform: translateY(-1px);
+    }
+
+    .lang-globe-icon {
+      stroke: currentColor;
+      flex-shrink: 0;
+      opacity: 0.9;
+    }
+
+    .lang-label {
+      letter-spacing: 0.06em;
+      font-weight: 800;
+      color: inherit;
+      line-height: 1;
+    }
+
+    .lang-dropdown {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      background: rgba(12, 17, 28, 0.96);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 14px;
+      padding: 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 155px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7), 0 0 25px rgba(0, 210, 255, 0.12);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-6px);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 100;
+    }
+
+    .lang-switcher-wrap.open .lang-dropdown {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .lang-option {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0.55rem 0.75rem;
+      background: transparent;
+      border: 1px solid transparent;
+      color: #94a3b8;
+      font-size: 0.85rem;
+      font-weight: 600;
+      font-family: inherit;
+      border-radius: 8px;
+      cursor: pointer;
+      text-align: left;
+      width: 100%;
+      transition: all 0.2s ease;
+    }
+
+    .lang-option:hover {
+      background: rgba(255, 255, 255, 0.06);
+      color: #ffffff;
+    }
+
+    .lang-option.active {
+      background: rgba(0, 210, 255, 0.12);
+      color: #00d2ff;
+      border-color: rgba(0, 210, 255, 0.25);
+    }
+
+    .lang-flag {
+      font-size: 1rem;
+      line-height: 1;
+    }
+
+    .lang-code-pill {
+      margin-left: auto;
+      font-size: 0.7rem;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
     @media (max-width: 640px) {
       body {
         padding: 24px 16px 50px;
@@ -459,29 +592,59 @@
   <!-- Conteúdo Principal -->
   <main class="content-container">
 
-    <!-- Topo / Marca com Logo Oficial -->
-    <a href="index.html" class="brand-header" title="Voltar ao início">
-      <img src="logo.png" alt="RAVENGAMES Logo" class="brand-logo" />
-      <div class="brand-info">
-        <h2>RAVEN<span>GAMES</span></h2>
-        <span class="tagline">jogos para a sua live</span>
+    <!-- Topo / Header com Marca e Language Switcher -->
+    <div class="header-top-row">
+      <a href="index.html" class="brand-header" title="Voltar ao início">
+        <img src="logo.png" alt="RAVENGAMES Logo" class="brand-logo" />
+        <div class="brand-info">
+          <h2>RAVEN<span>GAMES</span></h2>
+          <span class="tagline" id="brandTagline">jogos para a sua live</span>
+        </div>
+      </a>
+
+      <!-- Language Switcher Pill -->
+      <div class="header-right-actions">
+        <div class="lang-switcher-wrap" id="langSwitcher">
+          <button class="lang-btn" id="langToggleBtn" aria-label="Trocar Idioma">
+            <svg class="lang-globe-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="2" y1="12" x2="22" y2="12"></line>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1 4-10z"></path>
+            </svg>
+            <span class="lang-label" id="currentLangLabel">PT</span>
+          </button>
+
+          <!-- Dropdown Menu -->
+          <div class="lang-dropdown" id="langDropdown">
+            <button class="lang-option active" data-lang="pt">
+              <span class="lang-flag">🇧🇷</span>
+              <span>Português</span>
+              <span class="lang-code-pill">PT</span>
+            </button>
+            <button class="lang-option" data-lang="en">
+              <span class="lang-flag">🇺🇸</span>
+              <span>English</span>
+              <span class="lang-code-pill">EN</span>
+            </button>
+          </div>
+        </div>
       </div>
-    </a>
+    </div>
 
     <!-- Tag Comece Por Aqui -->
     <div>
-      <div class="badge">
+      <div class="badge" id="pageBadge">
         <span class="status-dot"></span>
-        Comece por aqui
+        <span>Comece por aqui</span>
       </div>
     </div>
 
     <!-- Título Principal com Gradiente -->
-    <h1 class="page-title">
+    <h1 class="page-title" id="pageTitle">
       Veja como funciona, <span class="highlight">em 2 minutos</span>
     </h1>
 
-    <p class="page-subtitle" style="margin-bottom:1.2rem;">
+    <p class="page-subtitle" id="pageSubtitle" style="margin-bottom:1.2rem;">
       O vídeo mostra tudo: como escolher o plano, como pagar e como abrir o primeiro jogo na sua live.
     </p>
 
@@ -494,7 +657,7 @@
           <line x1="12" y1="17" x2="12" y2="21"></line>
         </svg>
       </div>
-      <div style="font-size:0.92rem; color:#f1f5f9; line-height:1.45;">
+      <div id="compatNotice" style="font-size:0.92rem; color:#f1f5f9; line-height:1.45;">
         <strong style="color:#00d2ff; font-weight:700;">Disponível para Windows e Mac (MacBook):</strong> O launcher roda no computador para transmitir e automatizar sua live. Se você estiver no celular, abra este site no seu computador.
       </div>
     </div>
@@ -521,8 +684,8 @@
           </svg>
         </div>
         <div class="action-btn-text">
-          <span class="action-btn-title">Baixar para Windows</span>
-          <span class="action-btn-sub">PC / Notebook (.exe)</span>
+          <span class="action-btn-title" id="btnWinTitle">Baixar para Windows</span>
+          <span class="action-btn-sub" id="btnWinSub">PC / Notebook (.exe)</span>
         </div>
       </a>
 
@@ -534,8 +697,8 @@
           </svg>
         </div>
         <div class="action-btn-text">
-          <span class="action-btn-title">Baixar para Mac</span>
-          <span class="action-btn-sub">MacBook / macOS (.dmg)</span>
+          <span class="action-btn-title" id="btnMacTitle">Baixar para Mac</span>
+          <span class="action-btn-sub" id="btnMacSub">MacBook / macOS (.dmg)</span>
         </div>
       </a>
 
@@ -547,8 +710,8 @@
           </svg>
         </div>
         <div class="action-btn-text">
-          <span class="action-btn-title">Entrar no Discord</span>
-          <span class="action-btn-sub">Comunidade e suporte</span>
+          <span class="action-btn-title" id="btnDiscordTitle">Entrar no Discord</span>
+          <span class="action-btn-sub" id="btnDiscordSub">Comunidade e suporte</span>
         </div>
       </a>
 
@@ -556,33 +719,33 @@
 
     <!-- Avisos de Instalação -->
     <div style="display:flex; flex-direction:column; gap:0.5rem;">
-      <p class="notice-box">
+      <p class="notice-box" id="noticeWin">
         <strong>Windows:</strong> Se avisar que não conhece o programa, clique em <strong>"Mais informações"</strong> e depois em <strong>"Executar assim mesmo"</strong>.
       </p>
-      <p class="notice-box">
+      <p class="notice-box" id="noticeMac">
         <strong>MacBook (macOS):</strong> Abra o arquivo <strong>.dmg</strong> e arraste o <strong>RAVENGAMES</strong> para a pasta <strong>Aplicativos</strong>. Se o macOS avisar sobre desenvolvedor não verificado, vá em <em>Ajustes do Sistema > Privacidade e Segurança > Abrir Mesmo Assim</em>.
       </p>
     </div>
 
     <!-- Card de Passos Glassmorphic -->
     <div class="steps-card">
-      <h3 class="steps-card-title">Depois de baixar</h3>
+      <h3 class="steps-card-title" id="stepsCardTitle">Depois de baixar</h3>
       <ol class="steps-list">
         <li class="step-row">
           <span class="step-badge">1</span>
-          <div>
+          <div id="step1Text">
             <strong>Instale e crie sua conta</strong> dentro do launcher.
           </div>
         </li>
         <li class="step-row">
           <span class="step-badge">2</span>
-          <div>
+          <div id="step2Text">
             <strong>Escolha o plano na tela de planos</strong> — o pagamento é pelo cartão ou Pix, na hora.
           </div>
         </li>
         <li class="step-row">
           <span class="step-badge">3</span>
-          <div>
+          <div id="step3Text">
             <strong>Conecte a sua live do TikTok</strong> e abra o jogo. Pronto.
           </div>
         </li>
@@ -596,7 +759,7 @@
           <line x1="19" y1="12" x2="5" y2="12"></line>
           <polyline points="12 19 5 12 12 5"></polyline>
         </svg>
-        <span>Voltar para o site</span>
+        <span id="btnBackText">Voltar para o site</span>
       </a>
     </div>
 
@@ -612,8 +775,8 @@
           <line x1="12" y1="17" x2="12" y2="21"></line>
         </svg>
       </div>
-      <h3 style="font-size:1.35rem; font-weight:800; color:#fff; margin-bottom:10px; letter-spacing:-0.5px;">Escolha o seu Sistema</h3>
-      <p style="font-size:0.92rem; color:#94a3b8; line-height:1.5; margin-bottom:20px;">
+      <h3 id="modalTitle" style="font-size:1.35rem; font-weight:800; color:#fff; margin-bottom:10px; letter-spacing:-0.5px;">Escolha o seu Sistema</h3>
+      <p id="modalSub" style="font-size:0.92rem; color:#94a3b8; line-height:1.5; margin-bottom:20px;">
         Selecione a versão compatível com o seu computador para iniciar o download gratuito do <strong>RAVENGAMES</strong>:
       </p>
       
@@ -623,7 +786,7 @@
           <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="margin-right:8px;">
             <path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.951-1.801"/>
           </svg>
-          <span style="font-weight:700;">Baixar para Windows (.exe)</span>
+          <span id="modalWinText" style="font-weight:700;">Baixar para Windows (.exe)</span>
         </a>
 
         <!-- Download Mac -->
@@ -631,7 +794,7 @@
           <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="margin-right:8px;">
             <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.37c.62-.75 1.04-1.8 0.92-2.85-.9.04-2 .6-2.65 1.35-.58.66-1.09 1.73-.95 2.76.99.08 2.04-.51 2.68-1.26z"/>
           </svg>
-          <span style="font-weight:700;">Baixar para MacBook / Mac (.dmg)</span>
+          <span id="modalMacText" style="font-weight:700;">Baixar para MacBook / Mac (.dmg)</span>
         </a>
 
         <button id="btnFecharModalPc" type="button" style="background:transparent; border:1px solid rgba(255,255,255,0.1); color:#94a3b8; padding:10px 20px; border-radius:12px; font-size:0.88rem; font-weight:600; cursor:pointer; transition:all 0.2s ease; margin-top:4px;">
@@ -660,16 +823,223 @@
 
   <script>
     (function() {
+      // Modal control
       const modal = document.getElementById('modalAvisoPc');
       const btnFechar = document.getElementById('btnFecharModalPc');
+      if (btnFechar && modal) {
+        btnFechar.addEventListener('click', function() {
+          modal.style.display = 'none';
+        });
 
-      btnFechar.addEventListener('click', function() {
-        modal.style.display = 'none';
+        modal.addEventListener('click', function(e) {
+          if (e.target === modal) modal.style.display = 'none';
+        });
+      }
+
+      // ================= SELETOR DE IDIOMA E INTERNACIONALIZAÇÃO (PT / EN) =================
+      const langSwitcherWrap = document.getElementById('langSwitcher');
+      const langToggleBtn = document.getElementById('langToggleBtn');
+      const currentLangLabel = document.getElementById('currentLangLabel');
+      const langOptions = document.querySelectorAll('.lang-option');
+
+      if (langToggleBtn && langSwitcherWrap) {
+        langToggleBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          langSwitcherWrap.classList.toggle('open');
+        });
+
+        document.addEventListener('click', (e) => {
+          if (!langSwitcherWrap.contains(e.target)) {
+            langSwitcherWrap.classList.remove('open');
+          }
+        });
+      }
+
+      const translations = {
+        pt: {
+          code: 'PT',
+          pageTitleTag: 'Comece por aqui - RAVENGAMES',
+          brandTagline: 'jogos para a sua live',
+          badge: '<span class="status-dot"></span><span>Comece por aqui</span>',
+          title: 'Veja como funciona, <span class="highlight">em 2 minutos</span>',
+          subtitle: 'O vídeo mostra tudo: como escolher o plano, como pagar e como abrir o primeiro jogo na sua live.',
+          compatNotice: '<strong style="color:#00d2ff; font-weight:700;">Disponível para Windows e Mac (MacBook):</strong> O launcher roda no computador para transmitir e automatizar sua live. Se você estiver no celular, abra este site no seu computador.',
+          btnWinTitle: 'Baixar para Windows',
+          btnWinSub: 'PC / Notebook (.exe)',
+          btnMacTitle: 'Baixar para Mac',
+          btnMacSub: 'MacBook / macOS (.dmg)',
+          btnDiscordTitle: 'Entrar no Discord',
+          btnDiscordSub: 'Comunidade e suporte',
+          noticeWin: '<strong>Windows:</strong> Se avisar que não conhece o programa, clique em <strong>"Mais informações"</strong> e depois em <strong>"Executar assim mesmo"</strong>.',
+          noticeMac: '<strong>MacBook (macOS):</strong> Abra o arquivo <strong>.dmg</strong> e arraste o <strong>RAVENGAMES</strong> para a pasta <strong>Aplicativos</strong>. Se o macOS avisar sobre desenvolvedor não verificado, vá em <em>Ajustes do Sistema > Privacidade e Segurança > Abrir Mesmo Assim</em>.',
+          stepsTitle: 'Depois de baixar',
+          step1: '<strong>Instale e crie sua conta</strong> dentro do launcher.',
+          step2: '<strong>Escolha o plano na tela de planos</strong> — o pagamento é pelo cartão ou Pix, na hora.',
+          step3: '<strong>Conecte a sua live do TikTok</strong> e abra o jogo. Pronto.',
+          btnBack: 'Voltar para o site',
+          modalTitle: 'Escolha o seu Sistema',
+          modalSub: 'Selecione a versão compatível com o seu computador para iniciar o download gratuito do <strong>RAVENGAMES</strong>:',
+          modalWin: 'Baixar para Windows (.exe)',
+          modalMac: 'Baixar para MacBook / Mac (.dmg)',
+          modalClose: 'Fechar'
+        },
+        en: {
+          code: 'EN',
+          pageTitleTag: 'Start here - RAVENGAMES',
+          brandTagline: 'games for your live stream',
+          badge: '<span class="status-dot"></span><span>Start here</span>',
+          title: 'See how it works, <span class="highlight">in 2 minutes</span>',
+          subtitle: 'The video shows everything: how to choose a plan, pay, and launch your first live game.',
+          compatNotice: '<strong style="color:#00d2ff; font-weight:700;">Available for Windows and Mac (MacBook):</strong> The launcher runs on your computer to broadcast and automate your live stream. If you are on a phone, open this page on your desktop.',
+          btnWinTitle: 'Download for Windows',
+          btnWinSub: 'PC / Laptop (.exe)',
+          btnMacTitle: 'Download for Mac',
+          btnMacSub: 'MacBook / macOS (.dmg)',
+          btnDiscordTitle: 'Join Discord',
+          btnDiscordSub: 'Community & Support',
+          noticeWin: '<strong>Windows:</strong> If Windows SmartScreen prompts an alert, click on <strong>"More info"</strong> and then <strong>"Run anyway"</strong>.',
+          noticeMac: '<strong>MacBook (macOS):</strong> Open the <strong>.dmg</strong> file and drag <strong>RAVENGAMES</strong> into the <strong>Applications</strong> folder. If macOS warns about an unidentified developer, go to <em>System Settings > Privacy & Security > Open Anyway</em>.',
+          stepsTitle: 'After downloading',
+          step1: '<strong>Install and create your account</strong> inside the launcher.',
+          step2: '<strong>Choose your plan on the plans screen</strong> — instant payment via card or checkout.',
+          step3: '<strong>Connect your TikTok live</strong> and launch the game. You are all set.',
+          btnBack: 'Back to website',
+          modalTitle: 'Choose your Operating System',
+          modalSub: 'Select the compatible version for your computer to start the free download of <strong>RAVENGAMES</strong>:',
+          modalWin: 'Download for Windows (.exe)',
+          modalMac: 'Download for MacBook / Mac (.dmg)',
+          modalClose: 'Close'
+        }
+      };
+
+      function applyLanguage(lang) {
+        const data = translations[lang] || translations.pt;
+        document.documentElement.lang = lang === 'en' ? 'en' : 'pt-BR';
+        document.title = data.pageTitleTag;
+
+        if (currentLangLabel) currentLangLabel.textContent = data.code;
+
+        langOptions.forEach(opt => {
+          if (opt.getAttribute('data-lang') === lang) {
+            opt.classList.add('active');
+          } else {
+            opt.classList.remove('active');
+          }
+        });
+
+        const brandTagline = document.getElementById('brandTagline');
+        if (brandTagline) brandTagline.textContent = data.brandTagline;
+
+        const pageBadge = document.getElementById('pageBadge');
+        if (pageBadge) pageBadge.innerHTML = data.badge;
+
+        const pageTitle = document.getElementById('pageTitle');
+        if (pageTitle) pageTitle.innerHTML = data.title;
+
+        const pageSubtitle = document.getElementById('pageSubtitle');
+        if (pageSubtitle) pageSubtitle.textContent = data.subtitle;
+
+        const compatNotice = document.getElementById('compatNotice');
+        if (compatNotice) compatNotice.innerHTML = data.compatNotice;
+
+        const btnWinTitle = document.getElementById('btnWinTitle');
+        if (btnWinTitle) btnWinTitle.textContent = data.btnWinTitle;
+
+        const btnWinSub = document.getElementById('btnWinSub');
+        if (btnWinSub) btnWinSub.textContent = data.btnWinSub;
+
+        const btnMacTitle = document.getElementById('btnMacTitle');
+        if (btnMacTitle) btnMacTitle.textContent = data.btnMacTitle;
+
+        const btnMacSub = document.getElementById('btnMacSub');
+        if (btnMacSub) btnMacSub.textContent = data.btnMacSub;
+
+        const btnDiscordTitle = document.getElementById('btnDiscordTitle');
+        if (btnDiscordTitle) btnDiscordTitle.textContent = data.btnDiscordTitle;
+
+        const btnDiscordSub = document.getElementById('btnDiscordSub');
+        if (btnDiscordSub) btnDiscordSub.textContent = data.btnDiscordSub;
+
+        const noticeWin = document.getElementById('noticeWin');
+        if (noticeWin) noticeWin.innerHTML = data.noticeWin;
+
+        const noticeMac = document.getElementById('noticeMac');
+        if (noticeMac) noticeMac.innerHTML = data.noticeMac;
+
+        const stepsCardTitle = document.getElementById('stepsCardTitle');
+        if (stepsCardTitle) stepsCardTitle.textContent = data.stepsTitle;
+
+        const step1Text = document.getElementById('step1Text');
+        if (step1Text) step1Text.innerHTML = data.step1;
+
+        const step2Text = document.getElementById('step2Text');
+        if (step2Text) step2Text.innerHTML = data.step2;
+
+        const step3Text = document.getElementById('step3Text');
+        if (step3Text) step3Text.innerHTML = data.step3;
+
+        const btnBackText = document.getElementById('btnBackText');
+        if (btnBackText) btnBackText.textContent = data.btnBack;
+
+        const modalTitle = document.getElementById('modalTitle');
+        if (modalTitle) modalTitle.textContent = data.modalTitle;
+
+        const modalSub = document.getElementById('modalSub');
+        if (modalSub) modalSub.innerHTML = data.modalSub;
+
+        const modalWinText = document.getElementById('modalWinText');
+        if (modalWinText) modalWinText.textContent = data.modalWin;
+
+        const modalMacText = document.getElementById('modalMacText');
+        if (modalMacText) modalMacText.textContent = data.modalMac;
+
+        const btnFecharModalPc = document.getElementById('btnFecharModalPc');
+        if (btnFecharModalPc) btnFecharModalPc.textContent = data.modalClose;
+
+        localStorage.setItem('site_lang_pref', lang);
+      }
+
+      langOptions.forEach(opt => {
+        opt.addEventListener('click', () => {
+          const selectedLang = opt.getAttribute('data-lang');
+          applyLanguage(selectedLang);
+          if (langSwitcherWrap) langSwitcherWrap.classList.remove('open');
+        });
       });
 
-      modal.addEventListener('click', function(e) {
-        if (e.target === modal) modal.style.display = 'none';
-      });
+      // Auto-detect language
+      function detectInitialLanguage() {
+        const saved = localStorage.getItem('site_lang_pref');
+        if (saved && (saved === 'pt' || saved === 'en')) {
+          return saved;
+        }
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const urlLang = urlParams.get('lang');
+        if (urlLang && (urlLang === 'pt' || urlLang === 'en')) {
+          return urlLang;
+        }
+
+        const userLang = (navigator.language || navigator.userLanguage || '').toLowerCase();
+        if (userLang.startsWith('en')) {
+          return 'en';
+        } else if (!userLang.startsWith('pt')) {
+          try {
+            const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+            const brTz = ['Sao_Paulo', 'Fortaleza', 'Belem', 'Manaus', 'Cuiaba', 'Recife', 'Bahia', 'Campo_Grande', 'Maceio', 'Porto_Velho', 'Rio_Branco', 'Noronha', 'Lisbon'];
+            const isBrOrPt = brTz.some(t => tz.includes(t));
+            if (!isBrOrPt) return 'en';
+          } catch(e) {
+            return 'en';
+          }
+        }
+        return 'pt';
+      }
+
+      const initialLang = detectInitialLanguage();
+      if (initialLang !== 'pt') {
+        applyLanguage(initialLang);
+      }
     })();
   </script>
 

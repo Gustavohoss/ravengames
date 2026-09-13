@@ -943,9 +943,9 @@
     </p>
 
     <div class="cta-group">
-      <a href="painel.html?cadastro=1" class="shiny-cta primary">
+      <a href="https://discord.gg/4CCx9Cw2n9" target="_blank" rel="noopener noreferrer" class="shiny-cta primary">
         <span>
-          Criar Conta / Cadastrar
+          Entrar na Comunidade
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <line x1="5" y1="12" x2="19" y2="12"></line>
             <polyline points="12 5 19 12 12 19"></polyline>
@@ -963,12 +963,6 @@
             <line x1="18" y1="11" x2="18.01" y2="11"></line>
           </svg>
           Ver Vitrine de Jogos
-        </span>
-      </a>
-
-      <a href="https://discord.gg/4CCx9Cw2n9" target="_blank" rel="noopener noreferrer" class="shiny-cta">
-        <span>
-          Entrar na Comunidade
         </span>
       </a>
     </div>
@@ -4076,7 +4070,7 @@
 
   <!-- Script Dinâmico TikSpy (Relógio ao Vivo + Notificações de Presentes da Live em Cascata) -->
   <script>
-    const liveGifts = [
+    const liveGiftsPT = [
       { heading: 'Presente Recebido 🦁', desc: 'Leão do TikTok • +29.999 Moedas 🪙' },
       { heading: 'Presente Recebido 🪐', desc: 'Universo TikTok • +44.999 Moedas 🪙' },
       { heading: 'Presente Recebido 🎁', desc: 'Galáxia • +1.000 Moedas 🪙' },
@@ -4089,19 +4083,44 @@
       { heading: 'Interação de Live ⚡', desc: 'Ativou Dança do Personagem' }
     ];
 
-    const notifIcon = 'notif-icon.png';
-    const timeLabels = ['agora', '1m', '2m', '3m'];
+    const liveGiftsEN = [
+      { heading: 'Gift Received 🦁', desc: 'TikTok Lion • +29,999 Coins 🪙' },
+      { heading: 'Gift Received 🪐', desc: 'TikTok Universe • +44,999 Coins 🪙' },
+      { heading: 'Gift Received 🎁', desc: 'Galaxy • +1,000 Coins 🪙' },
+      { heading: 'Gift Received 🚀', desc: 'Space Rocket • +20,000 Coins 🪙' },
+      { heading: 'Gift Received 🌹', desc: 'Rose x1,000 • +1,000 Coins 🪙' },
+      { heading: 'Chat Command ⚔️', desc: 'Spawned Boss • +500 Coins 🪙' },
+      { heading: 'Gift Received 🐋', desc: 'Diving Whale • +2,150 Coins 🪙' },
+      { heading: 'Gift Received 🦅', desc: 'Soaring Falcon • +10,999 Coins 🪙' },
+      { heading: 'New Leader 👑', desc: 'Took #1 Spot in Live Stream' },
+      { heading: 'Live Interaction ⚡', desc: 'Triggered Character Dance' }
+    ];
 
-    function getRandomGift() {
-      return liveGifts[Math.floor(Math.random() * liveGifts.length)];
+    let currentActiveLang = 'pt';
+    const notifIcon = 'notif-icon.png';
+    const timeLabelsPT = ['agora', '1m', '2m', '3m'];
+    const timeLabelsEN = ['now', '1m', '2m', '3m'];
+
+    function getLiveGiftsList() {
+      return currentActiveLang === 'en' ? liveGiftsEN : liveGiftsPT;
     }
 
-    // Atualiza relógio e datas
+    function getTimeLabels() {
+      return currentActiveLang === 'en' ? timeLabelsEN : timeLabelsPT;
+    }
+
+    function getRandomGift() {
+      const list = getLiveGiftsList();
+      return list[Math.floor(Math.random() * list.length)];
+    }
+
+    // Atualiza relógio e datas com suporte ao idioma ativo
     function updateMockupClocks() {
       const now = new Date();
-      const timeStr = now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-      const dateShort = now.toLocaleDateString('pt-BR', { weekday: 'short', day: 'numeric', month: 'short' });
-      const dateLong = now.toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' });
+      const locale = currentActiveLang === 'en' ? 'en-US' : 'pt-BR';
+      const timeStr = now.toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit', hour12: false });
+      const dateShort = now.toLocaleDateString(locale, { weekday: 'short', day: 'numeric', month: 'short' });
+      const dateLong = now.toLocaleDateString(locale, { weekday: 'long', day: 'numeric', month: 'long' });
 
       // Desktop MacBook
       const macTime = document.getElementById('macCurrentTime');
@@ -4144,21 +4163,23 @@
     function pushDesktop() {
       const deskWrap = document.getElementById('desktopNotifs');
       if (!deskWrap) return;
-      const card = createCard(getRandomGift(), 'agora', false, true);
+      const tLabels = getTimeLabels();
+      const card = createCard(getRandomGift(), tLabels[0], false, true);
       deskWrap.prepend(card);
       if (deskWrap.children.length > 4) {
         deskWrap.removeChild(deskWrap.lastChild);
       }
       const badges = deskWrap.querySelectorAll('.notif-time-badge');
       badges.forEach((b, idx) => {
-        b.textContent = timeLabels[idx] || (idx + 1) + 'm';
+        b.textContent = tLabels[idx] || (idx + 1) + 'm';
       });
     }
 
     function pushMobile() {
       const mobWrap = document.getElementById('mobileNotifs');
       if (!mobWrap) return;
-      const card = createCard(getRandomGift(), 'agora', true, true);
+      const tLabels = getTimeLabels();
+      const card = createCard(getRandomGift(), tLabels[0], true, true);
       mobWrap.appendChild(card);
       if (mobWrap.children.length > 4) {
         mobWrap.removeChild(mobWrap.firstChild);
@@ -4166,7 +4187,7 @@
       const badges = mobWrap.querySelectorAll('.notif-time-badge');
       const len = badges.length;
       badges.forEach((b, idx) => {
-        b.textContent = timeLabels[len - 1 - idx] || (len - idx) + 'm';
+        b.textContent = tLabels[len - 1 - idx] || (len - idx) + 'm';
       });
     }
 
@@ -4174,17 +4195,19 @@
     function initNotifs() {
       const deskWrap = document.getElementById('desktopNotifs');
       const mobWrap = document.getElementById('mobileNotifs');
+      const gifts = getLiveGiftsList();
+      const tLabels = getTimeLabels();
       if (deskWrap) {
         deskWrap.innerHTML = '';
         for (let i = 0; i < 4; i++) {
-          const card = createCard(liveGifts[i % liveGifts.length], timeLabels[i], false, false);
+          const card = createCard(gifts[i % gifts.length], tLabels[i], false, false);
           deskWrap.appendChild(card);
         }
       }
       if (mobWrap) {
         mobWrap.innerHTML = '';
         for (let i = 3; i >= 0; i--) {
-          const card = createCard(liveGifts[i % liveGifts.length], timeLabels[i], true, false);
+          const card = createCard(gifts[i % gifts.length], tLabels[i], true, false);
           mobWrap.appendChild(card);
         }
       }
@@ -4224,7 +4247,7 @@
       });
     });
 
-    // ================= SELETOR DE IDIOMA E INTERNACIONALIZAÇÃO (PT / EN) =================
+    // ================= SELETOR DE IDIOMA E INTERNACIONALIZAÇÃO COMPLETA (PT / EN) =================
     const langSwitcherWrap = document.getElementById('langSwitcher');
     const langToggleBtn = document.getElementById('langToggleBtn');
     const currentLangLabel = document.getElementById('currentLangLabel');
@@ -4247,71 +4270,248 @@
     const translations = {
       pt: {
         code: 'PT',
+        pageTitle: 'RAVENGAMES',
+        htmlLang: 'pt-BR',
         nav: ['Jogos', 'Como Funciona', 'Recursos', 'Planos', 'Dúvidas'],
+        navPanel: 'Acessar Painel',
         navCta: 'Entrar na comunidade',
         heroBadge: '<span>Comunidade com <strong>+2.000 Streamers</strong></span>',
         heroTitle: 'Sua live de TikTok jogando <br><span class="highlight">sozinha</span>, com o chat dentro do jogo.',
         heroSubtitle: 'Jogos interativos com modo AFK e anti-inatividade. O chat e os presentes controlam a partida em tempo real, mantendo a transmissão viva e faturando mesmo quando você não está no teclado.',
-        heroCta1: 'Entrar na comunidade',
-        heroCta2: 'Baixar o Launcher',
-        heroCta3: 'Ver Jogos Disponíveis',
+        heroCta1: 'Entrar na Comunidade',
+        heroCta2: 'Ver Vitrine de Jogos',
         partnersLabel: 'TECNOLOGIAS E PLATAFORMAS INTEGRADAS',
-        howItWorksBadge: 'TUTORIAL RÁPIDO EM 3 PASSOS',
+        partnerDescs: [
+          'Conexão direta com chat e presentes',
+          'Overlays e Chroma Key nativo',
+          'Automação de scripts e danças',
+          'Alertas sonoros sincronizados',
+          'Comunidade e novos mapas'
+        ],
+        mockupBadge: 'Comunidade com mais de 2.000 membros',
+        mockupTitle: 'Fature no Piloto <br class="mobile-break" /> Automático',
+        mockupSubtitle: 'Enquanto você dorme ou foca em outras coisas, sua live interativa recebe presentes e gera receita no piloto automático.',
+        mockupFinder: ['Finder', 'Arquivo', 'Editar', 'Visualizar'],
+        howItWorksBadge: 'PASSO A PASSO SIMPLES',
         howItWorksTitle: 'Como funciona',
         howItWorksSubtitle: 'Três etapas entre abrir a transmissão e ver o chat participando da partida.',
-        gamesBadge: 'EXPERIÊNCIAS INTERATIVAS',
+        step1Tag: 'INPUT DO CHAT',
+        step1Title: 'O espectador comenta',
+        step1Desc: 'Qualquer pessoa assistindo escreve no chat da sua live, como já faria normalmente.',
+        step2Tag: 'ENGINE RUNTIME',
+        step2Title: 'O comentário vira ação',
+        step2Desc: 'O jogo lê o comentário e coloca aquela pessoa dentro da partida, ao vivo, na sua tela.',
+        step3Tag: 'RETENÇÃO & VIRAL',
+        step3Title: 'A live se sustenta sozinha',
+        step3Desc: 'Quem se vê no jogo comenta de novo, chama outras pessoas e permanece na sala por muito mais tempo.',
+        step3Retention: 'Retenção Média',
+        step3Chips: ['🔥 Booster Viral', '🎁 Presentes Turbo'],
+        gamesBadge: 'CATÁLOGO EM CONSTANTE EXPANSÃO',
         gamesTitle: 'Catálogo de jogos',
         gamesSubtitle: 'Experiências prontas para transmissão, construídas especificamente para o formato de live interativa. O catálogo é ampliado continuamente.',
+        gameCards: [
+          {
+            badge: 'VITALÍCIO',
+            title: 'Flappy da Live',
+            desc: 'O número sobe sozinho rumo a 1.000.000 e a sala se une para derrubar: presente vira foguete, TNT e meteoro em cima do pássaro.',
+            demo: 'Ver demonstração'
+          },
+          {
+            badge: 'VITALÍCIO',
+            title: 'Tower Sky',
+            desc: 'A torre sobe enquanto a audiência manda blocos. Errar o encaixe derruba tudo, e a sala inteira sente.',
+            demo: 'Ver demonstração'
+          },
+          {
+            badge: 'VITALÍCIO',
+            title: 'Avatares da Live',
+            desc: 'O espectador aparece no jogo com a própria identidade visual e se reconhece na tela, o que puxa novos comentários.',
+            demo: 'Ver demonstração'
+          }
+        ],
         bannerHeading: 'Novos títulos em produção',
+        bannerBadge: 'PIPELINE ATIVO',
         bannerSubtext: 'O catálogo cresce de forma contínua. Lançamentos são anunciados primeiro dentro do servidor.',
         bannerCta: 'Acompanhar no Servidor',
-        testimonialsBadge: 'RESULTADOS REAIS DE QUEM TRANSMITE',
-        testimonialsTitle: 'Quem usa, domina o algoritmo',
-        testimonialsSubtitle: 'Veja o que streamers e criadores de conteúdo ao vivo dizem sobre a retenção e monetização com nossos jogos interativos.',
+        proofsLabel: 'Resultados reais',
+        proofsTitle: 'Prints de quem já <span style="color:#00d2ff; background: linear-gradient(135deg, #00d2ff 0%, #0099ff 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">está faturando</span>',
+        proofsSubtitle: 'Diamantes reais, seguidores reais, dinheiro real. Sem edição, sem mentira.',
         faqTitle: 'Perguntas frequentes',
-        faqSubtitle: 'O que os criadores costumam perguntar antes de entrar.'
+        faqSubtitle: 'O que os criadores costumam perguntar antes de entrar.',
+        faqItems: [
+          {
+            q: 'Preciso saber programar?',
+            a: 'Não! Zero conhecimento técnico ou programação é necessário. Os jogos já vêm 100% integrados e prontos no launcher. Você só precisa abrir, conectar sua conta e iniciar a transmissão. O sistema lê os comentários e presentes automaticamente em tempo real.'
+          },
+          {
+            q: 'Preciso ficar ao vivo o tempo todo?',
+            a: 'Não. Você faz suas transmissões nos dias e horários que achar melhor. A grande vantagem é que como o público joga e interage entre si através do chat, a sua live se sustenta com retenção altíssima mesmo em momentos em que você faz pausas.'
+          },
+          {
+            q: 'Como entro na comunidade?',
+            a: 'Ao garantir o seu acesso, você recebe imediatamente o link exclusivo do nosso servidor oficial no Discord. Lá você terá acesso ao canal de suporte direto, anúncios de novos jogos em produção, dicas de monetização e troca de experiências com outros streamers.'
+          },
+          {
+            q: 'O atendimento é em português?',
+            a: 'Sim, 100% em português brasileiro! Nossa equipe de suporte e desenvolvedores está disponível no servidor para tirar dúvidas, auxiliar na configuração do OBS/TikTok Live Studio e resolver qualquer eventualidade.'
+          },
+          {
+            q: 'O que é o sistema anti-inatividade?',
+            a: 'É uma inteligência do jogo que detecta se o chat ficou alguns segundos sem interagir. Quando isso acontece, o jogo dispara automaticamente eventos surpresa, desafios de contagem ou bônus na tela para incentivar novos comentários e manter o algoritmo da live sempre em alta.'
+          },
+          {
+            q: 'Onde vejo os jogos funcionando?',
+            a: 'Você pode clicar no botão "Ver demonstração" em qualquer jogo no catálogo acima para conferir o gameplay, ou entrar na comunidade para assistir transmissões em tempo real de membros que estão ao vivo agora.'
+          }
+        ],
+        marquees: {
+          track1: ['STREAM 100% AUTOMATIZADA', 'MODO AFK INTELIGENTE', 'CHAT NO CONTROLE', 'SISTEMA ANTI-INATIVIDADE', 'RETENÇÃO RECORDE', '60 FPS NATIVO', 'INTEGRAÇÃO TIKTOK LIVE'],
+          track2: ['FATURAMENTO NO AUTOPILOTO', 'JOGOS EXCLUSIVOS', 'EVENTOS & PRESENTES', 'OVERLAYS OBS STUDIO', 'ENGAGEMENT BOOSTER', 'COMUNIDADE VIP', 'ZERO PROGRAMAÇÃO']
+        },
+        footer: {
+          ctaTitle: 'Pronto para começar?',
+          ctaDesc: 'Eleve o nível da sua live de TikTok com os jogos interativos que mais geram retenção e presentes.',
+          btnPrimary: 'Entrar na comunidade',
+          btnSecondary: 'Acessar conta ou cadastrar',
+          quickLinks: ['Painel Web', 'Blog', 'Catálogo de Jogos', 'Como Funciona', 'Perguntas Frequentes', 'Termos de Uso', 'Privacidade', 'Pós-Compra', 'Recursos', 'Planos'],
+          copyright: '© 2026 Raven Games. Todos os direitos reservados.',
+          crafted1: 'Criado com',
+          crafted2: 'para Criadores de Conteúdo'
+        }
       },
       en: {
         code: 'EN',
+        pageTitle: 'RAVENGAMES — Interactive TikTok Live Games & Autopilot Stream',
+        htmlLang: 'en',
         nav: ['Games', 'How it Works', 'Features', 'Plans', 'FAQ'],
-        navCta: 'Join the Community',
+        navPanel: 'Access Dashboard',
+        navCta: 'Join Community',
         heroBadge: '<span>Active Community with <strong>+2,000 Streamers</strong></span>',
         heroTitle: 'Your TikTok Live playing <br><span class="highlight">on autopilot</span>, with chat inside the game.',
-        heroSubtitle: 'Interactive games with AFK mode and anti-idling. Chat comments and gifts control the match in real time, keeping your stream active and monetizing even when you are away from the keyboard.',
-        heroCta1: 'Join the Community',
-        heroCta2: 'Download Launcher',
-        heroCta3: 'Browse Games',
+        heroCta1: 'Join Community',
+        heroCta2: 'Browse Game Catalog',
         partnersLabel: 'INTEGRATED TECHNOLOGIES & PLATFORMS',
-        howItWorksBadge: 'QUICK 3-STEP TUTORIAL',
+        partnerDescs: [
+          'Direct connection to chat & live gifts',
+          'Overlays & native Chroma Key',
+          'Automated scripts & dances',
+          'Synchronized audio alerts',
+          'Community & new game maps'
+        ],
+        mockupBadge: 'Community with over 2,000 members',
+        mockupTitle: 'Monetize on <br class="mobile-break" /> Autopilot',
+        mockupSubtitle: 'While you sleep or focus on other things, your interactive live stream receives gifts and generates revenue on complete autopilot.',
+        mockupFinder: ['Finder', 'File', 'Edit', 'View'],
+        howItWorksBadge: 'SIMPLE STEP-BY-STEP',
         howItWorksTitle: 'How it works',
         howItWorksSubtitle: 'Three simple steps between starting your live and seeing your chat take over the game.',
-        gamesBadge: 'INTERACTIVE EXPERIENCES',
+        step1Tag: 'CHAT INPUT',
+        step1Title: 'Viewers drop a comment',
+        step1Desc: 'Anyone watching types in your live chat, exactly as they normally would.',
+        step2Tag: 'ENGINE RUNTIME',
+        step2Title: 'Comments become actions',
+        step2Desc: 'The game detects comments and drops that viewer right into the match, live on screen.',
+        step3Tag: 'RETENTION & VIRAL',
+        step3Title: 'The live sustains itself',
+        step3Desc: 'Viewers who see themselves in the game comment again, invite friends, and stay glued to the live much longer.',
+        step3Retention: 'Average Retention',
+        step3Chips: ['🔥 Viral Booster', '🎁 Turbo Gifts'],
+        gamesBadge: 'CONSTANTLY EXPANDING CATALOG',
         gamesTitle: 'Game Catalog',
         gamesSubtitle: 'Ready-to-stream experiences built specifically for the interactive live format. The catalog is continuously expanded.',
+        gameCards: [
+          {
+            badge: 'LIFETIME ACCESS',
+            title: 'Flappy Live',
+            desc: 'The counter climbs towards 1,000,000 and the entire chat unites to take it down: gifts trigger rockets, TNT, and meteors on the bird.',
+            demo: 'Watch demo'
+          },
+          {
+            badge: 'LIFETIME ACCESS',
+            title: 'Tower Sky 3D',
+            desc: 'The tower rises as viewers drop blocks. Missing the stack topples everything, creating massive chat hype.',
+            demo: 'Watch demo'
+          },
+          {
+            badge: 'LIFETIME ACCESS',
+            title: 'Live Roblox Avatars',
+            desc: 'Viewers spawn into the game with their own 3D custom avatars, triggering explosive engagement and gift wars.',
+            demo: 'Watch demo'
+          }
+        ],
         bannerHeading: 'New titles in production',
-        bannerSubtext: 'The catalog grows continuously. New releases are announced first inside the Discord server.',
-        bannerCta: 'Join our Server',
-        testimonialsBadge: 'REAL STREAMER RESULTS',
-        testimonialsTitle: 'Whoever uses it, dominates the algorithm',
-        testimonialsSubtitle: 'See what streamers and live creators are saying about retention and monetization with our interactive games.',
+        bannerBadge: 'ACTIVE PIPELINE',
+        bannerSubtext: 'The catalog grows continuously. New releases are announced first inside our Discord server.',
+        bannerCta: 'Join Discord Server',
+        proofsLabel: 'Real Results',
+        proofsTitle: 'Screenshots from streamers <span style="color:#00d2ff; background: linear-gradient(135deg, #00d2ff 0%, #0099ff 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">already earning</span>',
+        proofsSubtitle: 'Real diamonds, real followers, real income. Unfiltered, verified proof.',
         faqTitle: 'Frequently asked questions',
-        faqSubtitle: 'What creators usually ask before getting started.'
+        faqSubtitle: 'What creators usually ask before getting started.',
+        faqItems: [
+          {
+            q: 'Do I need coding or technical skills?',
+            a: 'No! Zero technical knowledge or coding is required. All games come 100% pre-configured and ready inside the desktop launcher. Simply open the app, connect your account, and hit broadcast. The system reads chat comments and gifts automatically in real time.'
+          },
+          {
+            q: 'Do I have to be on camera or microphone the entire time?',
+            a: 'No. Stream whenever you want. Because viewers play and compete with each other directly through live chat, your stream sustains record-breaking viewer retention even when you take breaks or run in 100% AFK mode.'
+          },
+          {
+            q: 'How do I join the community?',
+            a: 'Upon getting access, you instantly receive an exclusive invite to our official Discord server. Access direct support channels, new game announcements, monetization playbooks, and network with active streamers.'
+          },
+          {
+            q: 'Is customer support available for international users?',
+            a: 'Yes, 100%! Our support team and developers are available in our server to answer questions, guide you through OBS and TikTok LIVE Studio configuration, and assist you with anything you need.'
+          },
+          {
+            q: 'What is the anti-idling (AFK) system?',
+            a: 'It is a built-in game AI that detects if the chat goes quiet for a few seconds. When that happens, the game automatically triggers surprise events, countdown challenges, or multiplier bonuses to spark new comments and keep the TikTok algorithm pushing your live stream.'
+          },
+          {
+            q: 'Where can I see the games in action?',
+            a: 'You can click the "Watch demo" button on any game in the catalog above to preview the gameplay, or join our Discord community to watch active livestreams from creators broadcasting right now.'
+          }
+        ],
+        marquees: {
+          track1: ['100% AUTOMATED STREAM', 'SMART AFK MODE', 'CHAT IN FULL CONTROL', 'ANTI-IDLE SYSTEM', 'RECORD VIEWER RETENTION', 'NATIVE 60 FPS', 'TIKTOK LIVE INTEGRATION'],
+          track2: ['AUTOPILOT REVENUE', 'EXCLUSIVE GAMES', 'EVENTS & LIVE GIFTS', 'OBS STUDIO OVERLAYS', 'ENGAGEMENT BOOSTER', 'VIP COMMUNITY', 'ZERO CODING REQUIRED']
+        },
+        footer: {
+          ctaTitle: 'Ready to get started?',
+          ctaDesc: 'Elevate your TikTok live stream with interactive games proven to maximize viewer retention and live gifts.',
+          btnPrimary: 'Join Community',
+          btnSecondary: 'Access Account / Sign Up',
+          quickLinks: ['Web Dashboard', 'Blog', 'Game Catalog', 'How It Works', 'FAQ', 'Terms of Use', 'Privacy Policy', 'Post-Purchase', 'Features', 'Plans'],
+          copyright: '© 2026 Raven Games. All rights reserved.',
+          crafted1: 'Crafted with',
+          crafted2: 'for Content Creators'
+        }
       }
     };
 
     function applyLanguage(lang) {
+      currentActiveLang = lang;
       const data = translations[lang] || translations.pt;
+
+      // Atualiza metatags da página
+      document.title = data.pageTitle;
+      document.documentElement.lang = data.htmlLang;
       if (currentLangLabel) currentLangLabel.textContent = data.code;
 
-      // Nav
+      // Nav Links
       const navLinks = document.querySelectorAll('.nav-links a');
       if (navLinks && navLinks.length >= 5) {
         navLinks.forEach((link, idx) => {
           if (data.nav[idx]) link.textContent = data.nav[idx];
         });
       }
-      const navCta = document.querySelector('.btn-nav');
-      if (navCta) navCta.textContent = data.navCta;
+      const navPanelBtn = document.querySelector('.header-right-actions a[href="painel.html"]');
+      if (navPanelBtn) navPanelBtn.textContent = data.navPanel;
+
+      const navCtaBtn = document.querySelector('.header-right-actions a[href*="discord"]');
+      if (navCtaBtn) navCtaBtn.textContent = data.navCta;
 
       // Hero
       const heroBadge = document.querySelector('.hero .badge');
@@ -4323,24 +4523,44 @@
       const heroSubtitle = document.querySelector('.hero-subtitle');
       if (heroSubtitle) heroSubtitle.textContent = data.heroSubtitle;
 
-      const heroCta1 = document.querySelector('.cta-group .btn-primary');
+      // Hero CTAs
+      const heroCta1 = document.querySelector('.cta-group a.primary span');
       if (heroCta1) {
         heroCta1.innerHTML = `${data.heroCta1} <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>`;
       }
-
-      const heroCta2 = document.querySelector('.cta-group .btn-launcher');
+      const heroCta2 = document.querySelector('.cta-group a[href="#jogos"] span');
       if (heroCta2) {
-        heroCta2.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg> ${data.heroCta2}`;
-      }
-
-      const heroCta3 = document.querySelector('.cta-group .btn-secondary');
-      if (heroCta3) {
-        heroCta3.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="12" x2="10" y2="12"></line><line x1="8" y1="10" x2="8" y2="14"></line><line x1="15" y1="13" x2="15.01" y2="13"></line><line x1="18" y1="11" x2="18.01" y2="11"></line><rect x="2" y="6" width="20" height="12" rx="2"></rect></svg> ${data.heroCta3}`;
+        heroCta2.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"></rect><line x1="6" y1="12" x2="10" y2="12"></line><line x1="8" y1="10" x2="8" y2="14"></line><line x1="15" y1="13" x2="15.01" y2="13"></line><line x1="18" y1="11" x2="18.01" y2="11"></line></svg> ${data.heroCta2}`;
       }
 
       // Partners
       const partnersLabel = document.querySelector('.partners-label');
       if (partnersLabel) partnersLabel.textContent = data.partnersLabel;
+
+      const partnerDescEls = document.querySelectorAll('.partner-card .partner-desc');
+      if (partnerDescEls) {
+        partnerDescEls.forEach((el, idx) => {
+          const modIdx = idx % 5;
+          if (data.partnerDescs[modIdx]) el.textContent = data.partnerDescs[modIdx];
+        });
+      }
+
+      // Mockup TikSpy
+      const mockBadge = document.querySelector('#social-proof .badge');
+      if (mockBadge) mockBadge.innerHTML = `<span class="status-dot"></span>${data.mockupBadge}`;
+
+      const mockTitle = document.querySelector('#social-proof .section-title');
+      if (mockTitle) mockTitle.innerHTML = data.mockupTitle;
+
+      const mockSubtitle = document.querySelector('#social-proof .section-subtitle');
+      if (mockSubtitle) mockSubtitle.textContent = data.mockupSubtitle;
+
+      const finderSpans = document.querySelectorAll('.mac-menu-left span');
+      if (finderSpans && finderSpans.length >= 4) {
+        finderSpans.forEach((sp, idx) => {
+          if (data.mockupFinder[idx]) sp.textContent = data.mockupFinder[idx];
+        });
+      }
 
       // Como Funciona
       const hwSection = document.getElementById('como-funciona');
@@ -4351,9 +4571,40 @@
         if (hwTitle) hwTitle.textContent = data.howItWorksTitle;
         const hwSub = hwSection.querySelector('.section-subtitle');
         if (hwSub) hwSub.textContent = data.howItWorksSubtitle;
+
+        // Step 1
+        const s1Tag = hwSection.querySelector('.step-card-cyan .step-tag-pill');
+        if (s1Tag) s1Tag.textContent = data.step1Tag;
+        const s1Title = hwSection.querySelector('.step-card-cyan .step-title');
+        if (s1Title) s1Title.textContent = data.step1Title;
+        const s1Desc = hwSection.querySelector('.step-card-cyan .step-description');
+        if (s1Desc) s1Desc.textContent = data.step1Desc;
+
+        // Step 2
+        const s2Tag = hwSection.querySelector('.step-card-purple .step-tag-pill');
+        if (s2Tag) s2Tag.textContent = data.step2Tag;
+        const s2Title = hwSection.querySelector('.step-card-purple .step-title');
+        if (s2Title) s2Title.textContent = data.step2Title;
+        const s2Desc = hwSection.querySelector('.step-card-purple .step-description');
+        if (s2Desc) s2Desc.textContent = data.step2Desc;
+
+        // Step 3
+        const s3Tag = hwSection.querySelector('.step-card-emerald .step-tag-pill');
+        if (s3Tag) s3Tag.textContent = data.step3Tag;
+        const s3Title = hwSection.querySelector('.step-card-emerald .step-title');
+        if (s3Title) s3Title.textContent = data.step3Title;
+        const s3Desc = hwSection.querySelector('.step-card-emerald .step-description');
+        if (s3Desc) s3Desc.textContent = data.step3Desc;
+        const s3RetLabel = hwSection.querySelector('.sim-growth-label');
+        if (s3RetLabel) s3RetLabel.textContent = data.step3Retention;
+        const s3Chips = hwSection.querySelectorAll('.sim-growth-chips .sim-chip');
+        if (s3Chips && s3Chips.length >= 2) {
+          s3Chips[0].textContent = data.step3Chips[0];
+          s3Chips[1].textContent = data.step3Chips[1];
+        }
       }
 
-      // Jogos
+      // Catálogo de Jogos
       const gamesSection = document.getElementById('jogos');
       if (gamesSection) {
         const gBadge = gamesSection.querySelector('.badge');
@@ -4363,23 +4614,42 @@
         const gSub = gamesSection.querySelector('.section-subtitle');
         if (gSub) gSub.textContent = data.gamesSubtitle;
 
+        const gCards = gamesSection.querySelectorAll('.game-card');
+        gCards.forEach((card, idx) => {
+          if (data.gameCards[idx]) {
+            const cBadge = card.querySelector('.game-badge');
+            if (cBadge) cBadge.textContent = data.gameCards[idx].badge;
+            const cTitle = card.querySelector('.game-title');
+            if (cTitle) cTitle.textContent = data.gameCards[idx].title;
+            const cDesc = card.querySelector('.game-desc');
+            if (cDesc) cDesc.textContent = data.gameCards[idx].desc;
+            const cDemo = card.querySelector('.game-demo-link');
+            if (cDemo) {
+              cDemo.innerHTML = `${data.gameCards[idx].demo} <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>`;
+            }
+          }
+        });
+
+        // Banner em Produção
         const bHeading = gamesSection.querySelector('.banner-heading');
         if (bHeading) bHeading.textContent = data.bannerHeading;
+        const bBadge = gamesSection.querySelector('.banner-live-badge');
+        if (bBadge) bBadge.innerHTML = `<span class="banner-badge-dot"></span>${data.bannerBadge}`;
         const bSub = gamesSection.querySelector('.banner-subtext');
         if (bSub) bSub.textContent = data.bannerSubtext;
         const bCta = gamesSection.querySelector('.btn-discord-server span');
         if (bCta) bCta.textContent = data.bannerCta;
       }
 
-      // Prova Social
-      const testSection = document.getElementById('depoimentos');
-      if (testSection) {
-        const tBadge = testSection.querySelector('.badge');
-        if (tBadge) tBadge.innerHTML = `<span class="status-dot"></span>${data.testimonialsBadge}`;
-        const tTitle = testSection.querySelector('.section-title');
-        if (tTitle) tTitle.textContent = data.testimonialsTitle;
-        const tSub = testSection.querySelector('.section-subtitle');
-        if (tSub) tSub.textContent = data.testimonialsSubtitle;
+      // Provas Sociais
+      const proofsSection = document.getElementById('provas');
+      if (proofsSection) {
+        const pLabel = proofsSection.querySelector('.section-label');
+        if (pLabel) pLabel.textContent = data.proofsLabel;
+        const pTitle = proofsSection.querySelector('h2');
+        if (pTitle) pTitle.innerHTML = data.proofsTitle;
+        const pSub = proofsSection.querySelector('p');
+        if (pSub) pSub.textContent = data.proofsSubtitle;
       }
 
       // FAQ
@@ -4389,9 +4659,72 @@
         if (fTitle) fTitle.textContent = data.faqTitle;
         const fSub = faqSection.querySelector('.faq-subtitle');
         if (fSub) fSub.textContent = data.faqSubtitle;
+
+        const fItems = faqSection.querySelectorAll('.faq-item');
+        fItems.forEach((item, idx) => {
+          if (data.faqItems[idx]) {
+            const qSpan = item.querySelector('.faq-question span');
+            if (qSpan) qSpan.textContent = data.faqItems[idx].q;
+            const aP = item.querySelector('.faq-answer p');
+            if (aP) aP.textContent = data.faqItems[idx].a;
+          }
+        });
       }
 
-      // Active state in dropdown
+      // Faixas Duplas X Marquee
+      const marqueeWrap = document.querySelector('.footer-marquee-x-section');
+      if (marqueeWrap) {
+        const ribbon1Tracks = marqueeWrap.querySelectorAll('.ribbon-tilt-1 .footer-marquee-group');
+        ribbon1Tracks.forEach(group => {
+          const spans = group.querySelectorAll('span:not(.ribbon-star):not(.ribbon-star-alt)');
+          spans.forEach((sp, idx) => {
+            if (data.marquees.track1[idx]) sp.textContent = data.marquees.track1[idx];
+          });
+        });
+
+        const ribbon2Tracks = marqueeWrap.querySelectorAll('.ribbon-tilt-2 .footer-marquee-group');
+        ribbon2Tracks.forEach(group => {
+          const spans = group.querySelectorAll('span:not(.ribbon-star-cyan):not(.ribbon-star-purple)');
+          spans.forEach((sp, idx) => {
+            if (data.marquees.track2[idx]) sp.textContent = data.marquees.track2[idx];
+          });
+        });
+      }
+
+      // Rodapé
+      const footerEl = document.getElementById('footer');
+      if (footerEl) {
+        const ftTitle = footerEl.querySelector('.footer-cta-title');
+        if (ftTitle) ftTitle.textContent = data.footer.ctaTitle;
+        const ftDesc = footerEl.querySelector('.footer-cta-desc');
+        if (ftDesc) ftDesc.textContent = data.footer.ctaDesc;
+
+        const ftBtn1 = footerEl.querySelector('.footer-btn-group .shiny-cta.white span');
+        if (ftBtn1) {
+          ftBtn1.innerHTML = `${data.footer.btnPrimary} <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>`;
+        }
+        const ftBtn2 = footerEl.querySelector('.footer-btn-group .shiny-cta:not(.white) span');
+        if (ftBtn2) {
+          ftBtn2.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg> ${data.footer.btnSecondary}`;
+        }
+
+        const ftLinks = footerEl.querySelectorAll('.footer-quick-links a');
+        if (ftLinks) {
+          ftLinks.forEach((lnk, idx) => {
+            if (data.footer.quickLinks[idx]) lnk.textContent = data.footer.quickLinks[idx];
+          });
+        }
+
+        const ftCopy = footerEl.querySelector('.footer-copyright');
+        if (ftCopy) ftCopy.textContent = data.footer.copyright;
+
+        const ftCrafted = footerEl.querySelector('.footer-badge-crafted');
+        if (ftCrafted) {
+          ftCrafted.innerHTML = `<span>${data.footer.crafted1}</span><span class="heart-pulse">❤</span><span>${data.footer.crafted2}</span>`;
+        }
+      }
+
+      // Atualiza estado ativo no seletor
       langOptions.forEach(opt => {
         if (opt.getAttribute('data-lang') === lang) {
           opt.classList.add('active');
@@ -4400,7 +4733,12 @@
         }
       });
 
+      // Salva preferência no localStorage
       localStorage.setItem('site_lang_pref', lang);
+
+      // Atualiza relógios e notificações no idioma correto
+      updateMockupClocks();
+      initNotifs();
     }
 
     langOptions.forEach(opt => {
@@ -4411,11 +4749,24 @@
       });
     });
 
-    // Restaura preferência salva
-    const savedLang = localStorage.getItem('site_lang_pref') || 'pt';
-    if (savedLang !== 'pt') {
-      applyLanguage(savedLang);
-    }
+    // ================= DETECÇÃO AUTOMÁTICA DE IDIOMA E PAÍS (ZERO LATÊNCIA) =================
+    (function detectUserLanguage() {
+      const savedLang = localStorage.getItem('site_lang_pref');
+      if (savedLang) {
+        applyLanguage(savedLang);
+        return;
+      }
+
+      // Detecção pelo navegador do visitante
+      const userLangs = navigator.languages || [navigator.language || navigator.userLanguage || ''];
+      const primaryLang = (userLangs[0] || '').toLowerCase();
+      const isPortuguese = primaryLang.startsWith('pt');
+
+      // Se for português (Brasil, Portugal, Angola, etc.), carrega em PT
+      // Se for inglês, espanhol ou qualquer outro visitante internacional, ativa EN automaticamente
+      const autoLang = isPortuguese ? 'pt' : 'en';
+      applyLanguage(autoLang);
+    })();
 
     // Header Fixo com Efeito Glass ao Rolar
     const stickyHeaderEl = document.getElementById('stickyHeader');

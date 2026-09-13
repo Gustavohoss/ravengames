@@ -206,6 +206,48 @@
     .faq-item { background: var(--fundo-card); border: 1px solid var(--borda); border-radius: 12px; padding: 18px 20px; margin-bottom: 14px; }
     .faq-item h4 { font-size: 1.05rem; font-weight: 700; color: #fff; margin-bottom: 8px; }
     .faq-item p { color: var(--texto-mutado); font-size: 0.92rem; margin: 0; line-height: 1.6; }
+  
+    /* Language Toggle Pill */
+    .header-right { display: flex; align-items: center; gap: 14px; }
+    .lang-toggle-pill {
+      display: inline-flex;
+      align-items: center;
+      background: rgba(18, 24, 38, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 999px;
+      padding: 3px 6px;
+      gap: 4px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      backdrop-filter: blur(8px);
+    }
+    .lang-btn {
+      color: #94a3b8;
+      text-decoration: none;
+      padding: 4px 10px;
+      border-radius: 999px;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .lang-btn:hover { color: #fff; }
+    .lang-btn.active {
+      background: rgba(0, 210, 255, 0.18);
+      color: #00d2ff;
+      border: 1px solid rgba(0, 210, 255, 0.4);
+      box-shadow: 0 0 10px rgba(0, 210, 255, 0.25);
+    }
+    .lang-divider { color: rgba(255, 255, 255, 0.2); font-size: 0.7rem; }
+    .btn-header-cta {
+      color: #00d2ff;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.88rem;
+      transition: all 0.2s;
+    }
+    .btn-header-cta:hover { color: #fff; text-shadow: 0 0 8px rgba(0, 210, 255, 0.6); }
+
   </style>
 </head>
 <body>
@@ -216,7 +258,14 @@
         <img src="logo.png" alt="Raven Games Logo" />
         <div>RAVEN <span>GAMES</span></div>
       </a>
-      <a href="index.html#planos" style="color: var(--ciano); text-decoration: none; font-weight: 700; font-size: 0.88rem;">Garantir Meu Acesso VIP ➒</a>
+      <div class="header-right">
+        <div class="lang-toggle-pill">
+          <a href="comunidade-discord-video-aulas-raven-games.html" class="lang-btn active" onclick="localStorage.setItem('site_lang_pref','pt')">🇧🇷 PT</a>
+          <span class="lang-divider">|</span>
+          <a href="comunidade-discord-video-aulas-raven-games-en.html" class="lang-btn" onclick="localStorage.setItem('site_lang_pref','en')">🇺🇸 EN</a>
+        </div>
+        <a href="index.html#planos" class="btn-header-cta">Conhecer o Software ➔</a>
+      </div>
     </div>
   </header>
 
@@ -269,7 +318,7 @@
       <div class="module-grid">
 
         <div class="module-card">
-          <span class="module-badge">M�dulo 1 • Início Rápido</span>
+          <span class="module-badge">M�dulo 1 • Início Rápido</span>
           <h3 class="module-title">Instalação e Setup em 5 Minutos</h3>
           <p class="module-desc">
             Download do launcher oficial para Windows ou Mac, ativação da licença e configuração da proporção vertical 1080x1920 sem complicação.
@@ -278,7 +327,7 @@
 
 
         <div class="module-card">
-          <span class="module-badge">M�dulo 2 • Liberação de Conta</span>
+          <span class="module-badge">M�dulo 2 • Liberação de Conta</span>
           <h3 class="module-title">Live com Menos de 1.000 Seguidores</h3>
           <p class="module-desc">
             Passo a passo para desbloquear o TikTok LIVE Studio no mesmo dia via parcerias oficiais de agências e métodos autorizados pelo TikTok.
@@ -287,7 +336,7 @@
 
 
         <div class="module-card">
-          <span class="module-badge">M�dulo 3 • Conexão de Jogos</span>
+          <span class="module-badge">M�dulo 3 • Conexão de Jogos</span>
           <h3 class="module-title">Conectando o Chat aos Jogos</h3>
           <p class="module-desc">
             Como sincronizar Flappy Bird, Tower Sky 3D e a Arena de Avatares do Roblox para reagirem a cada Rosa, Comentário e Galáxia recebida.
@@ -296,7 +345,7 @@
 
 
         <div class="module-card">
-          <span class="module-badge">M�dulo 4 • Algoritmo & FYP</span>
+          <span class="module-badge">M�dulo 4 • Algoritmo & FYP</span>
           <h3 class="module-title">Anti-Inatividade & Viralização</h3>
           <p class="module-desc">
             Como configurar os gatilhos automáticos na tela para manter a live recomendada na aba Para Você (YP+0 e evitar avisos de inatividade.
@@ -305,7 +354,7 @@
 
 
         <div class="module-card">
-          <span class="module-badge">M�dulo 5 • Escala de Ganhos</span>
+          <span class="module-badge">M�dulo 5 • Escala de Ganhos</span>
           <h3 class="module-title">Estratégia dos Melhores Horários</h3>
           <p class="module-desc">
             Quais minigames ligar no horário de almoço, no horário nobre e de madrugada (AFK) para extrair o maior volume de diamantes por hora.
@@ -314,7 +363,7 @@
 
 
         <div class="module-card">
-          <span class="module-adge">M�dulo 6 • Saque via Pix</span>
+          <span class="module-adge">M�dulo 6 • Saque via Pix</span>
           <h3 class="module-title">Gestão Financeira e Saque</h3>
           <p class="module-desc">
             Como converter os diamantes acumulados na sua carteira de criador do TikTok diretamente para a sua conta bancária via Pix.

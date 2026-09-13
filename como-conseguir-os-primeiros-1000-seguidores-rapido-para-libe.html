@@ -118,6 +118,48 @@
     .faq-item { background: var(--fundo-card); border: 1px solid var(--borda); border-radius: 12px; padding: 18px 20px; margin-bottom: 14px; }
     .faq-item h4 { font-size: 1.05rem; font-weight: 700; color: #fff; margin-bottom: 8px; }
     .faq-item p { color: var(--texto-mutado); font-size: 0.92rem; margin: 0; }
+  
+    /* Language Toggle Pill */
+    .header-right { display: flex; align-items: center; gap: 14px; }
+    .lang-toggle-pill {
+      display: inline-flex;
+      align-items: center;
+      background: rgba(18, 24, 38, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 999px;
+      padding: 3px 6px;
+      gap: 4px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      backdrop-filter: blur(8px);
+    }
+    .lang-btn {
+      color: #94a3b8;
+      text-decoration: none;
+      padding: 4px 10px;
+      border-radius: 999px;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .lang-btn:hover { color: #fff; }
+    .lang-btn.active {
+      background: rgba(0, 210, 255, 0.18);
+      color: #00d2ff;
+      border: 1px solid rgba(0, 210, 255, 0.4);
+      box-shadow: 0 0 10px rgba(0, 210, 255, 0.25);
+    }
+    .lang-divider { color: rgba(255, 255, 255, 0.2); font-size: 0.7rem; }
+    .btn-header-cta {
+      color: #00d2ff;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.88rem;
+      transition: all 0.2s;
+    }
+    .btn-header-cta:hover { color: #fff; text-shadow: 0 0 8px rgba(0, 210, 255, 0.6); }
+
   </style>
 </head>
 <body>
@@ -128,7 +170,14 @@
         <img src="logo.png" alt="Raven Games Logo" />
         <div>RAVEN <span>GAMES</span></div>
       </a>
-      <a href="index.html#planos" style="color: var(--ciano); text-decoration: none; font-weight: 700; font-size: 0.88rem;">Conhecer o Software ➔</a>
+      <div class="header-right">
+        <div class="lang-toggle-pill">
+          <a href="como-conseguir-os-primeiros-1000-seguidores-rapido-para-libe.html" class="lang-btn active" onclick="localStorage.setItem('site_lang_pref','pt')">🇧🇷 PT</a>
+          <span class="lang-divider">|</span>
+          <a href="como-conseguir-os-primeiros-1000-seguidores-rapido-para-libe-en.html" class="lang-btn" onclick="localStorage.setItem('site_lang_pref','en')">🇺🇸 EN</a>
+        </div>
+        <a href="index.html#planos" class="btn-header-cta">Conhecer o Software ➔</a>
+      </div>
     </div>
   </header>
 

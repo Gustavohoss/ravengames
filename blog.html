@@ -416,6 +416,159 @@
         display: none;
       }
     }
+
+    /* Header Right Actions & Language Switcher (matching index.html) */
+    .header-right-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+    }
+
+    .lang-switcher-wrap {
+      position: relative;
+      user-select: none;
+    }
+
+    .lang-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      background: rgba(18, 24, 38, 0.75);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #ffffff;
+      padding: 0.52rem 0.85rem;
+      border-radius: 12px;
+      font-size: 0.86rem;
+      font-weight: 800;
+      font-family: inherit;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .lang-btn:hover {
+      background: rgba(26, 35, 54, 0.95);
+      border-color: rgba(0, 210, 255, 0.4);
+      color: #00d2ff;
+      box-shadow: 0 6px 20px rgba(0, 210, 255, 0.15);
+      transform: translateY(-1px);
+    }
+
+    .lang-globe-icon {
+      stroke: currentColor;
+      flex-shrink: 0;
+      opacity: 0.9;
+    }
+
+    .lang-label {
+      letter-spacing: 0.06em;
+      font-weight: 800;
+      color: inherit;
+      line-height: 1;
+    }
+
+    .lang-dropdown {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      background: rgba(12, 17, 28, 0.96);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 14px;
+      padding: 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 155px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7), 0 0 25px rgba(0, 210, 255, 0.12);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-6px);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 1000;
+    }
+
+    .lang-switcher-wrap.open .lang-dropdown {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .lang-option {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0.55rem 0.75rem;
+      background: transparent;
+      border: 1px solid transparent;
+      color: #94a3b8;
+      font-size: 0.85rem;
+      font-weight: 600;
+      font-family: inherit;
+      border-radius: 8px;
+      cursor: pointer;
+      text-align: left;
+      width: 100%;
+      transition: all 0.2s ease;
+    }
+
+    .lang-option:hover {
+      background: rgba(255, 255, 255, 0.06);
+      color: #ffffff;
+    }
+
+    .lang-option.active {
+      background: rgba(0, 210, 255, 0.12);
+      color: #00d2ff;
+      border-color: rgba(0, 210, 255, 0.25);
+    }
+
+    .lang-flag {
+      font-size: 1rem;
+      line-height: 1;
+    }
+
+    .lang-code-pill {
+      margin-left: auto;
+      font-size: 0.7rem;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    @media (max-width: 860px) {
+      .featured-card {
+        grid-template-columns: 1fr;
+        padding: 24px;
+      }
+      .blog-title {
+        font-size: 2rem;
+      }
+      nav.header-nav {
+        display: none;
+      }
+      .header-right-actions {
+        gap: 0.5rem;
+      }
+      .btn-header-cta {
+        padding: 6px 12px;
+        font-size: 0.78rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .logo-link div {
+        display: none;
+      }
+      .btn-header-cta {
+        display: none;
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -429,14 +582,42 @@
       </a>
 
       <nav class="header-nav">
-        <a href="index.html">Início</a>
-        <a href="index.html#vitrine">Jogos da Live</a>
-        <a href="blog.html" class="active">Blog & Guias</a>
-        <a href="download.html">Baixar App</a>
-        <a href="painel.html" style="color: var(--ciano); font-weight: 800;">Entrar no Painel ➔</a>
+        <a href="index.html" id="navHome">Início</a>
+        <a href="index.html#jogos" id="navGames">Jogos</a>
+        <a href="download.html" id="navDownload">Download</a>
+        <a href="https://discord.gg/4CCx9Cw2n9" target="_blank" rel="noopener noreferrer" id="navDiscord">Discord</a>
+        <a href="painel.html" style="color: var(--ciano); font-weight: 800;" id="navPanel">Painel ➔</a>
       </nav>
 
-      <a href="index.html#planos" class="btn-header-cta">COMEÇAR AGORA</a>
+      <div class="header-right-actions">
+        <!-- Language Switcher Pill matching index.html -->
+        <div class="lang-switcher-wrap" id="langSwitcher">
+          <button class="lang-btn" id="langToggleBtn" aria-label="Trocar Idioma / Switch Language">
+            <svg class="lang-globe-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="2" y1="12" x2="22" y2="12"></line>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+            </svg>
+            <span class="lang-label" id="currentLangLabel">PT</span>
+          </button>
+
+          <!-- Dropdown Menu -->
+          <div class="lang-dropdown" id="langDropdown">
+            <button class="lang-option active" data-lang="pt">
+              <span class="lang-flag">🇧🇷</span>
+              <span>Português</span>
+              <span class="lang-code-pill">PT</span>
+            </button>
+            <button class="lang-option" data-lang="en">
+              <span class="lang-flag">🇺🇸</span>
+              <span>English</span>
+              <span class="lang-code-pill">EN</span>
+            </button>
+          </div>
+        </div>
+
+        <a href="index.html#planos" class="btn-header-cta" id="navCta">COMEÇAR AGORA</a>
+      </div>
     </div>
   </header>
 
@@ -445,43 +626,44 @@
     
     <!-- Hero -->
     <div class="blog-hero">
-      <div class="blog-badge">📚 Central Oficial de Inteligência</div>
-      <h1 class="blog-title">Renda Extra com <span>Lives Automáticas</span></h1>
-      <p class="blog-sub">Guias práticos, tutoriais e análises para você transformar seu computador em uma máquina de presentes e faturamento no TikTok, sem precisar aparecer.</p>
+      <div class="blog-badge" id="heroBadge">BLOG OFICIAL</div>
+      <h1 class="blog-title" id="heroTitle">Renda Extra com <span>Lives Automáticas no TikTok</span></h1>
+      <p class="blog-sub" id="heroSubtitle">Guias, tutoriais e estratégias para monetizar no TikTok com jogos interativos sem precisar aparecer.</p>
 
-            <!-- Search & Category Filter -->
+      <!-- Search & Category Filter -->
       <div class="search-bar-wrap" style="max-width: 600px; margin: 0 auto 24px; position: relative;">
-        <input type="text" id="article-search" placeholder="🔍 Pesquisar dúvida ou assunto (ex: rosa, ban, roblox, pix)..." 
+        <input type="text" id="article-search" placeholder="Buscar artigos..." 
           style="width: 100%; padding: 14px 20px; border-radius: 12px; background: #121722; border: 1px solid rgba(0, 210, 255, 0.3); color: #fff; font-size: 0.95rem; outline: none; transition: border-color 0.2s;" />
       </div>
 
-      <div class="filter-bar">
-        <button class="cat-btn active" data-filter="all">Todos os Artigos <span class="cat-count">72</span></button>
-        <button class="cat-btn" data-filter="renda-extra">💰 Renda Extra <span class="cat-count">42</span></button>
-        <button class="cat-btn" data-filter="sem-aparecer">🎭 Sem Aparecer <span class="cat-count">5</span></button>
-        <button class="cat-btn" data-filter="seguranca">🛡️ Segurança & Regras <span class="cat-count">13</span></button>
-        <button class="cat-btn" data-filter="jogos">🧱 Jogos & Roblox <span class="cat-count">12</span></button>
+      <div class="filter-bar" id="filterBar">
+        <button class="cat-btn active" data-filter="all"><span class="cat-text">Todos</span> <span class="cat-count">72</span></button>
+        <button class="cat-btn" data-filter="renda-extra"><span class="cat-text">Renda Extra</span> <span class="cat-count">42</span></button>
+        <button class="cat-btn" data-filter="sem-aparecer"><span class="cat-text">Sem Aparecer</span> <span class="cat-count">5</span></button>
+        <button class="cat-btn" data-filter="seguranca"><span class="cat-text">Segurança & Regras</span> <span class="cat-count">13</span></button>
+        <button class="cat-btn" data-filter="jogos"><span class="cat-text">Roblox & Jogos</span> <span class="cat-count">12</span></button>
+        <button class="cat-btn" data-filter="comunidade"><span class="cat-text">Comunidade</span> <span class="cat-count">1</span></button>
       </div>
     </div>
 
     <!-- Artigo em Destaque (Pilar Principal) -->
-    <article class="featured-card" data-category="renda-extra">
+    <article class="featured-card" data-category="renda-extra" id="featuredCard">
       <div>
-        <span class="featured-badge">🔥 GUIA PILAR 2026</span>
+        <span class="featured-badge" id="featuredBadge">🔥 GUIA PILAR 2026</span>
         <h2 class="featured-title">
-          <a href="como-ganhar-dinheiro-com-lives-automaticas-tiktok.html">
+          <a href="como-ganhar-dinheiro-com-lives-automaticas-tiktok.html" id="featuredLink">
             Como Ganhar Dinheiro com Lives Automáticas no TikTok sem Aparecer (Guia Completo)
           </a>
         </h2>
-        <p class="featured-desc">
+        <p class="featured-desc" id="featuredDesc">
           Descubra como pessoas comuns com computadores simples estão gerando um segundo salário diário no piloto automático, sem microfone, sem câmera e sem precisar de milhares de seguidores.
         </p>
-        <div class="featured-meta">
-          <span>⏱️ Leitura: 8 min</span>
+        <div class="featured-meta" id="featuredMeta">
+          <span id="featuredReadTime">⏱️ Leitura: 8 min</span>
           <span>•</span>
-          <span>✍️ Por Equipe Raven Games</span>
+          <span id="featuredAuthor">✍️ Por Equipe Raven Games</span>
           <span>•</span>
-          <span style="color: var(--verde); font-weight: 700;">✓ Verificado 2026</span>
+          <span id="featuredVerified" style="color: var(--verde); font-weight: 700;">✓ Verificado 2026</span>
         </div>
       </div>
       <div class="featured-img-wrap">
@@ -503,8 +685,8 @@
           <h3 class="article-heading">Como conseguir os primeiros 1.000 seguidores rápido para liberar a ferramenta de live?</h3>
           <p class="article-snippet">Não é obrigatório ter 1.000 seguidores para fazer live com jogos no PC. Você pode liberar o TikTok LIVE Studio instantaneamente associando sua conta a uma ...</p>
           <div class="article-footer">
-            <span>⏱️ 5 min de leitura</span>
-            <span>Ver Artigo ➔</span>
+            <span class="card-read-time">⏱️ 5 min de leitura</span>
+            <span class="card-read-more">Ler artigo completo</span>
           </div>
         </div>
       </a>
@@ -519,8 +701,8 @@
           <h3 class="article-heading">Como criar rivalidade no chat (torcidas, homens vs mulheres, estados) para multiplicar os presentes?</h3>
           <p class="article-snippet">Com o ecossistema da Raven Games, você monetiza lives automáticas no TikTok transformando interações e presentes do chat em dinheiro real, com operação 100...</p>
           <div class="article-footer">
-            <span>⏱️ 5 min de leitura</span>
-            <span>Ver Artigo ➔</span>
+            <span class="card-read-time">⏱️ 5 min de leitura</span>
+            <span class="card-read-more">Ler artigo completo</span>
           </div>
         </div>
       </a>
@@ -535,8 +717,8 @@
           <h3 class="article-heading">Como fazer o algoritmo do TikTok recomendar a minha live na For You (FYP)?</h3>
           <p class="article-snippet">Com o ecossistema da Raven Games, você monetiza lives automáticas no TikTok transformando interações e presentes do chat em dinheiro real, com operação 100...</p>
           <div class="article-footer">
-            <span>⏱️ 5 min de leitura</span>
-            <span>Ver Artigo ➔</span>
+            <span class="card-read-time">⏱️ 5 min de leitura</span>
+            <span class="card-read-more">Ler artigo completo</span>
           </div>
         </div>
       </a>
@@ -551,8 +733,8 @@
           <h3 class="article-heading">Como Funciona o Jogo dos Avatares do Roblox na Live do TikTok (Guia Técnico 2026)</h3>
           <p class="article-snippet">Entenda a arquitetura técnica por trás do jogo dos avatares Roblox na live do TikTok: sincronização de WebSockets, renderização 3D via API do Roblox, gatilho...</p>
           <div class="article-footer">
-            <span>⏱️ 5 min de leitura</span>
-            <span>Ver Artigo ➔</span>
+            <span class="card-read-time">⏱️ 5 min de leitura</span>
+            <span class="card-read-more">Ler artigo completo</span>
           </div>
         </div>
       </a>
@@ -567,8 +749,8 @@
           <h3 class="article-heading">Como funciona o efeito manada onde as pessoas mandam presentes sem você pedir?</h3>
           <p class="article-snippet">Com o ecossistema da Raven Games, você monetiza lives automáticas no TikTok transformando interações e presentes do chat em dinheiro real, com operação 100...</p>
           <div class="article-footer">
-            <span>⏱️ 5 min de leitura</span>
-            <span>Ver Artigo ➔</span>
+            <span class="card-read-time">⏱️ 5 min de leitura</span>
+            <span class="card-read-more">Ler artigo completo</span>
           </div>
         </div>
       </a>
@@ -583,8 +765,8 @@
           <h3 class="article-heading">Como funciona o método de live que roda sozinha no TikTok e gera renda extra?</h3>
           <p class="article-snippet">Com o ecossistema da Raven Games, você monetiza lives automáticas no TikTok transformando interações e presentes do chat em dinheiro real, com operação 100...</p>
           <div class="article-footer">
-            <span>⏱️ 5 min de leitura</span>
-            <span>Ver Artigo ➔</span>
+            <span class="card-read-time">⏱️ 5 min de leitura</span>
+            <span class="card-read-more">Ler artigo completo</span>
           </div>
         </div>
       </a>
@@ -599,8 +781,8 @@
           <h3 class="article-heading">Como ganhar dinheiro com lives automáticas no TikTok?</h3>
           <p class="article-snippet">Com o ecossistema da Raven Games, você monetiza lives automáticas no TikTok transformando interações e presentes do chat em dinheiro real, com operação 100...</p>
           <div class="article-footer">
-            <span>⏱️ 5 min de leitura</span>
-            <span>Ver Artigo ➔</span>
+            <span class="card-read-time">⏱️ 5 min de leitura</span>
+            <span class="card-read-more">Ler artigo completo</span>
           </div>
         </div>
       </a>
@@ -615,8 +797,8 @@
           <h3 class="article-heading">Como Ganhar Dinheiro com Lives Automáticas no TikTok sem Aparecer (Guia Completo 2026)</h3>
           <p class="article-snippet">Guia definitivo: descubra como fazer renda extra com lives automáticas no TikTok sem mostrar o rosto, sem falar no microfone e usando softwares de jogos inte...</p>
           <div class="article-footer">
-            <span>⏱️ 5 min de leitura</span>
-            <span>Ver Artigo ➔</span>
+            <span class="card-read-time">⏱️ 5 min de leitura</span>
+            <span class="card-read-more">Ler artigo completo</span>
           </div>
         </div>
       </a>
@@ -631,8 +813,8 @@
           <h3 class="article-heading">Como Fazer Live no TikTok com Menos de 1.000 Seguidores no PC (Passo a Passo 2026)</h3>
           <p class="article-snippet">Aprenda como liberar o TikTok LIVE Studio no PC com menos de 1.000 seguidores. Descubra os 3 métodos práticos para transmitir jogos interativos e faturar com...</p>
           <div class="article-footer">
-            <span>⏱️ 5 min de leitura</span>
-            <span>Ver Artigo ➔</span>
+            <span class="card-read-time">⏱️ 5 min de leitura</span>
+            <span class="card-read-more">Ler artigo completo</span>
           </div>
         </div>
       </a>
@@ -647,8 +829,8 @@
           <h3 class="article-heading">Como monetizar live automática sem depender do Fundo de Criadores do TikTok?</h3>
           <p class="article-snippet">Com o ecossistema da Raven Games, você monetiza lives automáticas no TikTok transformando interações e presentes do chat em dinheiro real, com operação 100...</p>
           <div class="article-footer">
-            <span>⏱️ 5 min de leitura</span>
-            <span>Ver Artigo ➔</span>
+            <span class="card-read-time">⏱️ 5 min de leitura</span>
+            <span class="card-read-more">Ler artigo completo</span>
           </div>
         </div>
       </a>
@@ -663,8 +845,8 @@
           <h3 class="article-heading">Como o jogo de Roblox com avatares 3D faz o público gastar mais presentes?</h3>
           <p class="article-snippet">O jogo dos Avatares Roblox 3D sincroniza o chat com a API oficial do Roblox. Quando o espectador envia seu nick, seu boneco 3D cai na arena; ao enviar pres...</p>
           <div class="article-footer">
-            <span>⏱️ 5 min de leitura</span>
-            <span>Ver Artigo ➔</span>
+            <span class="card-read-time">⏱️ 5 min de leitura</span>
+            <span class="card-read-more">Ler artigo completo</span>
           </div>
         </div>
       </a>
@@ -679,8 +861,8 @@
           <h3 class="article-heading">Como o TikTok paga os presentes recebidos em live? Quanto vale em dinheiro real?</h3>
           <p class="article-snippet">Com o ecossistema da Raven Games, você monetiza lives automáticas no TikTok transformando interações e presentes do chat em dinheiro real, com operação 100...</p>
           <div class="article-footer">
-            <span>⏱️ 5 min de leitura</span>
-            <span>Ver Artigo ➔</span>
+            <span class="card-read-time">⏱️ 5 min de leitura</span>
+            <span class="card-read-more">Ler artigo completo</span>
           </div>
         </div>
       </a>
@@ -695,8 +877,8 @@
           <h3 class="article-heading">Como pessoas comuns estão tirando mais de R$ 3.000 por mês com lives automáticas?</h3>
           <p class="article-snippet">Com o ecossistema da Raven Games, você monetiza lives automáticas no TikTok transformando interações e presentes do chat em dinheiro real, com operação 100...</p>
           <div class="article-footer">
-            <span>⏱️ 5 min de leitura</span>
-            <span>Ver Artigo ➔</span>
+            <span class="card-read-time">⏱️ 5 min de leitura</span>
+            <span class="card-read-more">Ler artigo completo</span>
           </div>
         </div>
       </a>
@@ -711,8 +893,8 @@
           <h3 class="article-heading">Como saber se a live está dando lucro em tempo real pelo celular?</h3>
           <p class="article-snippet">Com o ecossistema da Raven Games, você monetiza lives automáticas no TikTok transformando interações e presentes do chat em dinheiro real, com operação 100...</p>
           <div class="article-footer">
-            <span>⏱️ 5 min de leitura</span>
-            <span>Ver Artigo ➔</span>
+            <span class="card-read-time">⏱️ 5 min de leitura</span>
+            <span class="card-read-more">Ler artigo completo</span>
           </div>
         </div>
       </a>
@@ -727,8 +909,8 @@
           <h3 class="article-heading">Como sacar o dinheiro dos diamantes do TikTok direto via Pix ou conta bancária?</h3>
           <p class="article-snippet">Você saca os ganhos das lives no TikTok diretamente via Pix acessando Ferramentas do Criador > Saldo > Resgatar. O dinheiro cai na sua conta bancária cadas...</p>
           <div class="article-footer">
-            <span>⏱️ 5 min de leitura</span>
-            <span>Ver Artigo ➔</span>
+            <span class="card-read-time">⏱️ 5 min de leitura</span>
+            <span class="card-read-more">Ler artigo completo</span>
           </div>
         </div>
       </a>
@@ -743,8 +925,8 @@
           <h3 class="article-heading">Como sacar o dinheiro dos presentes do TikTok direto via Pix?</h3>
           <p class="article-snippet">Você saca os ganhos das lives no TikTok diretamente via Pix acessando Ferramentas do Criador > Saldo > Resgatar. O dinheiro cai na sua conta bancária cadas...</p>
           <div class="article-footer">
-            <span>⏱️ 5 min de leitura</span>
-            <span>Ver Artigo ➔</span>
+            <span class="card-read-time">⏱️ 5 min de leitura</span>
+            <span class="card-read-more">Ler artigo completo</span>
           </div>
         </div>
       </a>
@@ -759,8 +941,8 @@
           <h3 class="article-heading">Como transformar o computador em uma máquina de renda extra com TikTok Live?</h3>
           <p class="article-snippet">Com o ecossistema da Raven Games, você monetiza lives automáticas no TikTok transformando interações e presentes do chat em dinheiro real, com operação 100...</p>
           <div class="article-footer">
-            <span>⏱️ 5 min de leitura</span>
-            <span>Ver Artigo ➔</span>
+            <span class="card-read-time">⏱️ 5 min de leitura</span>
+            <span class="card-read-more">Ler artigo completo</span>
           </div>
         </div>
       </a>
@@ -775,14 +957,14 @@
           <h3 class="article-heading">Como usar notificações no celular para saber quando caem presentes enquanto a live roda?</h3>
           <p class="article-snippet">Com o ecossistema da Raven Games, você monetiza lives automáticas no TikTok transformando interações e presentes do chat em dinheiro real, com operação 100...</p>
           <div class="article-footer">
-            <span>⏱️ 5 min de leitura</span>
-            <span>Ver Artigo ➔</span>
+            <span class="card-read-time">⏱️ 5 min de leitura</span>
+            <span class="card-read-more">Ler artigo completo</span>
           </div>
         </div>
       </a>
 
       <!-- Artigo: Comunidade VIP no Discord da Raven Games: Védeo Aulas Gravadas, Suporte e Networking -->
-      <a href="comunidade-discord-video-aulas-raven-games.html" class="article-card" data-category="seguranca">
+      <a href="comunidade-discord-video-aulas-raven-games.html" class="article-card" data-category="comunidade">
         <div class="article-thumb">
           <img src="imagens/provas/1778617224481.jpg" alt="Comunidade VIP no Discord da Raven Games: Védeo Aulas Gravadas, Suporte e Networking" loading="lazy" />
         </div>
@@ -791,8 +973,8 @@
           <h3 class="article-heading">Comunidade VIP no Discord da Raven Games: Védeo Aulas Gravadas, Suporte e Networking</h3>
           <p class="article-snippet">Conheça a Comunidade VIP no Discord da Raven Games: acesso a védeo aulas gravadas do zero ao avançado, suporte técnico diário, networking com mais de 2.000 c...</p>
           <div class="article-footer">
-            <span>⏱️ 5 min de leitura</span>
-            <span>Ver Artigo ➔</span>
+            <span class="card-read-time">⏱️ 5 min de leitura</span>
+            <span class="card-read-more">Ler artigo completo</span>
           </div>
         </div>
       </a>
@@ -807,8 +989,8 @@
           <h3 class="article-heading">Dá para conciliar essa renda extra trabalhando 8 horas por dia como CLT?</h3>
           <p class="article-snippet">Sim, você pode conciliar perfeitamente com uma rotina CLT de 8 horas. Basta ligar o computador com o Raven Games antes de sair de casa ou antes de dormir; ...</p>
           <div class="article-footer">
-            <span>⏱️ 5 min de leitura</span>
-            <span>Ver Artigo ➔</span>
+            <span class="card-read-time">⏱️ 5 min de leitura</span>
+            <span class="card-read-more">Ler artigo completo</span>
           </div>
         </div>
       </a>
@@ -823,8 +1005,8 @@
           <h3 class="article-heading">Dá para faturar mais de R$ 5.000 por mês apenas com jogos interativos no TikTok?</h3>
           <p class="article-snippet">Com o ecossistema da Raven Games, você monetiza lives automáticas no TikTok transformando interações e presentes do chat em dinheiro real, com operação 100...</p>
           <div class="article-footer">
-            <span>⏱️ 5 min de leitura</span>
-            <span>Ver Artigo ➔</span>
+            <span class="card-read-time">⏱️ 5 min de leitura</span>
+            <span class="card-read-more">Ler artigo completo</span>
           </div>
         </div>
       </a>
@@ -839,8 +1021,8 @@
           <h3 class="article-heading">Dá para fazer renda extra no TikTok enquanto durmo ou trabalho?</h3>
           <p class="article-snippet">Sim, você pode conciliar perfeitamente com uma rotina CLT de 8 horas. Basta ligar o computador com o Raven Games antes de sair de casa ou antes de dormir; ...</p>
           <div class="article-footer">
-            <span>⏱️ 5 min de leitura</span>
-            <span>Ver Artigo ➔</span>
+            <span class="card-read-time">⏱️ 5 min de leitura</span>
+            <span class="card-read-more">Ler artigo completo</span>
           </div>
         </div>
       </a>
@@ -855,8 +1037,8 @@
           <h3 class="article-heading">Dá para ganhar dinheiro com live automática mesmo sendo total iniciante?</h3>
           <p class="article-snippet">Qualquer iniciante sem experiência prévia pode começar hoje mesmo. Como os minigames da Raven Games já vêm prontos e rodam de forma autônoma sem necessidad...</p>
           <div class="article-footer">
-            <span>⏱️ 5 min de leitura</span>
-            <span>Ver Artigo ➔</span>
+            <span class="card-read-time">⏱️ 5 min de leitura</span>
+            <span class="card-read-more">Ler artigo completo</span>
           </div>
         </div>
       </a>
@@ -871,8 +1053,8 @@
           <h3 class="article-heading">Diretrizes Oficiais do TikTok para Jogos Interativos e Regras de Presentes</h3>
           <p class="article-snippet">Conheça as regras oficiais do TikTok para transmissões com jogos interativos e doações de presentes. Aprenda as 4 regras de ouro para nunca tomar aviso ou st...</p>
           <div class="article-footer">
-            <span>⏱️ 5 min de leitura</span>
-            <span>Ver Artigo ➔</span>
+            <span class="card-read-time">⏱️ 5 min de leitura</span>
+            <span class="card-read-more">Ler artigo completo</span>
           </div>
         </div>
       </a>
@@ -887,8 +1069,8 @@
           <h3 class="article-heading">É melhor fazer live automática ou postar vídeos curtos para monetizar o TikTok?</h3>
           <p class="article-snippet">Com o ecossistema da Raven Games, você monetiza lives automáticas no TikTok transformando interações e presentes do chat em dinheiro real, com operação 100...</p>
           <div class="article-footer">
-            <span>⏱️ 5 min de leitura</span>
-            <span>Ver Artigo ➔</span>
+            <span class="card-read-time">⏱️ 5 min de leitura</span>
+            <span class="card-read-more">Ler artigo completo</span>
           </div>
         </div>
       </a>
@@ -903,8 +1085,8 @@
           <h3 class="article-heading">É possível ganhar dinheiro no TikTok com o computador ligado sem estar na frente dele?</h3>
           <p class="article-snippet">Com o ecossistema da Raven Games, você monetiza lives automáticas no TikTok transformando interações e presentes do chat em dinheiro real, com operação 100...</p>
           <div class="article-footer">
-            <span>⏱️ 5 min de leitura</span>
-            <span>Ver Artigo ➔</span>
+            <span class="card-read-time">⏱️ 5 min de leitura</span>
+            <span class="card-read-more">Ler artigo completo</span>
           </div>
         </div>
       </a>
@@ -919,8 +1101,8 @@
           <h3 class="article-heading">É possível transformar essa renda extra em um negócio de R$ 10.000/mês?</h3>
           <p class="article-snippet">Com o ecossistema da Raven Games, você monetiza lives automáticas no TikTok transformando interações e presentes do chat em dinheiro real, com operação 100...</p>
           <div class="article-footer">
-            <span>⏱️ 5 min de leitura</span>
-            <span>Ver Artigo ➔</span>
+            <span class="card-read-time">⏱️ 5 min de leitura</span>
+            <span class="card-read-more">Ler artigo completo</span>
           </div>
         </div>
       </a>
@@ -935,8 +1117,8 @@
           <h3 class="article-heading">É verdade que os presentes da live caem em dinheiro direto na conta bancária?</h3>
           <p class="article-snippet">Com o ecossistema da Raven Games, você monetiza lives automáticas no TikTok transformando interações e presentes do chat em dinheiro real, com operação 100...</p>
           <div class="article-footer">
-            <span>⏱️ 5 min de leitura</span>
-            <span>Ver Artigo ➔</span>
+            <span class="card-read-time">⏱️ 5 min de leitura</span>
+            <span class="card-read-more">Ler artigo completo</span>
           </div>
         </div>
       </a>
@@ -951,8 +1133,8 @@
           <h3 class="article-heading">Live Automática no TikTok Dá Ban? O que Dizem as Regras Oficiais em 2026</h3>
           <p class="article-snippet">Descubra se fazer live automática com jogos interativos dá ban no TikTok, quais são os riscos reais, o que dizem as diretrizes da comunidade e como transmiti...</p>
           <div class="article-footer">
-            <span>⏱️ 5 min de leitura</span>
-            <span>Ver Artigo ➔</span>
+            <span class="card-read-time">⏱️ 5 min de leitura</span>
+            <span class="card-read-more">Ler artigo completo</span>
           </div>
         </div>
       </a>
@@ -967,8 +1149,8 @@
           <h3 class="article-heading">Live no TikTok sem Aparecer: Como Funciona o Modo AFK e Automação 100%</h3>
           <p class="article-snippet">Descubra como fazer live no TikTok sem mostrar o rosto e sem falar no microfone. Entenda o modo AFK, por que o público prefere controlar a tela e como o Sist...</p>
           <div class="article-footer">
-            <span>⏱️ 5 min de leitura</span>
-            <span>Ver Artigo ➔</span>
+            <span class="card-read-time">⏱️ 5 min de leitura</span>
+            <span class="card-read-more">Ler artigo completo</span>
           </div>
         </div>
       </a>
@@ -983,8 +1165,8 @@
           <h3 class="article-heading">Top 5 Melhores Jogos Interativos para Faturar em Live do TikTok em 2026</h3>
           <p class="article-snippet">Comparativo detalhado dos 5 melhores jogos interativos para transmissões no TikTok em 2026: Flappy da Live, Tower Sky 3D, Avatares Roblox, Batalha Boys vs Gi...</p>
           <div class="article-footer">
-            <span>⏱️ 5 min de leitura</span>
-            <span>Ver Artigo ➔</span>
+            <span class="card-read-time">⏱️ 5 min de leitura</span>
+            <span class="card-read-more">Ler artigo completo</span>
           </div>
         </div>
       </a>
@@ -999,8 +1181,8 @@
           <h3 class="article-heading">O que é o Raven Games e como ele automatiza o ganho de presentes na live?</h3>
           <p class="article-snippet">Com o ecossistema da Raven Games, você monetiza lives automáticas no TikTok transformando interações e presentes do chat em dinheiro real, com operação 100...</p>
           <div class="article-footer">
-            <span>⏱️ 5 min de leitura</span>
-            <span>Ver Artigo ➔</span>
+            <span class="card-read-time">⏱️ 5 min de leitura</span>
+            <span class="card-read-more">Ler artigo completo</span>
           </div>
         </div>
       </a>
@@ -1015,8 +1197,8 @@
           <h3 class="article-heading">O que falar no microfone para incentivar o chat a mandar presentes e bater metas?</h3>
           <p class="article-snippet">Com o ecossistema da Raven Games, você monetiza lives automáticas no TikTok transformando interações e presentes do chat em dinheiro real, com operação 100...</p>
           <div class="article-footer">
-            <span>⏱️ 5 min de leitura</span>
-            <span>Ver Artigo ➔</span>
+            <span class="card-read-time">⏱️ 5 min de leitura</span>
+            <span class="card-read-more">Ler artigo completo</span>
           </div>
         </div>
       </a>
@@ -1031,8 +1213,8 @@
           <h3 class="article-heading">O que fazer no primeiro dia após comprar a Raven Games para começar a lucrar?</h3>
           <p class="article-snippet">Qualquer iniciante sem experiência prévia pode começar hoje mesmo. Como os minigames da Raven Games já vêm prontos e rodam de forma autônoma sem necessidad...</p>
           <div class="article-footer">
-            <span>⏱️ 5 min de leitura</span>
-            <span>Ver Artigo ➔</span>
+            <span class="card-read-time">⏱️ 5 min de leitura</span>
+            <span class="card-read-more">Ler artigo completo</span>
           </div>
         </div>
       </a>
@@ -1047,8 +1229,8 @@
           <h3 class="article-heading">O que são os jogos interativos que geram presentes em dinheiro no TikTok?</h3>
           <p class="article-snippet">Com o ecossistema da Raven Games, você monetiza lives automáticas no TikTok transformando interações e presentes do chat em dinheiro real, com operação 100...</p>
           <div class="article-footer">
-            <span>⏱️ 5 min de leitura</span>
-            <span>Ver Artigo ➔</span>
+            <span class="card-read-time">⏱️ 5 min de leitura</span>
+            <span class="card-read-more">Ler artigo completo</span>
           </div>
         </div>
       </a>
@@ -1063,8 +1245,8 @@
           <h3 class="article-heading">O que vem no plano Completo da Raven Games que faz ele faturar mais?</h3>
           <p class="article-snippet">Com o ecossistema da Raven Games, você monetiza lives automáticas no TikTok transformando interações e presentes do chat em dinheiro real, com operação 100...</p>
           <div class="article-footer">
-            <span>⏱️ 5 min de leitura</span>
-            <span>Ver Artigo ➔</span>
+            <span class="card-read-time">⏱️ 5 min de leitura</span>
+            <span class="card-read-more">Ler artigo completo</span>
           </div>
         </div>
       </a>
@@ -1079,8 +1261,8 @@
           <h3 class="article-heading">PC Fraco Roda Live Interativa? Requisitos Mínimos para Faturar no TikTok (2026)</h3>
           <p class="article-snippet">Descubra se o seu PC fraco ou notebook básico consegue rodar lives interativas no TikTok. Confira requisitos mínimos, teste de 60 FPS e comparativo de memóri...</p>
           <div class="article-footer">
-            <span>⏱️ 5 min de leitura</span>
-            <span>Ver Artigo ➔</span>
+            <span class="card-read-time">⏱️ 5 min de leitura</span>
+            <span class="card-read-more">Ler artigo completo</span>
           </div>
         </div>
       </a>
@@ -1095,8 +1277,8 @@
           <h3 class="article-heading">Por que as lives automáticas de jogos dão mais dinheiro que lives tradicionais?</h3>
           <p class="article-snippet">Com o ecossistema da Raven Games, você monetiza lives automáticas no TikTok transformando interações e presentes do chat em dinheiro real, com operação 100...</p>
           <div class="article-footer">
-            <span>⏱️ 5 min de leitura</span>
-            <span>Ver Artigo ➔</span>
+            <span class="card-read-time">⏱️ 5 min de leitura</span>
+            <span class="card-read-more">Ler artigo completo</span>
           </div>
         </div>
       </a>
@@ -1111,8 +1293,8 @@
           <h3 class="article-heading">Precisa abrir MEI ou declarar Imposto de Renda sobre os ganhos de live?</h3>
           <p class="article-snippet">Com o ecossistema da Raven Games, você monetiza lives automáticas no TikTok transformando interações e presentes do chat em dinheiro real, com operação 100...</p>
           <div class="article-footer">
-            <span>⏱️ 5 min de leitura</span>
-            <span>Ver Artigo ➔</span>
+            <span class="card-read-time">⏱️ 5 min de leitura</span>
+            <span class="card-read-more">Ler artigo completo</span>
           </div>
         </div>
       </a>
@@ -1127,8 +1309,8 @@
           <h3 class="article-heading">Precisa de 1.000 seguidores para abrir live com jogos no TikTok Studio?</h3>
           <p class="article-snippet">Não é obrigatório ter 1.000 seguidores para fazer live com jogos no PC. Você pode liberar o TikTok LIVE Studio instantaneamente associando sua conta a uma ...</p>
           <div class="article-footer">
-            <span>⏱️ 5 min de leitura</span>
-            <span>Ver Artigo ➔</span>
+            <span class="card-read-time">⏱️ 5 min de leitura</span>
+            <span class="card-read-more">Ler artigo completo</span>
           </div>
         </div>
       </a>
@@ -1143,8 +1325,8 @@
           <h3 class="article-heading">Precisa de conta bancária ou conta no PayPal para receber os saques?</h3>
           <p class="article-snippet">Você saca os ganhos das lives no TikTok diretamente via Pix acessando Ferramentas do Criador > Saldo > Resgatar. O dinheiro cai na sua conta bancária cadas...</p>
           <div class="article-footer">
-            <span>⏱️ 5 min de leitura</span>
-            <span>Ver Artigo ➔</span>
+            <span class="card-read-time">⏱️ 5 min de leitura</span>
+            <span class="card-read-more">Ler artigo completo</span>
           </div>
         </div>
       </a>
@@ -1159,8 +1341,8 @@
           <h3 class="article-heading">Precisa declarar Imposto de Renda ou abrir MEI para os ganhos de live no TikTok?</h3>
           <p class="article-snippet">Com o ecossistema da Raven Games, você monetiza lives automáticas no TikTok transformando interações e presentes do chat em dinheiro real, com operação 100...</p>
           <div class="article-footer">
-            <span>⏱️ 5 min de leitura</span>
-            <span>Ver Artigo ➔</span>
+            <span class="card-read-time">⏱️ 5 min de leitura</span>
+            <span class="card-read-more">Ler artigo completo</span>
           </div>
         </div>
       </a>
@@ -1175,8 +1357,8 @@
           <h3 class="article-heading">Precisa ter conta no PayPal para receber os pagamentos de live do TikTok?</h3>
           <p class="article-snippet">Com o ecossistema da Raven Games, você monetiza lives automáticas no TikTok transformando interações e presentes do chat em dinheiro real, com operação 100...</p>
           <div class="article-footer">
-            <span>⏱️ 5 min de leitura</span>
-            <span>Ver Artigo ➔</span>
+            <span class="card-read-time">⏱️ 5 min de leitura</span>
+            <span class="card-read-more">Ler artigo completo</span>
           </div>
         </div>
       </a>
@@ -1191,8 +1373,8 @@
           <h3 class="article-heading">Quais são os melhores nichos de live automática para monetizar rápido?</h3>
           <p class="article-snippet">Com o ecossistema da Raven Games, você monetiza lives automáticas no TikTok transformando interações e presentes do chat em dinheiro real, com operação 100...</p>
           <div class="article-footer">
-            <span>⏱️ 5 min de leitura</span>
-            <span>Ver Artigo ➔</span>
+            <span class="card-read-time">⏱️ 5 min de leitura</span>
+            <span class="card-read-more">Ler artigo completo</span>
           </div>
         </div>
       </a>
@@ -1207,8 +1389,8 @@
           <h3 class="article-heading">Qual é o checklist definitivo para colocar uma live automática para faturar ainda hoje?</h3>
           <p class="article-snippet">Com o ecossistema da Raven Games, você monetiza lives automáticas no TikTok transformando interações e presentes do chat em dinheiro real, com operação 100...</p>
           <div class="article-footer">
-            <span>⏱️ 5 min de leitura</span>
-            <span>Ver Artigo ➔</span>
+            <span class="card-read-time">⏱️ 5 min de leitura</span>
+            <span class="card-read-more">Ler artigo completo</span>
           </div>
         </div>
       </a>
@@ -1223,8 +1405,8 @@
           <h3 class="article-heading">Qual é o melhor horário para abrir live de jogos interativos no TikTok para pegar público ativo?</h3>
           <p class="article-snippet">Com o ecossistema da Raven Games, você monetiza lives automáticas no TikTok transformando interações e presentes do chat em dinheiro real, com operação 100...</p>
           <div class="article-footer">
-            <span>⏱️ 5 min de leitura</span>
-            <span>Ver Artigo ➔</span>
+            <span class="card-read-time">⏱️ 5 min de leitura</span>
+            <span class="card-read-more">Ler artigo completo</span>
           </div>
         </div>
       </a>
@@ -1239,8 +1421,8 @@
           <h3 class="article-heading">Qual é o passo a passo para começar a monetizar lives automáticas hoje?</h3>
           <p class="article-snippet">Com o ecossistema da Raven Games, você monetiza lives automáticas no TikTok transformando interações e presentes do chat em dinheiro real, com operação 100...</p>
           <div class="article-footer">
-            <span>⏱️ 5 min de leitura</span>
-            <span>Ver Artigo ➔</span>
+            <span class="card-read-time">⏱️ 5 min de leitura</span>
+            <span class="card-read-more">Ler artigo completo</span>
           </div>
         </div>
       </a>
@@ -1255,8 +1437,8 @@
           <h3 class="article-heading">Qual é o valor mínimo de saque de presentes no TikTok?</h3>
           <p class="article-snippet">Você saca os ganhos das lives no TikTok diretamente via Pix acessando Ferramentas do Criador > Saldo > Resgatar. O dinheiro cai na sua conta bancária cadas...</p>
           <div class="article-footer">
-            <span>⏱️ 5 min de leitura</span>
-            <span>Ver Artigo ➔</span>
+            <span class="card-read-time">⏱️ 5 min de leitura</span>
+            <span class="card-read-more">Ler artigo completo</span>
           </div>
         </div>
       </a>
@@ -1271,8 +1453,8 @@
           <h3 class="article-heading">Qual é o valor mínimo de saque no TikTok e quanto tempo demora para cair?</h3>
           <p class="article-snippet">Você saca os ganhos das lives no TikTok diretamente via Pix acessando Ferramentas do Criador > Saldo > Resgatar. O dinheiro cai na sua conta bancária cadas...</p>
           <div class="article-footer">
-            <span>⏱️ 5 min de leitura</span>
-            <span>Ver Artigo ➔</span>
+            <span class="card-read-time">⏱️ 5 min de leitura</span>
+            <span class="card-read-more">Ler artigo completo</span>
           </div>
         </div>
       </a>
@@ -1287,8 +1469,8 @@
           <h3 class="article-heading">Qual foi a maior renda já tirada com uma única live automática no Brasil?</h3>
           <p class="article-snippet">Com o ecossistema da Raven Games, você monetiza lives automáticas no TikTok transformando interações e presentes do chat em dinheiro real, com operação 100...</p>
           <div class="article-footer">
-            <span>⏱️ 5 min de leitura</span>
-            <span>Ver Artigo ➔</span>
+            <span class="card-read-time">⏱️ 5 min de leitura</span>
+            <span class="card-read-more">Ler artigo completo</span>
           </div>
         </div>
       </a>
@@ -1303,8 +1485,8 @@
           <h3 class="article-heading">Qual jogo da Raven Games mais converte visualizações em dinheiro no bolso?</h3>
           <p class="article-snippet">Com o ecossistema da Raven Games, você monetiza lives automáticas no TikTok transformando interações e presentes do chat em dinheiro real, com operação 100...</p>
           <div class="article-footer">
-            <span>⏱️ 5 min de leitura</span>
-            <span>Ver Artigo ➔</span>
+            <span class="card-read-time">⏱️ 5 min de leitura</span>
+            <span class="card-read-more">Ler artigo completo</span>
           </div>
         </div>
       </a>
@@ -1319,8 +1501,8 @@
           <h3 class="article-heading">Qual o checklist passo a passo para fazer a primeira live faturando hoje com Raven Games?</h3>
           <p class="article-snippet">Com o ecossistema da Raven Games, você monetiza lives automáticas no TikTok transformando interações e presentes do chat em dinheiro real, com operação 100...</p>
           <div class="article-footer">
-            <span>⏱️ 5 min de leitura</span>
-            <span>Ver Artigo ➔</span>
+            <span class="card-read-time">⏱️ 5 min de leitura</span>
+            <span class="card-read-more">Ler artigo completo</span>
           </div>
         </div>
       </a>
@@ -1335,8 +1517,8 @@
           <h3 class="article-heading">Qual o melhor horário para ligar a live automática e pegar mais doações?</h3>
           <p class="article-snippet">Com o ecossistema da Raven Games, você monetiza lives automáticas no TikTok transformando interações e presentes do chat em dinheiro real, com operação 100...</p>
           <div class="article-footer">
-            <span>⏱️ 5 min de leitura</span>
-            <span>Ver Artigo ➔</span>
+            <span class="card-read-time">⏱️ 5 min de leitura</span>
+            <span class="card-read-more">Ler artigo completo</span>
           </div>
         </div>
       </a>
@@ -1351,8 +1533,8 @@
           <h3 class="article-heading">Qual tipo de jogo interativo mais incentiva os espectadores a mandarem presentes caros?</h3>
           <p class="article-snippet">Com o ecossistema da Raven Games, você monetiza lives automáticas no TikTok transformando interações e presentes do chat em dinheiro real, com operação 100...</p>
           <div class="article-footer">
-            <span>⏱️ 5 min de leitura</span>
-            <span>Ver Artigo ➔</span>
+            <span class="card-read-time">⏱️ 5 min de leitura</span>
+            <span class="card-read-more">Ler artigo completo</span>
           </div>
         </div>
       </a>
@@ -1367,8 +1549,8 @@
           <h3 class="article-heading">Quanto custa a mensalidade da Raven Games e em quantas lives ela se paga?</h3>
           <p class="article-snippet">Com o ecossistema da Raven Games, você monetiza lives automáticas no TikTok transformando interações e presentes do chat em dinheiro real, com operação 100...</p>
           <div class="article-footer">
-            <span>⏱️ 5 min de leitura</span>
-            <span>Ver Artigo ➔</span>
+            <span class="card-read-time">⏱️ 5 min de leitura</span>
+            <span class="card-read-more">Ler artigo completo</span>
           </div>
         </div>
       </a>
@@ -1383,8 +1565,8 @@
           <h3 class="article-heading">Quanto custa para começar a operar lives automáticas de renda extra?</h3>
           <p class="article-snippet">Com o ecossistema da Raven Games, você monetiza lives automáticas no TikTok transformando interações e presentes do chat em dinheiro real, com operação 100...</p>
           <div class="article-footer">
-            <span>⏱️ 5 min de leitura</span>
-            <span>Ver Artigo ➔</span>
+            <span class="card-read-time">⏱️ 5 min de leitura</span>
+            <span class="card-read-more">Ler artigo completo</span>
           </div>
         </div>
       </a>
@@ -1399,8 +1581,8 @@
           <h3 class="article-heading">Quanto dá para ganhar por dia com lives automáticas de jogos interativos?</h3>
           <p class="article-snippet">Com o ecossistema da Raven Games, você monetiza lives automáticas no TikTok transformando interações e presentes do chat em dinheiro real, com operação 100...</p>
           <div class="article-footer">
-            <span>⏱️ 5 min de leitura</span>
-            <span>Ver Artigo ➔</span>
+            <span class="card-read-time">⏱️ 5 min de leitura</span>
+            <span class="card-read-more">Ler artigo completo</span>
           </div>
         </div>
       </a>
@@ -1415,8 +1597,8 @@
           <h3 class="article-heading">Quanto um Streamer Iniciante Ganha por Dia com Live Automática no TikTok? (Simulação Real 2026)</h3>
           <p class="article-snippet">Descubra quanto um streamer iniciante ganha no TikTok com live automática AFK. Veja simulações reais de ganhos diários, semanais e mensais, tabela comparativ...</p>
           <div class="article-footer">
-            <span>⏱️ 5 min de leitura</span>
-            <span>Ver Artigo ➔</span>
+            <span class="card-read-time">⏱️ 5 min de leitura</span>
+            <span class="card-read-more">Ler artigo completo</span>
           </div>
         </div>
       </a>
@@ -1431,8 +1613,8 @@
           <h3 class="article-heading">Quanto o TikTok desconta de comissão dos presentes da live?</h3>
           <p class="article-snippet">O TikTok desconta exatamente 50% de comissão sobre o valor de cada presente virtual enviado na transmissão. A outra metade é convertida em diamantes líquid...</p>
           <div class="article-footer">
-            <span>⏱️ 5 min de leitura</span>
-            <span>Ver Artigo ➔</span>
+            <span class="card-read-time">⏱️ 5 min de leitura</span>
+            <span class="card-read-more">Ler artigo completo</span>
           </div>
         </div>
       </a>
@@ -1447,8 +1629,8 @@
           <h3 class="article-heading">Quanto o TikTok desconta de taxa sobre os presentes da live (50% ou mais)?</h3>
           <p class="article-snippet">O TikTok desconta exatamente 50% de comissão sobre o valor de cada presente virtual enviado na transmissão. A outra metade é convertida em diamantes líquid...</p>
           <div class="article-footer">
-            <span>⏱️ 5 min de leitura</span>
-            <span>Ver Artigo ➔</span>
+            <span class="card-read-time">⏱️ 5 min de leitura</span>
+            <span class="card-read-more">Ler artigo completo</span>
           </div>
         </div>
       </a>
@@ -1463,8 +1645,8 @@
           <h3 class="article-heading">Quanto tempo por dia preciso deixar a live rodando para ter um bom lucro?</h3>
           <p class="article-snippet">Com o ecossistema da Raven Games, você monetiza lives automáticas no TikTok transformando interações e presentes do chat em dinheiro real, com operação 100...</p>
           <div class="article-footer">
-            <span>⏱️ 5 min de leitura</span>
-            <span>Ver Artigo ➔</span>
+            <span class="card-read-time">⏱️ 5 min de leitura</span>
+            <span class="card-read-more">Ler artigo completo</span>
           </div>
         </div>
       </a>
@@ -1479,8 +1661,8 @@
           <h3 class="article-heading">Quanto um iniciante pode esperar lucrar na primeira semana de lives automáticas?</h3>
           <p class="article-snippet">Qualquer iniciante sem experiência prévia pode começar hoje mesmo. Como os minigames da Raven Games já vêm prontos e rodam de forma autônoma sem necessidad...</p>
           <div class="article-footer">
-            <span>⏱️ 5 min de leitura</span>
-            <span>Ver Artigo ➔</span>
+            <span class="card-read-time">⏱️ 5 min de leitura</span>
+            <span class="card-read-more">Ler artigo completo</span>
           </div>
         </div>
       </a>
@@ -1495,8 +1677,8 @@
           <h3 class="article-heading">Quanto um streamer iniciante ganha em média por hora de live interativa?</h3>
           <p class="article-snippet">Qualquer iniciante sem experiência prévia pode começar hoje mesmo. Como os minigames da Raven Games já vêm prontos e rodam de forma autônoma sem necessidad...</p>
           <div class="article-footer">
-            <span>⏱️ 5 min de leitura</span>
-            <span>Ver Artigo ➔</span>
+            <span class="card-read-time">⏱️ 5 min de leitura</span>
+            <span class="card-read-more">Ler artigo completo</span>
           </div>
         </div>
       </a>
@@ -1511,8 +1693,8 @@
           <h3 class="article-heading">Quanto vale 1 Galáxia, 1 Leão ou 1 Universo do TikTok em reais?</h3>
           <p class="article-snippet">Uma Galáxia (1.000 moedas) rende cerca de R$ 27,50 líquidos, um Leão (29.999 moedas) rende aproximadamente R$ 825,00 líquidos e o Universo TikTok (34.999 m...</p>
           <div class="article-footer">
-            <span>⏱️ 5 min de leitura</span>
-            <span>Ver Artigo ➔</span>
+            <span class="card-read-time">⏱️ 5 min de leitura</span>
+            <span class="card-read-more">Ler artigo completo</span>
           </div>
         </div>
       </a>
@@ -1527,8 +1709,8 @@
           <h3 class="article-heading">Quanto vale 1 Galáxia ou 1 Leão do TikTok convertidos em dinheiro?</h3>
           <p class="article-snippet">Com o ecossistema da Raven Games, você monetiza lives automáticas no TikTok transformando interações e presentes do chat em dinheiro real, com operação 100...</p>
           <div class="article-footer">
-            <span>⏱️ 5 min de leitura</span>
-            <span>Ver Artigo ➔</span>
+            <span class="card-read-time">⏱️ 5 min de leitura</span>
+            <span class="card-read-more">Ler artigo completo</span>
           </div>
         </div>
       </a>
@@ -1543,8 +1725,8 @@
           <h3 class="article-heading">Quanto vale 1 Rosa do TikTok convertida em reais?</h3>
           <p class="article-snippet">1 Rosa no TikTok custa 1 moeda para o espectador (cerca de R$ 0,07 a R$ 0,09) e repassa 1 diamante ao criador, valendo líquido aproximadamente R$ 0,028 (qu...</p>
           <div class="article-footer">
-            <span>⏱️ 5 min de leitura</span>
-            <span>Ver Artigo ➔</span>
+            <span class="card-read-time">⏱️ 5 min de leitura</span>
+            <span class="card-read-more">Ler artigo completo</span>
           </div>
         </div>
       </a>
@@ -1559,8 +1741,8 @@
           <h3 class="article-heading">Quanto vale 1 Rosa do TikTok em reais para o streamer?</h3>
           <p class="article-snippet">1 Rosa no TikTok custa 1 moeda para o espectador (cerca de R$ 0,07 a R$ 0,09) e repassa 1 diamante ao criador, valendo líquido aproximadamente R$ 0,028 (qu...</p>
           <div class="article-footer">
-            <span>⏱️ 5 min de leitura</span>
-            <span>Ver Artigo ➔</span>
+            <span class="card-read-time">⏱️ 5 min de leitura</span>
+            <span class="card-read-more">Ler artigo completo</span>
           </div>
         </div>
       </a>
@@ -1575,8 +1757,8 @@
           <h3 class="article-heading">Quanto Vale 1 Rosa no TikTok? Tabela Oficial de Valores e Conversão em Reais (2026)</h3>
           <p class="article-snippet">Descubra quanto vale 1 Rosa no TikTok em reais, veja a tabela completa de presentes (Donut, Galáxia, Leão, Universo), a taxa retida pela plataforma e como a ...</p>
           <div class="article-footer">
-            <span>⏱️ 5 min de leitura</span>
-            <span>Ver Artigo ➔</span>
+            <span class="card-read-time">⏱️ 5 min de leitura</span>
+            <span class="card-read-more">Ler artigo completo</span>
           </div>
         </div>
       </a>
@@ -1591,8 +1773,8 @@
           <h3 class="article-heading">Quanto vale cada presente do TikTok em dinheiro real no bolso?</h3>
           <p class="article-snippet">Com o ecossistema da Raven Games, você monetiza lives automáticas no TikTok transformando interações e presentes do chat em dinheiro real, com operação 100...</p>
           <div class="article-footer">
-            <span>⏱️ 5 min de leitura</span>
-            <span>Ver Artigo ➔</span>
+            <span class="card-read-time">⏱️ 5 min de leitura</span>
+            <span class="card-read-more">Ler artigo completo</span>
           </div>
         </div>
       </a>
@@ -1607,8 +1789,8 @@
           <h3 class="article-heading">Quantos espectadores ao vivo (viewers) são necessários para começar a receber presentes constantes?</h3>
           <p class="article-snippet">Com o ecossistema da Raven Games, você monetiza lives automáticas no TikTok transformando interações e presentes do chat em dinheiro real, com operação 100...</p>
           <div class="article-footer">
-            <span>⏱️ 5 min de leitura</span>
-            <span>Ver Artigo ➔</span>
+            <span class="card-read-time">⏱️ 5 min de leitura</span>
+            <span class="card-read-more">Ler artigo completo</span>
           </div>
         </div>
       </a>
@@ -1623,8 +1805,8 @@
           <h3 class="article-heading">Raven Games é Confiável ou é Golpe? Análise Real de Ganhos e Segurança (2026)</h3>
           <p class="article-snippet">Análise completa e imparcial sobre o Raven Games: saiba se o software é confiável, se dá dinheiro de verdade, como funciona a garantia de 7 dias e o suporte ...</p>
           <div class="article-footer">
-            <span>⏱️ 5 min de leitura</span>
-            <span>Ver Artigo ➔</span>
+            <span class="card-read-time">⏱️ 5 min de leitura</span>
+            <span class="card-read-more">Ler artigo completo</span>
           </div>
         </div>
       </a>
@@ -1639,8 +1821,8 @@
           <h3 class="article-heading">Vale a pena assinar o plano Anual da Raven Games para ter desconto maior?</h3>
           <p class="article-snippet">Com o ecossistema da Raven Games, você monetiza lives automáticas no TikTok transformando interações e presentes do chat em dinheiro real, com operação 100...</p>
           <div class="article-footer">
-            <span>⏱️ 5 min de leitura</span>
-            <span>Ver Artigo ➔</span>
+            <span class="card-read-time">⏱️ 5 min de leitura</span>
+            <span class="card-read-more">Ler artigo completo</span>
           </div>
         </div>
       </a>
@@ -1648,20 +1830,691 @@
     </div>
 
     <!-- CTA Section -->
-    <div class="cta-banner">
-      <h2>Pronto para Colocar seu Computador para Render?</h2>
-      <p>Com o Raven Games, você configura sua live em menos de 5 minutos e deixa os jogos interativos trabalharem sozinhos pelo seu chat.</p>
-      <a href="index.html#planos" class="btn-cta-big">
-        <span>⚡ VER PLANOS & COMEÇAR AGORA</span>
+    <div class="cta-banner" id="ctaBanner">
+      <h2 id="ctaTitle">Pronto para Colocar seu Computador para Render?</h2>
+      <p id="ctaDesc">Com o Raven Games, você configura sua live em menos de 5 minutos e deixa os jogos interativos trabalharem sozinhos pelo seu chat.</p>
+      <a href="index.html#planos" class="btn-cta-big" id="ctaBtn">
+        <span id="ctaBtnText">⚡ VER PLANOS & COMEÇAR AGORA</span>
       </a>
     </div>
 
   </main>
 
-    <script>
+      <script>
     document.addEventListener('DOMContentLoaded', () => {
-      const filterButtons = document.querySelectorAll('.cat-btn');
+      // --- ELEMENT REFERENCES ---
+      const langSwitcherWrap = document.getElementById('langSwitcher');
+      const langToggleBtn = document.getElementById('langToggleBtn');
+      const currentLangLabel = document.getElementById('currentLangLabel');
+      const langOptions = document.querySelectorAll('.lang-option');
+
+      // Dropdown toggle
+      if (langToggleBtn && langSwitcherWrap) {
+        langToggleBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          langSwitcherWrap.classList.toggle('open');
+        });
+
+        document.addEventListener('click', (e) => {
+          if (!langSwitcherWrap.contains(e.target)) {
+            langSwitcherWrap.classList.remove('open');
+          }
+        });
+      }
+
+      // --- TRANSLATION DICTIONARIES ---
+      const uiTranslations = {
+        pt: {
+          code: 'PT',
+          docTitle: 'Blog Oficial Raven Games — Renda Extra com Lives Automáticas no TikTok',
+          metaDesc: 'Aprenda como ganhar dinheiro com lives automáticas no TikTok sem mostrar o rosto e sem falar no microfone. Tutoriais, estratégias e guias da Raven Games.',
+          nav: {
+            home: 'Início',
+            games: 'Jogos',
+            download: 'Download',
+            discord: 'Discord',
+            panel: 'Painel ➔',
+            cta: 'COMEÇAR AGORA'
+          },
+          heroBadge: 'BLOG OFICIAL',
+          heroTitle: 'Renda Extra com <span>Lives Automáticas no TikTok</span>',
+          heroSubtitle: 'Guias, tutoriais e estratégias para monetizar no TikTok com jogos interativos sem precisar aparecer.',
+          searchPlaceholder: 'Buscar artigos...',
+          categories: {
+            all: 'Todos',
+            'renda-extra': 'Renda Extra',
+            'sem-aparecer': 'Sem Aparecer',
+            seguranca: 'Segurança & Regras',
+            jogos: 'Roblox & Jogos',
+            comunidade: 'Comunidade'
+          },
+          featured: {
+            badge: '🔥 GUIA PILAR 2026',
+            href: 'como-ganhar-dinheiro-com-lives-automaticas-tiktok.html',
+            title: 'Como Ganhar Dinheiro com Lives Automáticas no TikTok sem Aparecer (Guia Completo)',
+            desc: 'Descubra como pessoas comuns com computadores simples estão gerando um segundo salário diário no piloto automático, sem microfone, sem câmera e sem precisar de milhares de seguidores.',
+            readTime: '⏱️ Leitura: 8 min',
+            author: '✍️ Por Equipe Raven Games',
+            verified: '✓ Verificado 2026'
+          },
+          ctaBanner: {
+            title: 'Pronto para Colocar seu Computador para Render?',
+            desc: 'Com o Raven Games, você configura sua live em menos de 5 minutos e deixa os jogos interativos trabalharem sozinhos pelo seu chat.',
+            btnText: '⚡ VER PLANOS & COMEÇAR AGORA'
+          },
+          tags: {
+            'renda-extra': '💰 Renda Extra',
+            'sem-aparecer': '🎭 Sem Aparecer',
+            seguranca: '🛡️ Segurança & Regras',
+            jogos: '🧱 Roblox & Jogos',
+            comunidade: '👥 Comunidade'
+          },
+          readMore: 'Ler artigo completo',
+          minRead: 'min de leitura'
+        },
+        en: {
+          code: 'EN',
+          docTitle: 'Official Raven Games Blog — Extra Income with Automated TikTok Lives',
+          metaDesc: 'Learn how to make money with automated TikTok lives without showing your face or speaking on mic. Tutorials, strategies, and guides by Raven Games.',
+          nav: {
+            home: 'Home',
+            games: 'Games',
+            download: 'Download',
+            discord: 'Discord',
+            panel: 'Dashboard ➔',
+            cta: 'START NOW'
+          },
+          heroBadge: 'OFFICIAL BLOG',
+          heroTitle: 'Extra Income with <span>Automated TikTok Lives</span>',
+          heroSubtitle: 'Guides, tutorials and strategies to monetize on TikTok with interactive games without showing your face.',
+          searchPlaceholder: 'Search articles...',
+          categories: {
+            all: 'All',
+            'renda-extra': 'Extra Income',
+            'sem-aparecer': 'Faceless / AFK',
+            seguranca: 'Rules & Safety',
+            jogos: 'Roblox & Games',
+            comunidade: 'Community'
+          },
+          featured: {
+            badge: '🔥 2026 PILLAR GUIDE',
+            href: 'como-ganhar-dinheiro-com-lives-automaticas-tiktok-en.html',
+            title: 'How to Make Money with Automated TikTok Lives Without Showing Your Face (Full Guide)',
+            desc: 'Discover how everyday people with simple computers are generating a second daily income on autopilot, with no mic, no camera, and no need for thousands of followers.',
+            readTime: '⏱️ 8 min read',
+            author: '✍️ By Raven Games Team',
+            verified: '✓ Verified 2026'
+          },
+          ctaBanner: {
+            title: 'Ready to Put Your Computer on Autopilot for Profit?',
+            desc: 'With Raven Games, you set up your stream in under 5 minutes and let interactive games work on autopilot for your chat.',
+            btnText: '⚡ VIEW PLANS & START NOW'
+          },
+          tags: {
+            'renda-extra': '💰 Extra Income',
+            'sem-aparecer': '🎭 Faceless / AFK',
+            seguranca: '🛡️ Rules & Safety',
+            jogos: '🧱 Roblox & Games',
+            comunidade: '👥 Community'
+          },
+          readMore: 'Read full article',
+          minRead: 'min read'
+        }
+      };
+
+      const cardTranslations = {
+      "Como conseguir os primeiros 1.000 seguidores rápido para liberar a ferramenta de live?": [
+            "How to get the first 1,000 followers quickly to release the live tool?",
+            "It is not mandatory to have 1,000 followers to live with games on PC. You can unlock TikTok LIVE Studio instantly by linking your account with an official TikTok partner agency or registering an account on the TikTok Shop for Creators.",
+            "como-conseguir-os-primeiros-1000-seguidores-rapido-para-libe-en.html"
+      ],
+      "Como criar rivalidade no chat (torcidas, homens vs mulheres, estados) para multiplicar os presentes?": [
+            "How to create rivalry in chat (fans, men vs women, states) to multiply gifts?",
+            "With the Raven Games ecosystem, you monetize automatic lives on TikTok by transforming chat interactions and gifts into real money, with 100% operation on autopilot, daily support on Discord and average earnings from R$50 to more than R$300 per day.",
+            "como-criar-rivalidade-no-chat-torcidas-homens-vs-mulheres-es-en.html"
+      ],
+      "Como fazer o algoritmo do TikTok recomendar a minha live na For You (FYP)?": [
+            "How can I make the TikTok algorithm recommend my live stream on For You (FYP)?",
+            "With the Raven Games ecosystem, you monetize automatic lives on TikTok by transforming chat interactions and gifts into real money, with 100% operation on autopilot, daily support on Discord and average earnings from R$50 to more than R$300 per day.",
+            "como-fazer-o-algoritmo-do-tiktok-recomendar-a-minha-live-na--en.html"
+      ],
+      "Como Funciona o Jogo dos Avatares do Roblox na Live do TikTok (Guia Técnico)": [
+            "How the 3D Roblox Avatars Game Works on TikTok Live (Technical Guide)",
+            "The Roblox avatar game on TikTok Live works by coupling an encrypted WebSocket pipeline that reads live stream chat events in real time with the official Roblox Corporation public avatar APIs. When a viewer types their Roblox username in the chat, the Raven Games software fetches and renders their exact 3D model on screen in under 500ms. When gifts are sent (Roses, Donuts, Galaxies), the physics engine scales up the avatar, triggers dance emotes, and launches arena battles, igniting competitive gifting wars in the chat with zero manual streamer interaction.",
+            "como-funciona-jogo-avatares-roblox-live-tiktok-en.html"
+      ],
+      "Como funciona o efeito manada onde as pessoas mandam presentes sem você pedir?": [
+            "How does the herd effect work where people send gifts without you asking?",
+            "With the Raven Games ecosystem, you monetize automatic lives on TikTok by transforming chat interactions and gifts into real money, with 100% operation on autopilot, daily support on Discord and average earnings from R$50 to more than R$300 per day.",
+            "como-funciona-o-efeito-manada-onde-as-pessoas-mandam-present-en.html"
+      ],
+      "Como funciona o método de live que roda sozinha no TikTok e gera renda extra?": [
+            "How does the live method that runs alone on TikTok work and generates extra income?",
+            "With the Raven Games ecosystem, you monetize automatic lives on TikTok by transforming chat interactions and gifts into real money, with 100% operation on autopilot, daily support on Discord and average earnings from R$50 to more than R$300 per day.",
+            "como-funciona-o-metodo-de-live-que-roda-sozinha-no-tiktok-e--en.html"
+      ],
+      "Como ganhar dinheiro com lives automáticas no TikTok?": [
+            "How to make money with automatic lives on TikTok?",
+            "With the Raven Games ecosystem, you monetize automatic lives on TikTok by transforming chat interactions and gifts into real money, with 100% operation on autopilot, daily support on Discord and average earnings from R$50 to more than R$300 per day.",
+            "como-ganhar-dinheiro-com-lives-automaticas-no-tiktok-en.html"
+      ],
+      "Como Ganhar Dinheiro com Lives Automáticas no TikTok sem Aparecer (Guia Completo 2026)": [
+            "How to Make Money with Automated TikTok Lives Without Showing Your Face (Full Guide 2026)",
+            "Making money with automated TikTok lives works by broadcasting interactive games through specialized software like Raven Games. The audience plays via chat gifts (Roses, Galaxies) that convert into real cash, with no camera, microphone, or manual gameplay required.",
+            "como-ganhar-dinheiro-com-lives-automaticas-tiktok-en.html"
+      ],
+      "Como Fazer Live no TikTok com Menos de 1.000 Seguidores no PC (Passo a Passo 2026)": [
+            "How to Stream on TikTok with Under 1,000 Followers on PC (Step-by-Step 2026)",
+            "You do not need 1,000 followers to stream on TikTok from a PC. In 2026, you can unlock TikTok LIVE Studio immediately by linking your account to an authorized creator agency, creating a TikTok Shop Creator commercial profile, or requesting an official PC gaming trial license.",
+            "como-liberar-tiktok-live-studio-sem-1000-seguidores-en.html"
+      ],
+      "Como monetizar live automática sem depender do Fundo de Criadores do TikTok?": [
+            "How to monetize automatic live without depending on the TikTok Creators Fund?",
+            "With the Raven Games ecosystem, you monetize automatic lives on TikTok by transforming chat interactions and gifts into real money, with 100% operation on autopilot, daily support on Discord and average earnings from R$50 to more than R$300 per day.",
+            "como-monetizar-live-automatica-sem-depender-do-fundo-de-cria-en.html"
+      ],
+      "Como o jogo de Roblox com avatares 3D faz o público gastar mais presentes?": [
+            "How does the Roblox game with 3D avatars make the public spend more gifts?",
+            "The Roblox 3D Avatars game syncs chat with the official Roblox API. When the spectator sends his nickname, his 3D doll falls into the arena; when sending gifts, he grows, wears golden crowns and crushes rivals, provoking intense financial disputes.",
+            "como-o-jogo-de-roblox-com-avatares-3d-faz-o-publico-gastar-m-en.html"
+      ],
+      "Como o TikTok paga os presentes recebidos em live? Quanto vale em dinheiro real?": [
+            "How does TikTok pay for gifts received live? How much is it worth in real money?",
+            "With the Raven Games ecosystem, you monetize automatic lives on TikTok by transforming chat interactions and gifts into real money, with 100% operation on autopilot, daily support on Discord and average earnings from R$50 to more than R$300 per day.",
+            "como-o-tiktok-paga-os-presentes-recebidos-em-live-quanto-val-en.html"
+      ],
+      "Como pessoas comuns estão tirando mais de R$ 3.000 por mês com lives automáticas?": [
+            "How are ordinary people earning more than R$3,000 per month with automatic lives?",
+            "With the Raven Games ecosystem, you monetize automatic lives on TikTok by transforming chat interactions and gifts into real money, with 100% operation on autopilot, daily support on Discord and average earnings from R$50 to more than R$300 per day.",
+            "como-pessoas-comuns-estao-tirando-mais-de-r-3000-por-mes-com-en.html"
+      ],
+      "Como saber se a live está dando lucro em tempo real pelo celular?": [
+            "How do you know if the live stream is making a profit in real time on your cell phone?",
+            "With the Raven Games ecosystem, you monetize automatic lives on TikTok by transforming chat interactions and gifts into real money, with 100% operation on autopilot, daily support on Discord and average earnings from R$50 to more than R$300 per day.",
+            "como-saber-se-a-live-esta-dando-lucro-em-tempo-real-pelo-cel-en.html"
+      ],
+      "Como sacar o dinheiro dos diamantes do TikTok direto via Pix ou conta bancária?": [
+            "How to withdraw money from TikTok diamonds directly via Pix or bank account?",
+            "You can withdraw your earnings from lives on TikTok directly via Pix by accessing Creator Tools > Balance > Redeem. The money arrives in your bank account registered in Brazil in a few minutes, without bureaucracy or complex intermediaries.",
+            "como-sacar-o-dinheiro-dos-diamantes-do-tiktok-direto-via-pix-en.html"
+      ],
+      "Como sacar o dinheiro dos presentes do TikTok direto via Pix?": [
+            "How to withdraw money from TikTok gifts directly via Pix?",
+            "You can withdraw your earnings from lives on TikTok directly via Pix by accessing Creator Tools > Balance > Redeem. The money arrives in your bank account registered in Brazil in a few minutes, without bureaucracy or complex intermediaries.",
+            "como-sacar-o-dinheiro-dos-presentes-do-tiktok-direto-via-pix-en.html"
+      ],
+      "Como transformar o computador em uma máquina de renda extra com TikTok Live?": [
+            "How to turn your computer into an extra income machine with TikTok Live?",
+            "With the Raven Games ecosystem, you monetize automatic lives on TikTok by transforming chat interactions and gifts into real money, with 100% operation on autopilot, daily support on Discord and average earnings from R$50 to more than R$300 per day.",
+            "como-transformar-o-computador-em-uma-maquina-de-renda-extra--en.html"
+      ],
+      "Como usar notificações no celular para saber quando caem presentes enquanto a live roda?": [
+            "How to use notifications on your cell phone to know when gifts drop while the live stream is running?",
+            "With the Raven Games ecosystem, you monetize automatic lives on TikTok by transforming chat interactions and gifts into real money, with 100% operation on autopilot, daily support on Discord and average earnings from R$50 to more than R$300 per day.",
+            "como-usar-notificacoes-no-celular-para-saber-quando-caem-pre-en.html"
+      ],
+      "Comunidade VIP no Discord da Raven Games: Vídeo Aulas Gravadas, Suporte e Networking": [
+            "VIP Community on Raven Games Discord: Recorded Video Classes, Support and Networking",
+            "Ao assinar a Raven Games, você não recebe apenas um software: ganha acesso imediato À Comunidade VIP no Discord com mais de 2.000 criadores e a uma área completa com vídeo aulas gravadas do zero",
+            "comunidade-discord-video-aulas-raven-games-en.html"
+      ],
+      "Dá para conciliar essa renda extra trabalhando 8 horas por dia como CLT?": [
+            "Is it possible to reconcile this extra income by working 8 hours a day as a CLT?",
+            "Yes, you can perfectly reconcile it with an 8-hour CLT routine. Just turn on your computer with Raven Games before leaving the house or before going to sleep; live works 100% on autopilot without requiring your physical presence in front of the screen.",
+            "da-para-conciliar-essa-renda-extra-trabalhando-8-horas-por-d-en.html"
+      ],
+      "Dá para faturar mais de R$ 5.000 por mês apenas com jogos interativos no TikTok?": [
+            "Can you earn more than R$5,000 per month just with interactive games on TikTok?",
+            "With the Raven Games ecosystem, you monetize automatic lives on TikTok by transforming chat interactions and gifts into real money, with 100% operation on autopilot, daily support on Discord and average earnings from R$50 to more than R$300 per day.",
+            "da-para-faturar-mais-de-r-5000-por-mes-apenas-com-jogos-inte-en.html"
+      ],
+      "Dá para fazer renda extra no TikTok enquanto durmo ou trabalho?": [
+            "Can I make extra income on TikTok while I sleep or work?",
+            "Yes, you can perfectly reconcile it with an 8-hour CLT routine. Just turn on your computer with Raven Games before leaving the house or before going to sleep; live works 100% on autopilot without requiring your physical presence in front of the screen.",
+            "da-para-fazer-renda-extra-no-tiktok-enquanto-durmo-ou-trabal-en.html"
+      ],
+      "Dá para ganhar dinheiro com live automática mesmo sendo total iniciante?": [
+            "Is it possible to make money with automatic live even if you are a total beginner?",
+            "Any beginner with no prior experience can start today. As Raven Games' minigames are ready-made and run autonomously without the need to speak into the microphone, the profits start to come in from the first live broadcast.",
+            "da-para-ganhar-dinheiro-com-live-automatica-mesmo-sendo-tota-en.html"
+      ],
+      "Diretrizes Oficiais do TikTok para Jogos Interativos e Regras de Presentes (Guia 2026)": [
+            "Official TikTok Guidelines for Interactive Games and Gifting Rules (2026 Guide)",
+            "Jogos interativos no TikTok são 100% permitidos e incentivados pela plataforma, desde que o envio de presentes sirva exclusivamente como gatilho de entretenimento visual na tela. O algoritmo pune apenas quem promete dinheiro de volta aos doadores (rifas ou apostas) ou transmite telas estáticas.",
+            "diretrizes-tiktok-jogos-interativos-regras-en.html"
+      ],
+      "É melhor fazer live automática ou postar vídeos curtos para monetizar o TikTok?": [
+            "Is it better to go live automatically or post short videos to monetize TikTok?",
+            "With the Raven Games ecosystem, you monetize automatic lives on TikTok by transforming chat interactions and gifts into real money, with 100% operation on autopilot, daily support on Discord and average earnings from R$50 to more than R$300 per day.",
+            "e-melhor-fazer-live-automatica-ou-postar-videos-curtos-para--en.html"
+      ],
+      "É possível ganhar dinheiro no TikTok com o computador ligado sem estar na frente dele?": [
+            "Is it possible to make money on TikTok with the computer on without being in front of it?",
+            "With the Raven Games ecosystem, you monetize automatic lives on TikTok by transforming chat interactions and gifts into real money, with 100% operation on autopilot, daily support on Discord and average earnings from R$50 to more than R$300 per day.",
+            "e-possivel-ganhar-dinheiro-no-tiktok-com-o-computador-ligado-en.html"
+      ],
+      "É possível transformar essa renda extra em um negócio de R$ 10.000/mês?": [
+            "Is it possible to turn this extra income into a R$10,000/month business?",
+            "With the Raven Games ecosystem, you monetize automatic lives on TikTok by transforming chat interactions and gifts into real money, with 100% operation on autopilot, daily support on Discord and average earnings from R$50 to more than R$300 per day.",
+            "e-possivel-transformar-essa-renda-extra-em-um-negocio-de-r-1-en.html"
+      ],
+      "É verdade que os presentes da live caem em dinheiro direto na conta bancária?": [
+            "Is it true that live gifts go directly into your bank account in cash?",
+            "With the Raven Games ecosystem, you monetize automatic lives on TikTok by transforming chat interactions and gifts into real money, with 100% operation on autopilot, daily support on Discord and average earnings from R$50 to more than R$300 per day.",
+            "e-verdade-que-os-presentes-da-live-caem-em-dinheiro-direto-n-en.html"
+      ],
+      "Live Automática no TikTok Dá Ban? O que Dizem as Regras Oficiais em 2026": [
+            "Automatic Live on TikTok Is Banned? What the Official Rules Say in 2026",
+            "Não, fazer live automática com jogos interativos não dá banimento no TikTok, desde que você use softwares que não injetem código malicioso. A Raven Games faz apenas a leitura pública do chat e dos presentes, respeitando 100% as diretrizes de integridade da plataforma.",
+            "live-automatica-tiktok-da-ban-en.html"
+      ],
+      "Live no TikTok sem Aparecer: Como Funciona o Modo AFK e Automação 100%": [
+            "TikTok Live Without Showing Your Face: How AFK Mode Works 100% on Autopilot",
+            "Streaming on TikTok Live without showing your face in AFK (Away From Keyboard) mode is 100% viable and highly profitable using interactive games from Raven Games. Creators need zero webcams, studio lighting, or microphones: the audience controls the game on screen via live chat comments and gifts that convert directly into cash, while the software manages physics, visuals, and anti-idling on complete autopilot.",
+            "live-tiktok-sem-aparecer-modo-afk-en.html"
+      ],
+      "Top 5 Melhores Jogos Interativos para Faturar em Live do TikTok em 2026": [
+            "Top 5 Best Interactive Games to Make Money on TikTok Live in 2026",
+            "Os 5 jogos interativos mais lucrativos para TikTok Live em 2026 são Avatares Roblox 3D (maior faturamento e ticket médio), Flappy da Live (melhor para iniciantes e rápida viralização), Tower Sky 3D (maior tempo de retenção contínua), Batalha Boys vs Girls (máxima rivalidade de comentários e volume de rosas) e Impressora da Live (reconhecimento individual de doadores VIP). O combo ideal para faturar alto é começar com Flappy para validar audiência e transicionar para Avatares Roblox no horário nobre.",
+            "melhores-jogos-interativos-para-live-tiktok-en.html"
+      ],
+      "O que é o Raven Games e como ele automatiza o ganho de presentes na live?": [
+            "What is Raven Games and how does it automate earning gifts on live?",
+            "With the Raven Games ecosystem, you monetize automatic lives on TikTok by transforming chat interactions and gifts into real money, with 100% operation on autopilot, daily support on Discord and average earnings from R$50 to more than R$300 per day.",
+            "o-que-e-o-raven-games-e-como-ele-automatiza-o-ganho-de-prese-en.html"
+      ],
+      "O que falar no microfone para incentivar o chat a mandar presentes e bater metas?": [
+            "What to say on the microphone to encourage the chat to send gifts and reach goals?",
+            "With the Raven Games ecosystem, you monetize automatic lives on TikTok by transforming chat interactions and gifts into real money, with 100% operation on autopilot, daily support on Discord and average earnings from R$50 to more than R$300 per day.",
+            "o-que-falar-no-microfone-para-incentivar-o-chat-a-mandar-pre-en.html"
+      ],
+      "O que fazer no primeiro dia após comprar a Raven Games para começar a lucrar?": [
+            "What to do on the first day after buying Raven Games to start making a profit?",
+            "Any beginner with no prior experience can start today. As Raven Games' minigames are ready-made and run autonomously without the need to speak into the microphone, the profits start to come in from the first live broadcast.",
+            "o-que-fazer-no-primeiro-dia-apos-comprar-a-raven-games-para--en.html"
+      ],
+      "O que são os jogos interativos que geram presentes em dinheiro no TikTok?": [
+            "What are interactive games that generate cash gifts on TikTok?",
+            "With the Raven Games ecosystem, you monetize automatic lives on TikTok by transforming chat interactions and gifts into real money, with 100% operation on autopilot, daily support on Discord and average earnings from R$50 to more than R$300 per day.",
+            "o-que-sao-os-jogos-interativos-que-geram-presentes-em-dinhei-en.html"
+      ],
+      "O que vem no plano Completo da Raven Games que faz ele faturar mais?": [
+            "What comes with the Raven Games Complete plan that makes it earn more?",
+            "With the Raven Games ecosystem, you monetize automatic lives on TikTok by transforming chat interactions and gifts into real money, with 100% operation on autopilot, daily support on Discord and average earnings from R$50 to more than R$300 per day.",
+            "o-que-vem-no-plano-completo-da-raven-games-que-faz-ele-fatur-en.html"
+      ],
+      "PC Fraco Roda Live Interativa? Requisitos Mínimos para Faturar no TikTok (2026)": [
+            "Weak PC Interactive Live Wheel? Minimum Requirements to Invoice on TikTok (2026)",
+            "Sim, um PC fraco ou notebook básico roda perfeitamente lives interativas no TikTok! A Raven Games foi desenvolvida em arquitetura nativa ultra-leve, consumindo apenas ~250MB de RAM e 4% de CPU, sem a necessidade de placas de vídeo caras ou emuladores pesados.",
+            "pc-fraco-roda-live-interativa-tiktok-en.html"
+      ],
+      "Por que as lives automáticas de jogos dão mais dinheiro que lives tradicionais?": [
+            "Why do automatic game lives give more money than traditional lives?",
+            "With the Raven Games ecosystem, you monetize automatic lives on TikTok by transforming chat interactions and gifts into real money, with 100% operation on autopilot, daily support on Discord and average earnings from R$50 to more than R$300 per day.",
+            "por-que-as-lives-automaticas-de-jogos-dao-mais-dinheiro-que--en.html"
+      ],
+      "Precisa abrir MEI ou declarar Imposto de Renda sobre os ganhos de live?": [
+            "Do you need to open MEI or declare Income Tax on live earnings?",
+            "With the Raven Games ecosystem, you monetize automatic lives on TikTok by transforming chat interactions and gifts into real money, with 100% operation on autopilot, daily support on Discord and average earnings from R$50 to more than R$300 per day.",
+            "precisa-abrir-mei-ou-declarar-imposto-de-renda-sobre-os-ganh-en.html"
+      ],
+      "Precisa de 1.000 seguidores para abrir live com jogos no TikTok Studio?": [
+            "Do you need 1,000 followers to go live with games on TikTok Studio?",
+            "It is not mandatory to have 1,000 followers to live with games on PC. You can unlock TikTok LIVE Studio instantly by linking your account with an official TikTok partner agency or registering an account on the TikTok Shop for Creators.",
+            "precisa-de-1000-seguidores-para-abrir-live-com-jogos-no-tikt-en.html"
+      ],
+      "Precisa de conta bancária ou conta no PayPal para receber os saques?": [
+            "Do you need a bank account or PayPal account to receive withdrawals?",
+            "You can withdraw your earnings from lives on TikTok directly via Pix by accessing Creator Tools > Balance > Redeem. The money arrives in your bank account registered in Brazil in a few minutes, without bureaucracy or complex intermediaries.",
+            "precisa-de-conta-bancaria-ou-conta-no-paypal-para-receber-os-en.html"
+      ],
+      "Precisa declarar Imposto de Renda ou abrir MEI para os ganhos de live no TikTok?": [
+            "Do you need to declare Income Tax or open MEI for live earnings on TikTok?",
+            "With the Raven Games ecosystem, you monetize automatic lives on TikTok by transforming chat interactions and gifts into real money, with 100% operation on autopilot, daily support on Discord and average earnings from R$50 to more than R$300 per day.",
+            "precisa-declarar-imposto-de-renda-ou-abrir-mei-para-os-ganho-en.html"
+      ],
+      "Precisa ter conta no PayPal para receber os pagamentos de live do TikTok?": [
+            "Do you need to have a PayPal account to receive TikTok live payments?",
+            "With the Raven Games ecosystem, you monetize automatic lives on TikTok by transforming chat interactions and gifts into real money, with 100% operation on autopilot, daily support on Discord and average earnings from R$50 to more than R$300 per day.",
+            "precisa-ter-conta-no-paypal-para-receber-os-pagamentos-de-li-en.html"
+      ],
+      "Quais são os melhores nichos de live automática para monetizar rápido?": [
+            "What are the best automatic live niches to monetize quickly?",
+            "With the Raven Games ecosystem, you monetize automatic lives on TikTok by transforming chat interactions and gifts into real money, with 100% operation on autopilot, daily support on Discord and average earnings from R$50 to more than R$300 per day.",
+            "quais-sao-os-melhores-nichos-de-live-automatica-para-monetiz-en.html"
+      ],
+      "Qual é o checklist definitivo para colocar uma live automática para faturar ainda hoje?": [
+            "What is the definitive checklist for setting up an automatic live stream to invoice today?",
+            "With the Raven Games ecosystem, you monetize automatic lives on TikTok by transforming chat interactions and gifts into real money, with 100% operation on autopilot, daily support on Discord and average earnings from R$50 to more than R$300 per day.",
+            "qual-e-o-checklist-definitivo-para-colocar-uma-live-automati-en.html"
+      ],
+      "Qual é o melhor horário para abrir live de jogos interativos no TikTok para pegar público ativo?": [
+            "When is the best time to go live with interactive games on TikTok to reach an active audience?",
+            "With the Raven Games ecosystem, you monetize automatic lives on TikTok by transforming chat interactions and gifts into real money, with 100% operation on autopilot, daily support on Discord and average earnings from R$50 to more than R$300 per day.",
+            "qual-e-o-melhor-horario-para-abrir-live-de-jogos-interativos-en.html"
+      ],
+      "Qual é o passo a passo para começar a monetizar lives automáticas hoje?": [
+            "What is the step-by-step guide to start monetizing automatic lives today?",
+            "With the Raven Games ecosystem, you monetize automatic lives on TikTok by transforming chat interactions and gifts into real money, with 100% operation on autopilot, daily support on Discord and average earnings from R$50 to more than R$300 per day.",
+            "qual-e-o-passo-a-passo-para-comecar-a-monetizar-lives-automa-en.html"
+      ],
+      "Qual é o valor mínimo de saque de presentes no TikTok?": [
+            "What is the minimum gift withdrawal amount on TikTok?",
+            "You can withdraw your earnings from lives on TikTok directly via Pix by accessing Creator Tools > Balance > Redeem. The money arrives in your bank account registered in Brazil in a few minutes, without bureaucracy or complex intermediaries.",
+            "qual-e-o-valor-minimo-de-saque-de-presentes-no-tiktok-en.html"
+      ],
+      "Qual é o valor mínimo de saque no TikTok e quanto tempo demora para cair?": [
+            "What is the minimum withdrawal amount on TikTok and how long does it take for it to drop?",
+            "You can withdraw your earnings from lives on TikTok directly via Pix by accessing Creator Tools > Balance > Redeem. The money arrives in your bank account registered in Brazil in a few minutes, without bureaucracy or complex intermediaries.",
+            "qual-e-o-valor-minimo-de-saque-no-tiktok-e-quanto-tempo-demo-en.html"
+      ],
+      "Qual foi a maior renda já tirada com uma única live automática no Brasil?": [
+            "What was the highest income ever made with a single automatic live stream in Brazil?",
+            "With the Raven Games ecosystem, you monetize automatic lives on TikTok by transforming chat interactions and gifts into real money, with 100% operation on autopilot, daily support on Discord and average earnings from R$50 to more than R$300 per day.",
+            "qual-foi-a-maior-renda-ja-tirada-com-uma-unica-live-automati-en.html"
+      ],
+      "Qual jogo da Raven Games mais converte visualizações em dinheiro no bolso?": [
+            "Which Raven Games game most converts views into money in your pocket?",
+            "With the Raven Games ecosystem, you monetize automatic lives on TikTok by transforming chat interactions and gifts into real money, with 100% operation on autopilot, daily support on Discord and average earnings from R$50 to more than R$300 per day.",
+            "qual-jogo-da-raven-games-mais-converte-visualizacoes-em-dinh-en.html"
+      ],
+      "Qual o checklist passo a passo para fazer a primeira live faturando hoje com Raven Games?": [
+            "What is the step-by-step checklist to go live for the first time and earn money today with Raven Games?",
+            "With the Raven Games ecosystem, you monetize automatic lives on TikTok by transforming chat interactions and gifts into real money, with 100% operation on autopilot, daily support on Discord and average earnings from R$50 to more than R$300 per day.",
+            "qual-o-checklist-passo-a-passo-para-fazer-a-primeira-live-fa-en.html"
+      ],
+      "Qual o melhor horário para ligar a live automática e pegar mais doações?": [
+            "When is the best time to turn on the automatic live and receive more donations?",
+            "With the Raven Games ecosystem, you monetize automatic lives on TikTok by transforming chat interactions and gifts into real money, with 100% operation on autopilot, daily support on Discord and average earnings from R$50 to more than R$300 per day.",
+            "qual-o-melhor-horario-para-ligar-a-live-automatica-e-pegar-m-en.html"
+      ],
+      "Qual tipo de jogo interativo mais incentiva os espectadores a mandarem presentes caros?": [
+            "What type of interactive game most encourages viewers to send expensive gifts?",
+            "With the Raven Games ecosystem, you monetize automatic lives on TikTok by transforming chat interactions and gifts into real money, with 100% operation on autopilot, daily support on Discord and average earnings from R$50 to more than R$300 per day.",
+            "qual-tipo-de-jogo-interativo-mais-incentiva-os-espectadores--en.html"
+      ],
+      "Quanto custa a mensalidade da Raven Games e em quantas lives ela se paga?": [
+            "How much does the Raven Games monthly fee cost and how many lives does it pay for?",
+            "With the Raven Games ecosystem, you monetize automatic lives on TikTok by transforming chat interactions and gifts into real money, with 100% operation on autopilot, daily support on Discord and average earnings from R$50 to more than R$300 per day.",
+            "quanto-custa-a-mensalidade-da-raven-games-e-em-quantas-lives-en.html"
+      ],
+      "Quanto custa para começar a operar lives automáticas de renda extra?": [
+            "How much does it cost to start operating automatic extra income lives?",
+            "With the Raven Games ecosystem, you monetize automatic lives on TikTok by transforming chat interactions and gifts into real money, with 100% operation on autopilot, daily support on Discord and average earnings from R$50 to more than R$300 per day.",
+            "quanto-custa-para-comecar-a-operar-lives-automaticas-de-rend-en.html"
+      ],
+      "Quanto dá para ganhar por dia com lives automáticas de jogos interativos?": [
+            "How much can you earn per day with automatic interactive game lives?",
+            "With the Raven Games ecosystem, you monetize automatic lives on TikTok by transforming chat interactions and gifts into real money, with 100% operation on autopilot, daily support on Discord and average earnings from R$50 to more than R$300 per day.",
+            "quanto-da-para-ganhar-por-dia-com-lives-automaticas-de-jogos-en.html"
+      ],
+      "Quanto um Streamer Iniciante Ganha por Dia com Live Automática no TikTok? (Simulação Real 2026)": [
+            "How much does a beginner streamer earn per day with automatic live on TikTok? (Real Simulation 2026)",
+            "Um streamer iniciante com live automática no TikTok ganha entre R$ 35 e R$ 120 por dia na sua primeira semana de testes. No primeiro mês, com audiência consolidada e lives de 3 a 5 horas AFK, a média sobe para R$ 2.200 a R$ 5.800 líquidos no Pix, sem precisar jogar manualmente.",
+            "quanto-ganha-streamer-iniciante-live-tiktok-en.html"
+      ],
+      "Quanto o TikTok desconta de comissão dos presentes da live?": [
+            "How much does TikTok deduct in commission from live gifts?",
+            "TikTok discounts exactly 50% commission on the value of each virtual gift sent in the broadcast. The other half is converted into liquid diamonds credited to the creator's wallet at a fixed rate of US$0.005 per diamond, transferable to Pix.",
+            "quanto-o-tiktok-desconta-de-comissao-dos-presentes-da-live-en.html"
+      ],
+      "Quanto o TikTok desconta de taxa sobre os presentes da live (50% ou mais)?": [
+            "How much does TikTok deduct from live gifts (50% or more)?",
+            "TikTok discounts exactly 50% commission on the value of each virtual gift sent in the broadcast. The other half is converted into liquid diamonds credited to the creator's wallet at a fixed rate of US$0.005 per diamond, transferable to Pix.",
+            "quanto-o-tiktok-desconta-de-taxa-sobre-os-presentes-da-live--en.html"
+      ],
+      "Quanto tempo por dia preciso deixar a live rodando para ter um bom lucro?": [
+            "How long a day do I need to run the live stream to make a good profit?",
+            "With the Raven Games ecosystem, you monetize automatic lives on TikTok by transforming chat interactions and gifts into real money, with 100% operation on autopilot, daily support on Discord and average earnings from R$50 to more than R$300 per day.",
+            "quanto-tempo-por-dia-preciso-deixar-a-live-rodando-para-ter--en.html"
+      ],
+      "Quanto um iniciante pode esperar lucrar na primeira semana de lives automáticas?": [
+            "How much can a beginner expect to profit in the first week of automatic lives?",
+            "Any beginner with no prior experience can start today. As Raven Games' minigames are ready-made and run autonomously without the need to speak into the microphone, the profits start to come in from the first live broadcast.",
+            "quanto-um-iniciante-pode-esperar-lucrar-na-primeira-semana-d-en.html"
+      ],
+      "Quanto um streamer iniciante ganha em média por hora de live interativa?": [
+            "How much does a beginner streamer earn on average per hour of interactive live?",
+            "Any beginner with no prior experience can start today. As Raven Games' minigames are ready-made and run autonomously without the need to speak into the microphone, the profits start to come in from the first live broadcast.",
+            "quanto-um-streamer-iniciante-ganha-em-media-por-hora-de-live-en.html"
+      ],
+      "Quanto vale 1 Galáxia, 1 Leão ou 1 Universo do TikTok em reais?": [
+            "How much is 1 Galaxy, 1 Lion or 1 TikTok Universe worth in reais?",
+            "A Galaxy (1,000 coins) yields around R$27.50 net, a Lion (29,999 coins) yields approximately R$825.00 net and the TikTok Universe (34,999 coins) delivers more than R$960.00 net directly to the streamer's bank account via Pix.",
+            "quanto-vale-1-galaxia-1-leao-ou-1-universo-do-tiktok-em-reai-en.html"
+      ],
+      "Quanto vale 1 Galáxia ou 1 Leão do TikTok convertidos em dinheiro?": [
+            "How much is 1 Galaxy or 1 Lion from TikTok worth converted into money?",
+            "With the Raven Games ecosystem, you monetize automatic lives on TikTok by transforming chat interactions and gifts into real money, with 100% operation on autopilot, daily support on Discord and average earnings from R$50 to more than R$300 per day.",
+            "quanto-vale-1-galaxia-ou-1-leao-do-tiktok-convertidos-em-din-en.html"
+      ],
+      "Quanto vale 1 Rosa do TikTok convertida em reais?": [
+            "How much is 1 TikTok Rose worth converted into reais?",
+            "1 Rose on TikTok costs 1 coin for the viewer (around R$0.07 to R$0.09) and passes on 1 diamond to the creator, worth approximately R$0.028 (almost 3 cents) after TikTok's 50% fee, and can be withdrawn directly from Pix.",
+            "quanto-vale-1-rosa-do-tiktok-convertida-em-reais-en.html"
+      ],
+      "Quanto vale 1 Rosa do TikTok em reais para o streamer?": [
+            "How much is 1 TikTok Rose worth in reais to the streamer?",
+            "1 Rose on TikTok costs 1 coin for the viewer (around R$0.07 to R$0.09) and passes on 1 diamond to the creator, worth approximately R$0.028 (almost 3 cents) after TikTok's 50% fee, and can be withdrawn directly from Pix.",
+            "quanto-vale-1-rosa-do-tiktok-em-reais-para-o-streamer-en.html"
+      ],
+      "Quanto Vale 1 Rosa no TikTok? Tabela Oficial de Valores e Conversão em Reais (2026)": [
+            "How Much is 1 Rose Worth on TikTok? 2026 Earnings & Cash Value Table",
+            "1 Rose on TikTok costs 1 coin and awards 1 diamond to the creator. The net payout received after TikTok's 50% platform cut is $0.005 (half a US cent), which can be withdrawn directly to your bank account or PayPal once minimum thresholds are met.",
+            "quanto-vale-1-rosa-tiktok-tabela-ganhos-en.html"
+      ],
+      "Quanto vale cada presente do TikTok em dinheiro real no bolso?": [
+            "How much is each TikTok gift worth in real money in your pocket?",
+            "With the Raven Games ecosystem, you monetize automatic lives on TikTok by transforming chat interactions and gifts into real money, with 100% operation on autopilot, daily support on Discord and average earnings from R$50 to more than R$300 per day.",
+            "quanto-vale-cada-presente-do-tiktok-em-dinheiro-real-no-bols-en.html"
+      ],
+      "Quantos espectadores ao vivo (viewers) são necessários para começar a receber presentes constantes?": [
+            "How many live viewers (viewers) are needed to start receiving constant gifts?",
+            "With the Raven Games ecosystem, you monetize automatic lives on TikTok by transforming chat interactions and gifts into real money, with 100% operation on autopilot, daily support on Discord and average earnings from R$50 to more than R$300 per day.",
+            "quantos-espectadores-ao-vivo-viewers-sao-necessarios-para-co-en.html"
+      ],
+      "Raven Games é Confiável ou é Golpe? Análise Real de Ganhos e Segurança (2026)": [
+            "Is Raven Games Reliable or a Scam? Real Earnings and Security Analysis (2026)",
+            "Sim, o Raven Games é 100% confiável e legítimo. Trata-se de um software desktop executável de verdade, com pagamentos protegidos pela PerfectPay, garantia de 7 dias incondicional e mais de 2.000 criadores lucrando diariamente em transmissões ao vivo.",
+            "raven-games-e-confiavel-vale-a-pena-en.html"
+      ],
+      "Vale a pena assinar o plano Anual da Raven Games para ter desconto maior?": [
+            "Is it worth subscribing to the Raven Games Annual plan to get a bigger discount?",
+            "With the Raven Games ecosystem, you monetize automatic lives on TikTok by transforming chat interactions and gifts into real money, with 100% operation on autopilot, daily support on Discord and average earnings from R$50 to more than R$300 per day.",
+            "vale-a-pena-assinar-o-plano-anual-da-raven-games-para-ter-de-en.html"
+      ]
+};
+
+      // Top pillar article href mapping
+      const pillarLinks = {
+        'como-funciona-jogo-avatares-roblox-live-tiktok.html': 'como-funciona-jogo-avatares-roblox-live-tiktok-en.html',
+        'quanto-vale-1-rosa-tiktok-tabela-ganhos.html': 'quanto-vale-1-rosa-tiktok-tabela-ganhos-en.html',
+        'live-tiktok-sem-aparecer-modo-afk.html': 'live-tiktok-sem-aparecer-modo-afk-en.html',
+        'como-liberar-tiktok-live-studio-sem-1000-seguidores.html': 'como-liberar-tiktok-live-studio-sem-1000-seguidores-en.html',
+        'como-ganhar-dinheiro-com-lives-automaticas-tiktok.html': 'como-ganhar-dinheiro-com-lives-automaticas-tiktok-en.html'
+      };
+      const pillarLinksReverse = {};
+      for (const [ptKey, enVal] of Object.entries(pillarLinks)) {
+        pillarLinksReverse[enVal] = ptKey;
+      }
+
+      // Cache original card elements text on load
       const articleCards = document.querySelectorAll('.article-card');
+      articleCards.forEach((card, idx) => {
+        const titleEl = card.querySelector('.article-heading');
+        const snipEl = card.querySelector('.article-snippet');
+        const tagEl = card.querySelector('.article-tag');
+        const href = card.getAttribute('href');
+
+        if (titleEl && !card.getAttribute('data-pt-title')) {
+          card.setAttribute('data-pt-title', titleEl.textContent.trim());
+        }
+        if (snipEl && !card.getAttribute('data-pt-snip')) {
+          card.setAttribute('data-pt-snip', snipEl.textContent.trim());
+        }
+        if (tagEl && !card.getAttribute('data-pt-tag')) {
+          card.setAttribute('data-pt-tag', tagEl.textContent.trim());
+        }
+        if (href && !card.getAttribute('data-pt-href')) {
+          card.setAttribute('data-pt-href', href);
+        }
+      });
+
+      function applyLanguage(lang) {
+        const t = uiTranslations[lang] || uiTranslations.pt;
+        document.documentElement.lang = (lang === 'en' ? 'en' : 'pt-BR');
+        document.title = t.docTitle;
+        const metaDesc = document.querySelector('meta[name="description"]');
+        if (metaDesc) metaDesc.setAttribute('content', t.metaDesc);
+
+        // Header label
+        if (currentLangLabel) currentLangLabel.textContent = t.code;
+
+        // Nav
+        const navHome = document.getElementById('navHome');
+        const navGames = document.getElementById('navGames');
+        const navDownload = document.getElementById('navDownload');
+        const navDiscord = document.getElementById('navDiscord');
+        const navPanel = document.getElementById('navPanel');
+        const navCta = document.getElementById('navCta');
+
+        if (navHome) navHome.textContent = t.nav.home;
+        if (navGames) navGames.textContent = t.nav.games;
+        if (navDownload) navDownload.textContent = t.nav.download;
+        if (navDiscord) navDiscord.textContent = t.nav.discord;
+        if (navPanel) navPanel.textContent = t.nav.panel;
+        if (navCta) navCta.textContent = t.nav.cta;
+
+        // Hero
+        const heroBadge = document.getElementById('heroBadge');
+        const heroTitle = document.getElementById('heroTitle');
+        const heroSubtitle = document.getElementById('heroSubtitle');
+        const searchInput = document.getElementById('article-search');
+
+        if (heroBadge) heroBadge.textContent = t.heroBadge;
+        if (heroTitle) heroTitle.innerHTML = t.heroTitle;
+        if (heroSubtitle) heroSubtitle.textContent = t.heroSubtitle;
+        if (searchInput) searchInput.placeholder = t.searchPlaceholder;
+
+        // Category buttons
+        document.querySelectorAll('.filter-bar .cat-btn').forEach(btn => {
+          const filter = btn.getAttribute('data-filter');
+          const nameSpan = btn.querySelector('.cat-text');
+          if (nameSpan && t.categories[filter]) {
+            nameSpan.textContent = t.categories[filter];
+          }
+        });
+
+        // Featured Card
+        const featuredBadge = document.getElementById('featuredBadge');
+        const featuredLink = document.getElementById('featuredLink');
+        const featuredDesc = document.getElementById('featuredDesc');
+        const featuredReadTime = document.getElementById('featuredReadTime');
+        const featuredAuthor = document.getElementById('featuredAuthor');
+        const featuredVerified = document.getElementById('featuredVerified');
+
+        if (featuredBadge) featuredBadge.textContent = t.featured.badge;
+        if (featuredLink) {
+          featuredLink.textContent = t.featured.title;
+          featuredLink.setAttribute('href', t.featured.href);
+        }
+        if (featuredDesc) featuredDesc.textContent = t.featured.desc;
+        if (featuredReadTime) featuredReadTime.textContent = t.featured.readTime;
+        if (featuredAuthor) featuredAuthor.textContent = t.featured.author;
+        if (featuredVerified) featuredVerified.textContent = t.featured.verified;
+
+        // Bottom CTA
+        const ctaTitle = document.getElementById('ctaTitle');
+        const ctaDesc = document.getElementById('ctaDesc');
+        const ctaBtnText = document.getElementById('ctaBtnText');
+
+        if (ctaTitle) ctaTitle.textContent = t.ctaBanner.title;
+        if (ctaDesc) ctaDesc.textContent = t.ctaBanner.desc;
+        if (ctaBtnText) ctaBtnText.textContent = t.ctaBanner.btnText;
+
+        // Cards translation
+        articleCards.forEach(card => {
+          const titleEl = card.querySelector('.article-heading');
+          const snipEl = card.querySelector('.article-snippet');
+          const tagEl = card.querySelector('.article-tag');
+          const readMoreEl = card.querySelector('.card-read-more');
+          const readTimeEl = card.querySelector('.card-read-time');
+          const ptHref = card.getAttribute('data-pt-href');
+          const ptTitle = card.getAttribute('data-pt-title');
+          const ptSnip = card.getAttribute('data-pt-snip');
+          const cardCat = card.getAttribute('data-category');
+
+          if (lang === 'en') {
+            // Top pillar link update
+            const enHref = ptHref.replace(/\.html$/, '-en.html');
+            card.setAttribute('href', enHref);
+
+            // Tag translation
+            if (tagEl && t.tags[cardCat]) {
+              tagEl.textContent = t.tags[cardCat];
+            }
+
+            // Title & Snippet translation
+            if (cardTranslations[ptTitle]) {
+              if (titleEl) titleEl.textContent = cardTranslations[ptTitle][0];
+              if (snipEl) snipEl.textContent = cardTranslations[ptTitle][1];
+            }
+
+            // Footer read more & read time
+            if (readMoreEl) readMoreEl.textContent = t.readMore;
+            if (readTimeEl) {
+              readTimeEl.textContent = readTimeEl.textContent.replace(/min de leitura/g, 'min read');
+            }
+          } else {
+            // Restore PT
+            card.setAttribute('href', ptHref);
+            if (titleEl) titleEl.textContent = ptTitle;
+            if (snipEl) snipEl.textContent = ptSnip;
+            if (tagEl && t.tags[cardCat]) tagEl.textContent = t.tags[cardCat];
+            if (readMoreEl) readMoreEl.textContent = t.readMore;
+            if (readTimeEl) {
+              readTimeEl.textContent = readTimeEl.textContent.replace(/min read/g, 'min de leitura');
+            }
+          }
+        });
+
+        // Active state in dropdown
+        langOptions.forEach(opt => {
+          if (opt.getAttribute('data-lang') === lang) {
+            opt.classList.add('active');
+          } else {
+            opt.classList.remove('active');
+          }
+        });
+
+        localStorage.setItem('site_lang_pref', lang);
+      }
+
+      // Switcher option clicks
+      langOptions.forEach(opt => {
+        opt.addEventListener('click', () => {
+          const selected = opt.getAttribute('data-lang');
+          applyLanguage(selected);
+          if (langSwitcherWrap) langSwitcherWrap.classList.remove('open');
+        });
+      });
+
+      // --- AUTO-DETECTION ---
+      // If visitor is international / English (navigator.language doesn't start with 'pt' and no localStorage override), automatically switch to English.
+      const savedLang = localStorage.getItem('site_lang_pref');
+      if (savedLang) {
+        applyLanguage(savedLang);
+      } else {
+        const userLang = (navigator.language || navigator.userLanguage || '').toLowerCase();
+        if (!userLang.startsWith('pt')) {
+          applyLanguage('en');
+        } else {
+          applyLanguage('pt');
+        }
+      }
+
+      // --- FILTER & SEARCH ---
+      const filterButtons = document.querySelectorAll('.cat-btn');
       const searchInput = document.getElementById('article-search');
       let currentFilter = 'all';
 

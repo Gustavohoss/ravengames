@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>How the 3D Roblox Avatars Game Works on TikTok Live (Technical Guide 2026)</title>
+  <meta name="description" content="Understand the technical architecture behind the Roblox avatars game on TikTok Live: WebSocket sync, 3D Roblox API rendering, monetization triggers, and setup with Raven Games." />
+  <link rel="icon" type="image/png" href="favicon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Schema.org JSON-LD for SEO, Perplexity & ChatGPT Search -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "TechArticle",
+        "headline": "How the 3D Roblox Avatars Game Works on TikTok Live (Technical Guide)",
+        "description": "Comprehensive technical and psychological breakdown of the integration between TikTok Live chat events and the Roblox 3D avatar API powered by Raven Games launcher.",
+        "author": {
+          "@type": "Organization",
+          "name": "Raven Games Tech Lab"
+        },
+        "publisher": {
+          "@type": "Organization",
+          "name": "Raven Games",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://ravengames.shop/logo.png"
+          }
+        },
+        "datePublished": "2026-09-09",
+        "dateModified": "2026-09-10",
+        "articleSection": "Roblox & Interactive Games",
+        "inLanguage": "en"
+      },
+      {
+        "@type": "SoftwareApplication",
+        "name": "Raven Games - Live Avatars Module",
+        "operatingSystem": "Windows 10, Windows 11, macOS",
+        "applicationCategory": "MultimediaApplication",
+        "offers": {
+          "@type": "Offer",
+          "price": "59.90",
+          "priceCurrency": "BRL"
+        },
+        "description": "Professional 3D real-time game launcher synchronizing Roblox 3D avatars with TikTok Live chat gifts and interactive events."
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "How does the software identify the viewer's Roblox avatar?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "The viewer types their Roblox username in the TikTok Live chat. The Raven Games software captures the message via WebSocket, queries the Roblox Corporation public user and thumbnail APIs, downloads the 3D mesh and texture data, and spawns the player's 3D model into the live arena in less than 500 milliseconds."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Why does the Roblox Avatar interactive game generate so many gifts?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "It taps into social validation, vanity, and competitive gamification. When viewers send gifts (such as Roses, Donuts, or Galaxies), their avatar grows larger, gains radiant auras, triggers exclusive dance emotes, or knocks rival avatars off the arena, fueling real-time bidding battles between viewers."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Does the streamer need to have Roblox installed or running on their PC?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. The Raven Games launcher features an independent, ultra-lightweight 3D graphics engine. It fetches assets directly from Roblox CDN endpoints without running the game client, consuming less than 15% CPU."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Which Raven Games plan includes the Roblox avatar game?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "It is included in the Raven Games Complete Lifetime Plan, featuring regular updates with new dance emotes, collision physics, and special themed visual skins."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    :root {
+      --fundo: #0a0d14;
+      --fundo-card: #121722;
+      --fundo-card-hover: #182030;
+      --borda: rgba(255, 255, 255, 0.08);
+      --borda-foco: #00d2ff;
+      --texto: #f8fafc;
+      --texto-mutado: #94a3b8;
+      --ciano: #00d2ff;
+      --ciano-glow: rgba(0, 210, 255, 0.25);
+      --verde: #10b981;
+      --roxo: #a855f7;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
+    body { background: var(--fundo); color: var(--texto); line-height: 1.7; -webkit-font-smoothing: antialiased; }
+
+    header.site-header {
+      position: sticky; top: 0; z-index: 1000; background: rgba(10, 13, 20, 0.85);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--borda); padding: 14px 24px;
+    }
+    .header-inner { max-width: 960px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .logo-link { display: flex; align-items: center; gap: 10px; text-decoration: none; color: #fff; font-weight: 800; font-size: 1.15rem; }
+    .logo-link img { width: 32px; height: 32px; border-radius: 8px; }
+    .logo-link span { color: var(--ciano); }
+
+    .header-right { display: flex; align-items: center; gap: 14px; }
+
+    /* Language Switcher Pill */
+    .lang-switcher-wrap { position: relative; user-select: none; }
+    .lang-btn {
+      display: inline-flex; align-items: center; gap: 0.45rem;
+      background: rgba(18, 24, 38, 0.75); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.12); color: #ffffff;
+      padding: 0.45rem 0.8rem; border-radius: 12px; font-size: 0.84rem;
+      font-weight: 800; font-family: inherit; cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); transition: all 0.25s ease;
+    }
+    .lang-btn:hover { background: rgba(26, 35, 54, 0.95); border-color: rgba(0, 210, 255, 0.4); color: #00d2ff; }
+    .lang-globe-icon { stroke: currentColor; flex-shrink: 0; opacity: 0.9; }
+    .lang-label { letter-spacing: 0.06em; font-weight: 800; line-height: 1; }
+    .lang-dropdown {
+      position: absolute; top: calc(100% + 8px); right: 0;
+      background: rgba(12, 17, 28, 0.96); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 14px;
+      padding: 6px; display: flex; flex-direction: column; gap: 4px;
+      min-width: 150px; box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7);
+      opacity: 0; visibility: hidden; transform: translateY(-6px);
+      transition: all 0.25s ease; z-index: 1000;
+    }
+    .lang-switcher-wrap.open .lang-dropdown { opacity: 1; visibility: visible; transform: translateY(0); }
+    .lang-option {
+      display: flex; align-items: center; gap: 8px; padding: 0.5rem 0.7rem;
+      background: transparent; border: 1px solid transparent; color: #94a3b8;
+      font-size: 0.84rem; font-weight: 600; font-family: inherit; border-radius: 8px;
+      cursor: pointer; text-align: left; width: 100%; text-decoration: none; transition: all 0.2s ease;
+    }
+    .lang-option:hover { background: rgba(255, 255, 255, 0.06); color: #ffffff; }
+    .lang-option.active { background: rgba(0, 210, 255, 0.12); color: #00d2ff; border-color: rgba(0, 210, 255, 0.25); }
+    .lang-flag { font-size: 1rem; line-height: 1; }
+    .lang-code-pill { margin-left: auto; font-size: 0.7rem; font-weight: 800; padding: 2px 6px; border-radius: 4px; background: rgba(255, 255, 255, 0.08); }
+
+    .article-container { max-width: 860px; margin: 0 auto; padding: 40px 20px 80px; }
+    .breadcrumb { font-size: 0.82rem; color: var(--texto-mutado); margin-bottom: 20px; }
+    .breadcrumb a { color: var(--ciano); text-decoration: none; }
+
+    h1.article-title { font-size: 2.35rem; font-weight: 800; line-height: 1.25; margin-bottom: 16px; letter-spacing: -0.02em; }
+    .article-meta { display: flex; flex-wrap: wrap; gap: 14px; font-size: 0.84rem; color: var(--texto-mutado); margin-bottom: 30px; border-bottom: 1px solid var(--borda); padding-bottom: 18px; }
+
+    /* BLUF Box */
+    .bluf-box {
+      background: linear-gradient(135deg, rgba(0, 210, 255, 0.12) 0%, rgba(18, 23, 34, 0.8) 100%);
+      border: 1px solid rgba(0, 210, 255, 0.35);
+      border-left: 5px solid var(--ciano);
+      border-radius: 14px; padding: 22px 24px; margin-bottom: 36px;
+    }
+    .bluf-box strong { color: var(--ciano); font-weight: 800; display: block; margin-bottom: 8px; text-transform: uppercase; font-size: 0.82rem; letter-spacing: 0.05em; }
+    .bluf-box p { font-size: 1.05rem; font-weight: 600; color: #fff; line-height: 1.6; }
+
+    .content-body h2 { font-size: 1.65rem; font-weight: 800; margin: 38px 0 16px; color: #fff; border-bottom: 1px solid var(--borda); padding-bottom: 8px; }
+    .content-body h3 { font-size: 1.25rem; font-weight: 700; margin: 24px 0 12px; color: var(--ciano); }
+    .content-body p { margin-bottom: 18px; color: #cbd5e1; font-size: 1rem; }
+    .content-body ul, .content-body ol { margin: 0 0 22px 24px; color: #cbd5e1; }
+    .content-body li { margin-bottom: 10px; }
+
+    /* Code / Tech Box */
+    .tech-card { background: #0d121c; border: 1px solid rgba(0, 210, 255, 0.2); border-radius: 12px; padding: 20px; margin: 24px 0; font-size: 0.92rem; }
+    .tech-card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; color: var(--ciano); font-weight: 700; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    .tech-step { display: flex; gap: 12px; margin-bottom: 12px; align-items: flex-start; }
+    .tech-step-num { background: rgba(0, 210, 255, 0.15); color: var(--ciano); font-weight: 800; width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; flex-shrink: 0; }
+
+    /* Highlight Banner */
+    .highlight-card {
+      background: linear-gradient(135deg, rgba(168, 85, 247, 0.1) 0%, rgba(18, 23, 34, 0.85) 100%);
+      border: 1px solid rgba(168, 85, 247, 0.3); border-left: 5px solid var(--roxo);
+      border-radius: 14px; padding: 20px 24px; margin: 28px 0;
+    }
+    .highlight-card h4 { color: #d8b4fe; font-weight: 800; margin-bottom: 8px; font-size: 1.1rem; }
+    .highlight-card p { margin: 0; color: #e2e8f0; font-size: 0.95rem; }
+
+    /* Table */
+    .table-wrap { overflow-x: auto; margin: 26px 0 34px; border-radius: 12px; border: 1px solid var(--borda); }
+    table { width: 100%; border-collapse: collapse; text-align: left; background: var(--fundo-card); font-size: 0.9rem; }
+    th { background: rgba(0, 210, 255, 0.12); color: var(--ciano); padding: 14px 16px; font-weight: 800; border-bottom: 1px solid var(--borda); }
+    td { padding: 14px 16px; border-bottom: 1px solid var(--borda); color: #e2e8f0; }
+    tr:last-child td { border-bottom: none; }
+
+    /* Banner CTA */
+    .article-cta {
+      background: linear-gradient(135deg, #121826 0%, #151d2e 100%);
+      border: 1px solid rgba(0, 210, 255, 0.4); border-radius: 16px;
+      padding: 34px; text-align: center; margin: 44px 0;
+      box-shadow: 0 14px 35px rgba(0, 0, 0, 0.6);
+    }
+    .article-cta h3 { font-size: 1.5rem; font-weight: 800; color: #fff; margin-bottom: 10px; }
+    .article-cta p { color: var(--texto-mutado); font-size: 0.94rem; margin-bottom: 22px; max-width: 580px; margin-left: auto; margin-right: auto; }
+    .btn-cta {
+      display: inline-block; background: var(--ciano); color: #07090e; font-size: 0.98rem; font-weight: 800;
+      padding: 13px 30px; border-radius: 10px; text-decoration: none; box-shadow: 0 4px 18px var(--ciano-glow);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-cta:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(0, 210, 255, 0.4); }
+
+    /* FAQ */
+    .faq-item { background: var(--fundo-card); border: 1px solid var(--borda); border-radius: 12px; padding: 18px 20px; margin-bottom: 14px; }
+    .faq-item h4 { font-size: 1.05rem; font-weight: 700; color: #fff; margin-bottom: 8px; }
+    .faq-item p { color: var(--texto-mutado); font-size: 0.92rem; margin: 0; line-height: 1.6; }
+  
+    /* Language Toggle Pill */
+    .header-right { display: flex; align-items: center; gap: 14px; }
+    .lang-toggle-pill {
+      display: inline-flex;
+      align-items: center;
+      background: rgba(18, 24, 38, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 999px;
+      padding: 3px 6px;
+      gap: 4px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      backdrop-filter: blur(8px);
+    }
+    .lang-btn {
+      color: #94a3b8;
+      text-decoration: none;
+      padding: 4px 10px;
+      border-radius: 999px;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .lang-btn:hover { color: #fff; }
+    .lang-btn.active {
+      background: rgba(0, 210, 255, 0.18);
+      color: #00d2ff;
+      border: 1px solid rgba(0, 210, 255, 0.4);
+      box-shadow: 0 0 10px rgba(0, 210, 255, 0.25);
+    }
+    .lang-divider { color: rgba(255, 255, 255, 0.2); font-size: 0.7rem; }
+    .btn-header-cta {
+      color: #00d2ff;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.88rem;
+      transition: all 0.2s;
+    }
+    .btn-header-cta:hover { color: #fff; text-shadow: 0 0 8px rgba(0, 210, 255, 0.6); }
+
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="index.html" class="logo-link">
+        <img src="logo.png" alt="Raven Games Logo" />
+        <div>RAVEN <span>GAMES</span></div>
+      </a>
+      <div class="header-right">
+        <div class="lang-toggle-pill">
+          <a href="como-funciona-jogo-avatares-roblox-live-tiktok.html" class="lang-btn" onclick="localStorage.setItem('site_lang_pref','pt')">🇧🇷 PT</a>
+          <span class="lang-divider">|</span>
+          <a href="como-funciona-jogo-avatares-roblox-live-tiktok-en.html" class="lang-btn active" onclick="localStorage.setItem('site_lang_pref','en')">🇺🇸 EN</a>
+        </div>
+        <a href="index.html#planos" class="btn-header-cta">Get Software ➔</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="article-container">
+    <div class="breadcrumb">
+      <a href="blog.html">Blog</a> ➔ <a href="blog.html">Roblox & Games</a> ➔ <span>How the Roblox Avatars Game Works</span>
+    </div>
+
+    <h1 class="article-title">How the 3D Roblox Avatars Game Works on TikTok Live (Technical Guide)</h1>
+
+    <div class="article-meta">
+      <span>🛠️ Reverse Engineering & Architecture</span>
+      <span>•</span>
+      <span>⏱️ 8 min read</span>
+      <span>•</span>
+      <span>📅 Updated September 2026</span>
+    </div>
+
+    <!-- BLUF: Bottom Line Up Front -->
+    <div class="bluf-box">
+      <strong>DIRECT ANSWER (BLUF — WHAT YOU NEED TO KNOW):</strong>
+      <p>
+        The Roblox avatar game on TikTok Live works by coupling an encrypted WebSocket pipeline that reads live stream chat events in real time with the official Roblox Corporation public avatar APIs. When a viewer types their Roblox username in the chat, the Raven Games software fetches and renders their exact 3D model on screen in under 500ms. When gifts are sent (Roses, Donuts, Galaxies), the physics engine scales up the avatar, triggers dance emotes, and launches arena battles, igniting competitive gifting wars in the chat with zero manual streamer interaction.
+      </p>
+    </div>
+
+    <div class="content-body">
+      <h2>The Roblox Avatar Phenomenon on TikTok Live</h2>
+      <p>
+        Across all formats of monetized live streams on TikTok, no category produces audience retention and revenue spikes as consistently as the <strong>Roblox Avatar Arena</strong>. Even on streams with modest audiences of 80 to 150 concurrent viewers, creators frequently generate between <strong>$60 to $180 per live stream</strong>.
+      </p>
+      <p>
+        To an outside spectator, it looks like sorcery: a viewer types any username in the TikTok chat and, a fraction of a second later, their exact 3D character drops from the sky onto the arena—complete with custom outfits, wings, hats, and authentic animations. When someone donates a gift, that avatar grows until it takes over half the screen, donning a golden crown and pushing smaller avatars off the stage.
+      </p>
+      <p>
+        How does this actually work behind the scenes? Below, we break down the synchronization architecture, 3D rendering pipeline, and psychological triggers that turn this tool into an automated monetization machine.
+      </p>
+
+      <h2>Technical Architecture: From TikTok Chat to 3D Screen in 500ms</h2>
+      <p>
+        Seamless synchronization between two massive proprietary ecosystems (TikTok and Roblox) requires an ultra-low-latency data pipeline engineered inside the <strong>Raven Games</strong> launcher.
+      </p>
+
+      <div class="tech-card">
+        <div class="tech-card-header">
+          <span>Raven Games Real-Time Data Pipeline</span>
+        </div>
+        <div class="tech-step">
+          <div class="tech-step-num">1</div>
+          <div><strong>Protobuf Packet Interception:</strong> The launcher listens to the encrypted TikTok LIVE Studio WebSocket feed, parsing and filtering <code>WebcastChatMessage</code> and <code>WebcastGiftMessage</code> payloads with zero delay.</div>
+        </div>
+        <div class="tech-step">
+          <div class="tech-step-num">2</div>
+          <div><strong>Identity Resolution via Roblox Public API:</strong> When a message contains an entry command (e.g. <code>!join Username</code> or simply the viewer's username), Raven Games fires an asynchronous REST request to the official endpoint:
+          <br><code style="color: #38bdf8; font-size: 0.85rem;">https://users.roblox.com/v1/usernames/users</code> to resolve the string username into its corresponding numeric <code>UserId</code>.</div>
+        </div>
+        <div class="tech-step">
+          <div class="tech-step-num">3</div>
+          <div><strong>3D Mesh & Texture Baking:</strong> The software queries the Roblox CDN thumbnail clusters:
+          <br><code style="color: #38bdf8; font-size: 0.85rem;">https://thumbnails.roblox.com/v1/users/avatar-3d?userId={id}</code>. The payload returns geometry <code>.obj</code> files and <code>.png</code> texture maps for the assembled R15/R6 player model.</div>
+        </div>
+        <div class="tech-step">
+          <div class="tech-step-num">4</div>
+          <div><strong>60 FPS 3D Rendering with Native RigidBody Physics:</strong> Raven Games' lightweight internal engine instances the character mesh into the arena scene, applying gravity, physical collisions, and skeletal rigging animations.</div>
+        </div>
+      </div>
+
+      <p>
+        All of this happens in <strong>under half a second</strong>. The streamer does not need to run the Roblox client on their PC or keep a web browser open: all asset processing is executed headless, keeping total RAM consumption below 600 MB.
+      </p>
+
+      <h2>Why Viewers Spend Hundreds of Gifts on the Game</h2>
+      <p>
+        The revenue mechanics of interactive avatars do not rely on charity or luck. They are anchored in three pillars of <strong>behavioral economics and live stream gamification</strong>:
+      </p>
+
+      <h3>1. Social Validation and Digital Identity</h3>
+      <p>
+        Roblox has over 380 million monthly active users worldwide. Each player spends dozens of hours (and real Robux currency) customizing their digital identity. Seeing that exact persona mirrored onto a live stream in front of hundreds of people triggers an immediate pride and self-affirmation bias.
+      </p>
+
+      <h3>2. The Ego Battle & "King of the Hill" Dynamic</h3>
+      <p>
+        Inside the Raven Games arena, visual hierarchy is governed by gifts:
+      </p>
+      <ul>
+        <li><strong>Basic Gifts (1 to 10 coins - Roses, Hearts):</strong> The avatar jumps, sparks, or grows by 5% in physical scale.</li>
+        <li><strong>Mid-Tier Gifts (30 to 100 coins - Donuts, Sunglasses):</strong> Plays rare breakdance emotes and pushes smaller avatars away from the center ring.</li>
+        <li><strong>Premium Gifts (500 to 1,000+ coins - Money Gun, Galaxy, Lion):</strong> The avatar morphs into a glowing "Golden Titan" with a crown, claiming the center pedestal and displaying an exclusive VIP leaderboard.</li>
+      </ul>
+
+      <div class="highlight-card">
+        <h4>The Herding Effect in Action:</h4>
+        <p>
+          When viewer "Alex" donates a 100-coin gift and his avatar grows 3x larger than the rest, rival viewer "Jake" refuses to be outdone and immediately drops a 300-coin gift to crush Alex's avatar. This competitive feedback loop is why avatar streams often collect thousands of coins in just 10 minutes.
+        </p>
+      </div>
+
+      <h3>3. Algorithmic Retention (Infinite Watch Time)</h3>
+      <p>
+        Once a viewer's avatar enters the arena, <strong>they don't close the stream</strong>. They stick around to watch how long their character survives, cheer for their spot, or wait for the exact moment to send another gift to counter-attack. TikTok detects this prolonged watch time and aggressively pushes the stream to the "For You" feed (FYP) of thousands of potential new viewers.
+      </p>
+
+      <h2>Conversion Table: Avatar Reaction vs. Gift Coins</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>TikTok Gift</th>
+              <th>Avg Cost (Coins)</th>
+              <th>Avatar Effect (Raven Games)</th>
+              <th>Psychological Impact on Chat</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Rose / Mini Heart</strong> 🌹</td>
+              <td>1 Coin</td>
+              <td>Arena entrance or +3% physical scale</td>
+              <td>Zero friction: activates the viewer's first gift</td>
+            </tr>
+            <tr>
+              <td><strong>Donut / Wishing Bottle</strong> 🍩</td>
+              <td>30 Coins</td>
+              <td>Breakdance emote animation with confetti</td>
+              <td>Individual visual spotlight & custom sound effect</td>
+            </tr>
+            <tr>
+              <td><strong>Party Hat / Magic Wand</strong> 🪄</td>
+              <td>99 Coins</td>
+              <td>Double Size (2x) + Lightning Aura effect</td>
+              <td>Sparks territorial battle with other avatars</td>
+            </tr>
+            <tr>
+              <td><strong>Money Gun / Dragon</strong> 💸</td>
+              <td>500 Coins</td>
+              <td>Volcano eruption + Titan avatar scaling</td>
+              <td>Stream climax moment; attracts new high spenders</td>
+            </tr>
+            <tr>
+              <td><strong>Galaxy / Lion</strong> 🌌🦁</td>
+              <td>1,000+ Coins</td>
+              <td>Golden Celestial Transformation + VIP Leaderboard</td>
+              <td>Crowns the undisputed top patron of the night</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- CTA Box -->
+      <div class="article-cta">
+        <h3>Ready to Stream the Avatar Arena on Your Channel?</h3>
+        <p>With the Raven Games Complete Plan, you receive the full Roblox Avatars module pre-configured, with 1-click installer and instant connection to TikTok LIVE Studio.</p>
+        <a href="index.html#planos" class="btn-cta">GET THE RAVEN GAMES COMPLETE PLAN</a>
+      </div>
+
+      <h2>How to Set Up the Avatar Game in Raven Games</h2>
+      <p>
+        Activating the avatar module takes under 5 minutes and requires zero coding knowledge:
+      </p>
+      <ol>
+        <li><strong>Download the Official Launcher:</strong> After signing up, download the Windows installer from your members dashboard.</li>
+        <li><strong>Open the "Live Avatars" Tab:</strong> In the Raven Games side menu, select <em>Roblox Avatars Arena</em>.</li>
+        <li><strong>Connect to your TikTok Live:</strong> Enter your TikTok <code>@username</code>. The system links directly to public chat WebSockets with no passwords required.</li>
+        <li><strong>Configure Reward Rules:</strong> Set the scaling rate per rose, assign emotes to mid-tier gifts, and define max simultaneous avatars (40 to 80 recommended for optimal screen clarity).</li>
+        <li><strong>Capture in OBS or TikTok LIVE Studio:</strong> Add a "Window Capture" source selecting Raven Games in vertical format (1080x1920) and hit "Go Live".</li>
+      </ol>
+
+      <h2>Frequently Asked Questions (FAQ)</h2>
+      <div class="faq-item">
+        <h4>1. Can using the Roblox public API get my Roblox account banned?</h4>
+        <p>No. Raven Games only queries public, open endpoints for thumbnails and user profiles provided by Roblox Corporation—the exact same endpoints used by community tools like Rolimon's and Roblox Wiki. No personal Roblox login credentials are ever used or requested.</p>
+      </div>
+      <div class="faq-item">
+        <h4>2. Does the game freeze if 200 people send usernames at once?</h4>
+        <p>No. Raven Games features an internal asynchronous FIFO queue that batches requests, preventing API rate limits and ensuring every viewer enters the arena smoothly at 60 frames per second.</p>
+      </div>
+      <div class="faq-item">
+        <h4>3. What if the chat goes quiet for a few minutes?</h4>
+        <p>The proprietary Anti-Idling System detects quiet intervals and automatically triggers dynamic arena events—such as meteor showers or temporary bonus challenges—encouraging viewers to comment and gift again.</p>
+      </div>
+      <div class="faq-item">
+        <h4>4. Can I run this stream while I sleep or work my day job?</h4>
+        <p>Yes. Because the game dynamics are 100% governed by viewer comments and gifts, the streamer never needs to touch the keyboard or speak into a microphone during the entire live broadcast.</p>
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    const switcher = document.getElementById('langSwitcher');
+    const toggleBtn = document.getElementById('langToggleBtn');
+    if (switcher && toggleBtn) {
+      toggleBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        switcher.classList.toggle('open');
+      });
+      document.addEventListener('click', (e) => {
+        if (!switcher.contains(e.target)) switcher.classList.remove('open');
+      });
+    }
+  </script>
+</body>
+</html>

@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
@@ -11,10 +11,23 @@
   <link rel="apple-touch-icon" href="favicon.png">
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
 
-  <!-- Fontes Google Inter & Space Grotesk -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet">
+  <!-- Meta Pixel Code -->
+  <script>
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '3373496012857126');
+  fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=3373496012857126&ev=PageView&noscript=1"
+  /></noscript>
+  <!-- End Meta Pixel Code -->
 
   <style>
     :root {
@@ -560,6 +573,94 @@
       color: var(--primary-cyan);
     }
 
+    /* Language Switcher */
+    .header-right-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+    }
+    .lang-switcher-wrap {
+      position: relative;
+      user-select: none;
+    }
+    .lang-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      background: rgba(18, 24, 38, 0.75);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #ffffff;
+      padding: 0.5rem 0.85rem;
+      border-radius: 12px;
+      font-size: 0.86rem;
+      font-weight: 800;
+      font-family: inherit;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      transition: all 0.25s ease;
+    }
+    .lang-btn:hover {
+      background: rgba(26, 35, 54, 0.95);
+      border-color: rgba(0, 210, 255, 0.4);
+      color: #00d2ff;
+    }
+    .lang-dropdown {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      background: rgba(12, 17, 28, 0.96);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 14px;
+      padding: 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 155px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-6px);
+      transition: all 0.25s ease;
+      z-index: 1000;
+    }
+    .lang-switcher-wrap.open .lang-dropdown {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+    .lang-option {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      padding: 0.55rem 0.75rem;
+      border-radius: 10px;
+      border: none;
+      background: transparent;
+      color: #94a3b8;
+      font-size: 0.85rem;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      width: 100%;
+      text-align: left;
+      transition: all 0.2s ease;
+    }
+    .lang-option:hover, .lang-option.active {
+      background: rgba(0, 210, 255, 0.15);
+      color: #ffffff;
+    }
+    .lang-code-pill {
+      margin-left: auto;
+      font-size: 0.72rem;
+      color: #64748b;
+      background: rgba(255, 255, 255, 0.06);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
     /* ================= RESPONSIVIDADE ================= */
     @media (max-width: 900px) {
       .terms-layout {
@@ -601,16 +702,41 @@
         <img src="logo.png" alt="Raven Games Logo">
       </a>
 
-      <div class="header-nav">
+            <div class="header-nav">
         <a href="index.html" class="btn-back-home">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <line x1="19" y1="12" x2="5" y2="12"></line>
             <polyline points="12 19 5 12 12 5"></polyline>
           </svg>
-          <span>Voltar ao Início</span>
+          <span id="btnBackHomeText">Voltar ao Início</span>
         </a>
+        <!-- Language Switcher Pill -->
+        <div class="lang-switcher-wrap" id="langSwitcher">
+          <button class="lang-btn" id="langToggleBtn" aria-label="Trocar Idioma">
+            <svg class="lang-globe-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="2" y1="12" x2="22" y2="12"></line>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+            </svg>
+            <span class="lang-label" id="currentLangLabel">PT</span>
+          </button>
+
+          <!-- Dropdown Menu -->
+          <div class="lang-dropdown" id="langDropdown">
+            <button class="lang-option active" data-lang="pt">
+              <span class="lang-flag">🇧🇷</span>
+              <span>Português</span>
+              <span class="lang-code-pill">PT</span>
+            </button>
+            <button class="lang-option" data-lang="en">
+              <span class="lang-flag">🇺🇸</span>
+              <span>English</span>
+              <span class="lang-code-pill">EN</span>
+            </button>
+          </div>
+        </div>
         <a href="index.html#comunidade" class="btn-community">
-          <span>Entrar na comunidade</span>
+          <span id="btnCommunityText">Entrar na comunidade</span>
         </a>
       </div>
     </div>
@@ -621,11 +747,11 @@
     
     <!-- Hero Header -->
     <div class="terms-hero">
-      <div class="legal-badge">
+      <div class="legal-badge" id="legalBadge">
         <span>✦ Documento Oficial & Jurídico</span>
       </div>
-      <h1 class="terms-title">Termos de Uso e Condições Gerais</h1>
-      <p class="terms-subtitle">
+      <h1 class="terms-title" id="termsTitle">Termos de Uso e Condições Gerais</h1>
+      <p class="terms-subtitle" id="termsSubtitle">
         Estes termos regem o acesso, a licença do Launcher, os jogos interativos e a <strong>política estrita de não-reembolso</strong> para os produtos digitais da <strong>Raven Games</strong>.
       </p>
     </div>
@@ -635,11 +761,11 @@
       
       <!-- Sidebar de Navegação Rápida -->
       <aside class="terms-sidebar">
-        <div class="sidebar-title">
+        <div class="sidebar-title" id="sidebarTitle">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 6h16M4 12h16M4 18h7"/></svg>
-          Índice de Tópicos
+          <span id="sidebarTitleText">Índice de Tópicos</span>
         </div>
-        <ul class="sidebar-nav">
+        <ul class="sidebar-nav" id="sidebarNav">
           <li><a href="#aceitacao" class="sidebar-link">1. Aceitação dos Termos</a></li>
           <li><a href="#servicos" class="sidebar-link">2. Descrição dos Serviços</a></li>
           <li><a href="#licenca" class="sidebar-link">3. Licença de Uso & IP</a></li>
@@ -656,8 +782,9 @@
       </aside>
 
       <!-- Corpo dos Artigos -->
+            <!-- Corpo dos Artigos Bilingue -->
       <article class="terms-body">
-        
+        <div id="termsContentPt" style="display: flex; flex-direction: column; gap: 3rem;">
         <!-- 1. Aceitação -->
         <section class="terms-card" id="aceitacao">
           <h2><span class="section-number">1</span> Aceitação dos Termos</h2>
@@ -673,7 +800,7 @@
         <section class="terms-card" id="servicos">
           <h2><span class="section-number">2</span> Descrição dos Serviços & Launcher</h2>
           <p>
-            A <strong>Raven Games</strong> disponibiliza uma suíte de jogos interativos executados localmente em 60 FPS através de um Launcher proprietário compatível com Windows. Os jogos são desenvolvidos para se conectar a transmissões ao vivo (lives de plataformas como TikTok), permitindo que os espectadores interajam em tempo real por meio de comandos de texto, curtidas, presentes virtuais e compartilhamentos.
+            A <strong>Raven Games</strong> disponibiliza uma suíte de jogos interativos executados localmente em 60 FPS através de um Launcher proprietário compatível com Windows e Mac. Os jogos são desenvolvidos para se conectar a transmissões ao vivo (lives de plataformas como TikTok), permitindo que os espectadores interajam em tempo real por meio de comandos de texto, curtidas, presentes virtuais e compartilhamentos.
           </p>
           <div class="highlight-box">
             <p><strong>Nota importante:</strong> A Raven Games fornece o software de jogo e overlay interativo. Você é o único responsável pela realização, conteúdo, conformidade e transmissão da sua live.</p>
@@ -809,7 +936,7 @@
           <div class="anti-refund-clause">
             <h4><span>9.4</span> Incompatibilidade Técnica Evitável e Suporte</h4>
             <p>
-              Todos os requisitos de sistema (sistema operacional Windows 10/11 64-bit, conexão estável com a internet e software de transmissão OBS Studio ou Streamlabs) são expressamente informados de maneira pública antes da contratação.
+              Todos os requisitos de sistema (sistema operacional Windows 10/11 64-bit ou macOS, conexão estável com a internet e software de transmissão OBS Studio ou Streamlabs) são expressamente informados de maneira pública antes da contratação.
             </p>
             <p>
               A alegação de impossibilidade técnica decorrente de computadores fora das especificações mínimas, bloqueios de firewall do próprio usuário, suspensões aplicadas pelo próprio TikTok na conta do streamer ou falhas de configuração pessoal não configuram defeito do software e <strong>não conferem direito a reembolso</strong>. Nossa equipe técnica oferece suporte para orientar a configuração correta de todos os membros.
@@ -854,7 +981,205 @@
             <p><strong>Comunidade VIP & Suporte:</strong> Acesse o canal de atendimento no Discord oficial da Raven Games ou clique em "Entrar na comunidade" no topo desta página.</p>
           </div>
         </section>
+        </div>
+        <div id="termsContentEn" style="display: none; flex-direction: column; gap: 3rem;">
+        <!-- 1. Acceptance of Terms -->
+        <section class="terms-card" id="aceitacao-en">
+          <h2><span class="section-number">1</span> Acceptance of Terms</h2>
+          <p>
+            By creating an account, downloading the Launcher, installing game packages, or utilizing any feature provided by <strong>Raven Games</strong>, you acknowledge that you have read, understood, and fully agreed to these Terms of Use and our Strict No-Refund Policy.
+          </p>
+          <p>
+            If you do not agree with any provision set forth in this document, you must immediately cease purchasing, accessing, and utilizing all of our tools and software.
+          </p>
+        </section>
 
+        <!-- 2. Description of Services -->
+        <section class="terms-card" id="servicos-en">
+          <h2><span class="section-number">2</span> Description of Services & Launcher</h2>
+          <p>
+            <strong>Raven Games</strong> provides a comprehensive suite of interactive games executed locally at 60 FPS through a proprietary Launcher compatible with Windows and Mac. The games are engineered to seamlessly connect to live broadcasts (such as TikTok Live streams), enabling viewers to interact in real time via chat commands, likes, virtual gifts, and stream shares.
+          </p>
+          <div class="highlight-box">
+            <p><strong>Important Note:</strong> Raven Games supplies the game software and interactive livestream overlays. You remain exclusively responsible for conducting, formatting, producing, and ensuring the legal and regulatory compliance of your broadcast.</p>
+          </div>
+        </section>
+
+        <!-- 3. License of Use & IP -->
+        <section class="terms-card" id="licenca-en">
+          <h2><span class="section-number">3</span> License of Use & Intellectual Property</h2>
+          <p>
+            We grant you a personal, non-exclusive, non-transferable, revocable, and strictly limited license to install and execute the Launcher and licensed interactive games solely for broadcasting on your personal live streaming channels.
+          </p>
+          <ul>
+            <li>Reverse engineering, decompiling, disassembling, modifying, or redistributing the source code or binary assets of the games and launcher is strictly prohibited.</li>
+            <li>Reselling, sublicensing, leasing, sharing, or transferring your license credentials or user account to third parties without express prior consent is strictly prohibited.</li>
+            <li>All trademarks, logos, branding, 3D assets, audio compositions, visual designs, and game mechanics remain the sole and exclusive intellectual property of Raven Games.</li>
+          </ul>
+        </section>
+
+        <!-- 4. TikTok Live Integration -->
+        <section class="terms-card" id="integracao-en">
+          <h2><span class="section-number">4</span> Third-Party Integrations (TikTok Live, OBS Studio & Tools)</h2>
+          <p>
+            Our software communicates with streaming tools including OBS Studio, Streamlabs, and real-time live event protocols. The user expressly acknowledges that:
+          </p>
+          <ul>
+            <li>Raven Games is an independent software development entity and holds no official ownership affiliation, direct sponsorship, or corporate endorsement from ByteDance / TikTok, OBS Project, or Streamlabs.</li>
+            <li>Content creators are obligated to strictly observe the Community Guidelines, Terms of Service, and broadcasting policies of any host platform where their broadcasts occur.</li>
+          </ul>
+        </section>
+
+        <!-- 5. Virtual Gifts & Monetization -->
+        <section class="terms-card" id="monetizacao-en">
+          <h2><span class="section-number">5</span> Virtual Gifts, Diamonds, and Creator Monetization</h2>
+          <p>
+            All virtual gifts, diamonds, and digital coins sent by audience members during live broadcasts are processed and settled directly by the host platform (e.g., TikTok).
+          </p>
+          <p>
+            Raven Games does not intermediate, handle, touch, or deduct any percentage or commission from gifts or revenues generated during your live stream. Payout schedules, conversion rates, and withdrawal rules remain subject exclusively to the terms of your host platform.
+          </p>
+        </section>
+
+        <!-- 6. User Conduct & Moderation -->
+        <section class="terms-card" id="conduta-en">
+          <h2><span class="section-number">6</span> User Conduct and Stream Moderation</h2>
+          <p>
+            Users agree to operate Raven Games utilities in an ethical, lawful, and compliant manner. It is strictly prohibited to utilize the software to:
+          </p>
+          <ul>
+            <li>Promote hate speech, graphic violence, illicit adult pornography, harassment, or unlawful content.</li>
+            <li>Artificially falsify engagement metrics, deploy fraudulent activities, or endanger third-party cybersecurity.</li>
+            <li>Direct automated malicious bots, spam, or denial-of-service attacks against community servers or related infrastructure.</li>
+          </ul>
+        </section>
+
+        <!-- 7. AFK Mode & Automation -->
+        <section class="terms-card" id="afk-en">
+          <h2><span class="section-number">7</span> AFK Mode & Livestream Automation</h2>
+          <p>
+            The software suite incorporates automated anti-idling and AFK game loops designed to retain viewership and engagement during broadcaster pauses or continuous matches. Broadcasters remain responsible for periodically monitoring their stream to ensure continued compliance with host platform activity requirements.
+          </p>
+        </section>
+
+        <!-- 8. Plans & Subscriptions -->
+        <section class="terms-card" id="planos-en">
+          <h2><span class="section-number">8</span> Plans, Subscriptions, and Continuous Updates</h2>
+          <p>
+            Access to software titles, updated launchers, and VIP community resources is granted according to the specific tier or subscription selected at the time of purchase. Releases of new games, performance optimizations, and compatibility updates are distributed automatically via the Raven Games Launcher.
+          </p>
+        </section>
+
+        <!-- ================= 9. STRICT NO-REFUND POLICY ================= -->
+        <section class="terms-card-alert" id="anti-reembolso-en">
+          <div class="alert-header-tag">
+            <span>⚠ BINDING & NON-NEGOTIABLE LEGAL CLAUSE</span>
+          </div>
+
+          <h2>
+            <span class="alert-section-number">9</span>
+            Strict No-Refund Policy (Anti-Refund) & Immediate Digital Fulfillment
+          </h2>
+
+          <div class="alert-main-banner">
+            <h3>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+              EXPRESS NOTICE OF IMMEDIATE CONSUMPTION
+            </h3>
+            <p>
+              RAVEN GAMES PRODUCTS AND SERVICES ARE INTANGIBLE DIGITAL GOODS DELIVERED FOR IMMEDIATE EXECUTION. UPON COMPLETION OF THE TRANSACTION AND PROVISION OF LAUNCHER ACCESS, GAME DOWNLOADS, AND VIP COMMUNITY CREDENTIALS, THE CONTRACT IS DEEMED FULLY EXECUTED AND EXHAUSTIVELY CONSUMED. NO RIGHT OF WITHDRAWAL, COOLING-OFF PERIOD, REVERSAL, OR REFUND APPLIES UNDER ANY CIRCUMSTANCES.
+            </p>
+          </div>
+
+          <!-- 9.1 Digital Nature -->
+          <div class="anti-refund-clause">
+            <h4><span>9.1</span> Nature of Digital Goods & Instant Enjoyment</h4>
+            <p>
+              Upon acquiring a subscription or software license from <strong>Raven Games</strong>, the user receives instantaneous access to protected binary executables, 60 FPS game builds, proprietary asset libraries, automation scripts, activation keys, and restricted VIP networking and support channels.
+            </p>
+            <p>
+              Because digital assets are instantly made available for download, local storage, and execution on the user's personal hardware, delivery is irrevocable, constituting <strong>full consumption of the product at the very moment of payment confirmation</strong>.
+            </p>
+          </div>
+
+          <!-- 9.2 Express Waiver -->
+          <div class="anti-refund-clause">
+            <h4><span>9.2</span> Express Waiver of Right of Withdrawal</h4>
+            <p>
+              Pursuant to applicable commercial law governing digital file supplies, downloadable software, and services immediately consumed upon fulfillment (including statutory exceptions regarding intangible digital goods with immediate access), <strong>the user expressly declares, consents, and agrees that they irrevocably waive any right of cancellation, withdrawal, or refund once credentials or downloadable files have been generated</strong>.
+            </p>
+            <ul>
+              <li>No refunds are granted due to voluntary cessation, change of mind, or lack of personal time to stream.</li>
+              <li>No refunds are granted based on subjective assertions such as "I did not like the game" or "my livestream did not attain viewers."</li>
+              <li>No retroactive refunds are provided for subscription periods, billing cycles, or access already consumed.</li>
+            </ul>
+          </div>
+
+          <!-- 9.3 Zero Tolerance -->
+          <div class="anti-refund-clause">
+            <h4><span>9.3</span> Zero-Tolerance Policy for Fraudulent Chargebacks & Banking Disputes</h4>
+            <p>
+              Initiating unauthorized financial disputes, fraudulent bank contestations, or "friendly chargebacks" with credit card issuers or payment processors following receipt of software files and credentials constitutes a <strong>grave breach of contract and actionable civil fraud</strong>.
+            </p>
+            <p>In the event of a chargeback or payment contestation, Raven Games enforces immediate sanctions:</p>
+            <ul>
+              <li><strong>Permanent HWID (Hardware ID) Ban:</strong> The user's machine identifier will be permanently barred from executing any present or future release of the Raven Games launcher.</li>
+              <li><strong>Summary Account Termination:</strong> Immediate, irrevocable revocation of all active licenses, software tokens, and expulsion from all private VIP groups.</li>
+              <li><strong>Blacklist Risk Reporting:</strong> Communication of the user's fraud profile across collaborative ecosystem cybersecurity networks.</li>
+              <li><strong>Legal Recovery & Extrajudicial Collection:</strong> Full legal action to recover outstanding amounts combined with statutory interest, contractual penalties, collection costs, and attorney fees.</li>
+            </ul>
+          </div>
+
+          <!-- 9.4 Incompatibility -->
+          <div class="anti-refund-clause">
+            <h4><span>9.4</span> Avoidable Technical Incompatibility & Technical Support</h4>
+            <p>
+              All technical specifications (Windows 10/11 64-bit or macOS, stable broadband internet connection, and streaming software OBS Studio or Streamlabs) are publicly and explicitly communicated prior to purchase.
+            </p>
+            <p>
+              Claims of technical inability arising from hardware below minimum specifications, user-side firewall or antivirus blockages, third-party platform account suspensions, or personal misconfigurations do not constitute software defect and <strong>do not confer any right to refund</strong>. Our technical support team remains available to guide setup and optimization for all licensed members.
+            </p>
+          </div>
+
+          <!-- 9.5 Breach -->
+          <div class="anti-refund-clause">
+            <h4><span>9.5</span> Termination for Terms Infraction Without Compensation</h4>
+            <p>
+              Any attempt at software piracy, unauthorized redistribution of installation archives, license key leakage, cheating, or abusive misconduct directed against community members will result in immediate unilateral account termination <strong>without any entitlement to restitution or financial compensation</strong>.
+            </p>
+          </div>
+        </section>
+
+        <!-- 10. Limitation of Liability -->
+        <section class="terms-card" id="responsabilidade-en">
+          <h2><span class="section-number">10</span> Limitation of Liability</h2>
+          <p>
+            The software is provided strictly on an "as is" and "as available" basis. Raven Games accepts no liability for interruptions caused by user internet service providers, host platform scheduled maintenance (e.g., TikTok or OBS servers), streamer account restrictions resulting from host guideline violations, or personal computer hardware incompatibilities.
+          </p>
+        </section>
+
+        <!-- 11. Privacy -->
+        <section class="terms-card" id="privacidade-en">
+          <h2><span class="section-number">11</span> Privacy & Personal Data Protection (LGPD / GDPR)</h2>
+          <p>
+            Raven Games prioritizes the security and privacy of your personal data. We gather solely the information strictly necessary for user authentication, license validation, and technical support fulfillment, adhering to applicable Data Protection standards (including LGPD Law No. 13,709/2018 and international benchmarks).
+          </p>
+          <p>
+            We never sell, rent, or lease your personal information to third parties for commercial advertising purposes.
+          </p>
+        </section>
+
+        <!-- 12. Support -->
+        <section class="terms-card" id="contato-en">
+          <h2><span class="section-number">12</span> Customer Inquiries & Support Channels</h2>
+          <p>
+            Should you have inquiries, clarification requests, or require technical support concerning these Terms of Use, please reach out directly through our official community channels or technical support desk.
+          </p>
+          <div class="highlight-box">
+            <p><strong>VIP Community & Support:</strong> Access our verified Discord support server or click on "Join Community" in the header of this page.</p>
+          </div>
+        </section>
+        </div>
       </article>
     </div>
 
@@ -863,10 +1188,10 @@
   <!-- Footer -->
   <footer class="terms-footer">
     <div class="footer-inner">
-      <div class="footer-copy">
+      <div class="footer-copy" id="footerCopy">
         © 2026 Raven Games. Todos os direitos reservados.
       </div>
-      <div class="footer-links">
+      <div class="footer-links" id="footerLinks">
         <a href="index.html">Início</a>
         <a href="index.html#jogos">Jogos</a>
         <a href="index.html#como-funciona">Como Funciona</a>
@@ -876,5 +1201,324 @@
     </div>
   </footer>
 
+  <script>
+    (function() {
+      const langSwitcherWrap = document.getElementById('langSwitcher');
+      const langToggleBtn = document.getElementById('langToggleBtn');
+      const currentLangLabel = document.getElementById('currentLangLabel');
+      const langOptions = document.querySelectorAll('.lang-option');
+
+      if (langToggleBtn && langSwitcherWrap) {
+        langToggleBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          langSwitcherWrap.classList.toggle('open');
+        });
+
+        document.addEventListener('click', (e) => {
+          if (!langSwitcherWrap.contains(e.target)) {
+            langSwitcherWrap.classList.remove('open');
+          }
+        });
+      }
+
+      const translations = {
+        pt: {
+          code: 'PT',
+          pageTitle: 'Termos de Uso & Política Anti-Reembolso | Raven Games',
+          btnBack: 'Voltar ao Início',
+          btnCommunity: 'Entrar na comunidade',
+          badge: '✦ Documento Oficial & Jurídico',
+          title: 'Termos de Uso e Condições Gerais',
+          subtitle: 'Estes termos regem o acesso, a licença do Launcher, os jogos interativos e a <strong>política estrita de não-reembolso</strong> para os produtos digitais da <strong>Raven Games</strong>.',
+          sidebarTitle: 'Índice de Tópicos',
+          sidebarLinks: [
+            '1. Aceitação dos Termos', '2. Descrição dos Serviços', '3. Licença de Uso & IP',
+            '4. Integração com TikTok Live', '5. Presentes & Monetização', '6. Conduta do Usuário',
+            '7. Modo AFK & Automação', '8. Assinaturas & Acessos', '⚠ 9. POLÍTICA ANTI-REEMBOLSO',
+            '10. Limitação de Responsabilidade', '11. Privacidade & LGPD', '12. Suporte & Contato'
+          ],
+          footerCopy: '© 2026 Raven Games. Todos os direitos reservados.',
+          footerLinks: ['Início', 'Jogos', 'Como Funciona', 'Perguntas Frequentes', 'Termos de Uso']
+        },
+        en: {
+          code: 'EN',
+          pageTitle: 'Terms of Use & Anti-Refund Policy | Raven Games',
+          btnBack: 'Back to Home',
+          btnCommunity: 'Join Community',
+          badge: '✦ Official Legal Document',
+          title: 'Terms of Use & General Conditions',
+          subtitle: 'These terms govern access, Launcher license, interactive games, and the <strong>strict no-refund policy</strong> for digital products by <strong>Raven Games</strong>.',
+          sidebarTitle: 'Table of Contents',
+          sidebarLinks: [
+            '1. Acceptance of Terms', '2. Service Description', '3. License & Intellectual Property',
+            '4. TikTok Live Integration', '5. Gifts & Monetization', '6. User Conduct',
+            '7. AFK Mode & Automation', '8. Subscriptions & Access', '⚠ 9. STRICT NO-REFUND POLICY',
+            '10. Limitation of Liability', '11. Privacy & Data Protection', '12. Support & Contact'
+          ],
+          footerCopy: '© 2026 Raven Games. All rights reserved.',
+          footerLinks: ['Home', 'Games', 'How It Works', 'FAQ', 'Terms of Use']
+        }
+      };
+
+      function applyLanguage(lang) {
+        const data = translations[lang] || translations.pt;
+        document.documentElement.lang = lang === 'en' ? 'en' : 'pt-BR';
+        document.title = data.pageTitle;
+
+        if (currentLangLabel) currentLangLabel.textContent = data.code;
+
+        langOptions.forEach(opt => {
+          if (opt.getAttribute('data-lang') === lang) {
+            opt.classList.add('active');
+          } else {
+            opt.classList.remove('active');
+          }
+        });
+
+        const btnBackHomeText = document.getElementById('btnBackHomeText');
+        if (btnBackHomeText) btnBackHomeText.textContent = data.btnBack;
+
+        const btnCommunityText = document.getElementById('btnCommunityText');
+        if (btnCommunityText) btnCommunityText.textContent = data.btnCommunity;
+
+        const legalBadge = document.getElementById('legalBadge');
+        if (legalBadge) legalBadge.innerHTML = `<span>${data.badge}</span>`;
+
+        const termsTitle = document.getElementById('termsTitle');
+        if (termsTitle) termsTitle.textContent = data.title;
+
+        const termsSubtitle = document.getElementById('termsSubtitle');
+        if (termsSubtitle) termsSubtitle.innerHTML = data.subtitle;
+
+        const sidebarTitleText = document.getElementById('sidebarTitleText');
+        if (sidebarTitleText) sidebarTitleText.textContent = data.sidebarTitle;
+
+        const sidebarLinkEls = document.querySelectorAll('.sidebar-nav .sidebar-link');
+        if (sidebarLinkEls) {
+          sidebarLinkEls.forEach((el, idx) => {
+            if (data.sidebarLinks[idx]) el.textContent = data.sidebarLinks[idx];
+          });
+        }
+
+        const footerCopy = document.getElementById('footerCopy');
+        if (footerCopy) footerCopy.textContent = data.footerCopy;
+
+        const footerLinkEls = document.querySelectorAll('#footerLinks a');
+        if (footerLinkEls) {
+          footerLinkEls.forEach((el, idx) => {
+            if (data.footerLinks[idx]) el.textContent = data.footerLinks[idx];
+          });
+        }
+
+        localStorage.setItem('site_lang_pref', lang);
+      }
+
+      langOptions.forEach(opt => {
+        opt.addEventListener('click', () => {
+          const selectedLang = opt.getAttribute('data-lang');
+          applyLanguage(selectedLang);
+          if (langSwitcherWrap) langSwitcherWrap.classList.remove('open');
+        });
+      });
+
+      // Auto-detect visitor language
+      function detectInitialLanguage() {
+        const saved = localStorage.getItem('site_lang_pref');
+        if (saved && (saved === 'pt' || saved === 'en')) {
+          return saved;
+        }
+        const userLang = (navigator.language || navigator.userLanguage || '').toLowerCase();
+        if (userLang.startsWith('en')) {
+          return 'en';
+        } else if (!userLang.startsWith('pt')) {
+          try {
+            const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+            const brTz = ['Sao_Paulo', 'Fortaleza', 'Belem', 'Manaus', 'Cuiaba', 'Recife', 'Bahia', 'Campo_Grande', 'Maceio', 'Porto_Velho', 'Rio_Branco', 'Noronha', 'Lisbon'];
+            const isBrOrPt = brTz.some(t => tz.includes(t));
+            if (!isBrOrPt) return 'en';
+          } catch(e) {
+            return 'en';
+          }
+        }
+        return 'pt';
+      }
+
+      const initialLang = detectInitialLanguage();
+      if (initialLang !== 'pt') {
+        applyLanguage(initialLang);
+      }
+    })();
+  </script>
+
+  <script>
+    (function() {
+      const langSwitcherWrap = document.getElementById('langSwitcher');
+      const langToggleBtn = document.getElementById('langToggleBtn');
+      const currentLangLabel = document.getElementById('currentLangLabel');
+      const langOptions = document.querySelectorAll('.lang-option');
+
+      if (langToggleBtn && langSwitcherWrap) {
+        langToggleBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          langSwitcherWrap.classList.toggle('open');
+        });
+
+        document.addEventListener('click', (e) => {
+          if (!langSwitcherWrap.contains(e.target)) {
+            langSwitcherWrap.classList.remove('open');
+          }
+        });
+      }
+
+      const translations = {
+        pt: {
+          code: 'PT',
+          pageTitle: 'Termos de Uso & Política Anti-Reembolso | Raven Games',
+          metaDesc: 'Termos de Uso, Condições Gerais de Serviços e Política Estrita de Não-Reembolso da plataforma Raven Games para criadores de conteúdo e streamers interativos.',
+          btnBackHome: 'Voltar ao Início',
+          btnCommunity: 'Entrar na comunidade',
+          legalBadge: '<span>✦ Documento Oficial & Jurídico</span>',
+          termsTitle: 'Termos de Uso e Condições Gerais',
+          termsSubtitle: 'Estes termos regem o acesso, a licença do Launcher, os jogos interativos e a <strong>política estrita de não-reembolso</strong> para os produtos digitais da <strong>Raven Games</strong>.',
+          footerCopy: '© 2026 Raven Games. Todos os direitos reservados.',
+          flHome: 'Início',
+          flGames: 'Jogos',
+          flHow: 'Como Funciona',
+          flFaq: 'Perguntas Frequentes',
+          flTerms: 'Termos de Uso'
+        },
+        en: {
+          code: 'EN',
+          pageTitle: 'Terms of Use & Strict No-Refund Policy | Raven Games',
+          metaDesc: 'Terms of Use, General Conditions of Service, and Strict No-Refund Policy of the Raven Games platform for content creators and interactive streamers.',
+          btnBackHome: 'Back to Home',
+          btnCommunity: 'Join Community',
+          legalBadge: '<span>✦ Official Legal Document</span>',
+          termsTitle: 'Terms of Use & General Conditions',
+          termsSubtitle: 'These terms govern access, Launcher licensing, interactive games, and the <strong>strict no-refund policy</strong> for digital products from <strong>Raven Games</strong>.',
+          footerCopy: '© 2026 Raven Games. All rights reserved.',
+          flHome: 'Home',
+          flGames: 'Games',
+          flHow: 'How It Works',
+          flFaq: 'FAQ',
+          flTerms: 'Terms of Use'
+        }
+      };
+
+      function applyLanguage(lang) {
+        const data = translations[lang] || translations.pt;
+        document.documentElement.lang = lang === 'en' ? 'en' : 'pt-BR';
+        document.title = data.pageTitle;
+
+        const metaDescEl = document.querySelector('meta[name="description"]');
+        if (metaDescEl) metaDescEl.setAttribute('content', data.metaDesc);
+
+        if (currentLangLabel) currentLangLabel.textContent = data.code;
+
+        langOptions.forEach(opt => {
+          if (opt.getAttribute('data-lang') === lang) {
+            opt.classList.add('active');
+          } else {
+            opt.classList.remove('active');
+          }
+        });
+
+        const btnBackHomeText = document.getElementById('btnBackHomeText');
+        if (btnBackHomeText) btnBackHomeText.textContent = data.btnBackHome;
+
+        const btnCommunityText = document.getElementById('btnCommunityText');
+        if (btnCommunityText) btnCommunityText.textContent = data.btnCommunity;
+
+        const legalBadge = document.getElementById('legalBadge');
+        if (legalBadge) legalBadge.innerHTML = data.legalBadge;
+
+        const termsTitle = document.getElementById('termsTitle');
+        if (termsTitle) termsTitle.textContent = data.termsTitle;
+
+        const termsSubtitle = document.getElementById('termsSubtitle');
+        if (termsSubtitle) termsSubtitle.innerHTML = data.termsSubtitle;
+
+        // Toggle Content Sections
+        const termsContentPt = document.getElementById('termsContentPt');
+        const termsContentEn = document.getElementById('termsContentEn');
+        const sidebarNavPt = document.getElementById('sidebarNavPt');
+        const sidebarNavEn = document.getElementById('sidebarNavEn');
+
+        if (lang === 'en') {
+          if (termsContentPt) termsContentPt.style.display = 'none';
+          if (termsContentEn) termsContentEn.style.display = 'flex';
+          if (sidebarNavPt) sidebarNavPt.style.display = 'none';
+          if (sidebarNavEn) sidebarNavEn.style.display = 'block';
+        } else {
+          if (termsContentPt) termsContentPt.style.display = 'flex';
+          if (termsContentEn) termsContentEn.style.display = 'none';
+          if (sidebarNavPt) sidebarNavPt.style.display = 'block';
+          if (sidebarNavEn) sidebarNavEn.style.display = 'none';
+        }
+
+        // Footer links
+        const footerCopy = document.getElementById('footerCopy');
+        if (footerCopy) footerCopy.textContent = data.footerCopy;
+
+        const flHome = document.querySelector('.fl-home');
+        if (flHome) flHome.textContent = data.flHome;
+
+        const flGames = document.querySelector('.fl-games');
+        if (flGames) flGames.textContent = data.flGames;
+
+        const flHow = document.querySelector('.fl-how');
+        if (flHow) flHow.textContent = data.flHow;
+
+        const flFaq = document.querySelector('.fl-faq');
+        if (flFaq) flFaq.textContent = data.flFaq;
+
+        const flTerms = document.querySelector('.fl-terms');
+        if (flTerms) flTerms.textContent = data.flTerms;
+
+        localStorage.setItem('site_lang_pref', lang);
+      }
+
+      langOptions.forEach(opt => {
+        opt.addEventListener('click', () => {
+          const selectedLang = opt.getAttribute('data-lang');
+          applyLanguage(selectedLang);
+          if (langSwitcherWrap) langSwitcherWrap.classList.remove('open');
+        });
+      });
+
+      function detectInitialLanguage() {
+        const saved = localStorage.getItem('site_lang_pref');
+        if (saved && (saved === 'pt' || saved === 'en')) {
+          return saved;
+        }
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const urlLang = urlParams.get('lang');
+        if (urlLang && (urlLang === 'pt' || urlLang === 'en')) {
+          return urlLang;
+        }
+
+        const userLang = (navigator.language || navigator.userLanguage || '').toLowerCase();
+        if (userLang.startsWith('en')) {
+          return 'en';
+        } else if (!userLang.startsWith('pt')) {
+          try {
+            const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+            const brTz = ['Sao_Paulo', 'Fortaleza', 'Belem', 'Manaus', 'Cuiaba', 'Recife', 'Bahia', 'Campo_Grande', 'Maceio', 'Porto_Velho', 'Rio_Branco', 'Noronha', 'Lisbon'];
+            const isBrOrPt = brTz.some(t => tz.includes(t));
+            if (!isBrOrPt) return 'en';
+          } catch(e) {
+            return 'en';
+          }
+        }
+        return 'pt';
+      }
+
+      const initialLang = detectInitialLanguage();
+      if (initialLang !== 'pt') {
+        applyLanguage(initialLang);
+      }
+    })();
+  </script>
 </body>
 </html>
