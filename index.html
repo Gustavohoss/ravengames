@@ -5687,8 +5687,9 @@
       const closeBtn = document.getElementById('vslModalCloseBtn');
       const footerCta = document.getElementById('modalVslFooter');
 
-      // TEMPO PARA REVELAR O BOTÃO (20 segundos exatos de vídeo)
-      const TEMPO_REVELAR_BOTAO = 20;
+      // TEMPO PARA REVELAR O BOTÃO (5 segundos após entrar na página da VSL)
+      const TEMPO_REVELAR_BOTAO = 5;
+      let timerRevelacaoCta = null;
 
       // FÓRMULA VTURB (Barra falsa acelerada: exibido = 100 * (x * (2 - x)) ^ (1/alpha))
       const BARRA_ALPHA = 2;
@@ -5708,6 +5709,10 @@
       }
 
       function resetarPlayer() {
+        if (timerRevelacaoCta) {
+          clearTimeout(timerRevelacaoCta);
+          timerRevelacaoCta = null;
+        }
         if (video) {
           video.pause();
           video.currentTime = 0;
@@ -5730,6 +5735,13 @@
         modal.classList.add('active');
         modal.setAttribute('aria-hidden', 'false');
         document.body.style.overflow = 'hidden';
+
+        // Revelar o botão exatamente 5 segundos após entrar na página/modal da VSL
+        timerRevelacaoCta = setTimeout(function() {
+          if (footerCta && modal.classList.contains('active')) {
+            footerCta.classList.add('revelado');
+          }
+        }, 5000);
 
         // Autoplay mutado imediato a partir do segundo 0
         if (video) {
@@ -5788,8 +5800,14 @@
         overlay.addEventListener('click', function(e) {
           e.stopPropagation();
           video.currentTime = 0; // Volta para o início do vídeo!
-          // Garante que o botão só apareça após 30 segundos com som
+          // Se ainda não revelou ou reiniciou, garante revelação em 5s
           if (footerCta) footerCta.classList.remove('revelado');
+          if (timerRevelacaoCta) clearTimeout(timerRevelacaoCta);
+          timerRevelacaoCta = setTimeout(function() {
+            if (footerCta && modal.classList.contains('active')) {
+              footerCta.classList.add('revelado');
+            }
+          }, 5000);
           video.muted = false;
           frame.classList.add('com-som', 'tocando');
           frame.classList.remove('pausado');
