@@ -4160,12 +4160,50 @@
     }
 
     @media (max-width: 768px) {
+      .vsl-modal-backdrop {
+        align-items: flex-start;
+        padding-top: max(24px, calc(env(safe-area-inset-top, 0px) + 20px));
+        padding-bottom: max(30px, calc(env(safe-area-inset-bottom, 0px) + 25px));
+        padding-left: 14px;
+        padding-right: 14px;
+      }
+
+      .vsl-modal-dialog {
+        max-width: 100%;
+        margin-top: 4vh; /* Eleva a VSL para a altura natural dos olhos no celular */
+      }
+
+      .vsl-modal-header {
+        margin-bottom: 12px;
+        padding: 0 10px;
+      }
+
+      .vsl-modal-badge {
+        font-size: 0.72rem;
+        padding: 4px 12px;
+        margin-bottom: 5px;
+      }
+
+      .vsl-modal-title {
+        font-size: 1.25rem;
+        margin-bottom: 4px;
+      }
+
+      .vsl-modal-desc {
+        font-size: 0.82rem;
+        line-height: 1.35;
+      }
+
       .vsl-modal-close {
         top: 8px;
         right: 8px;
-        width: 36px;
-        height: 36px;
+        width: 34px;
+        height: 34px;
         font-size: 18px;
+      }
+
+      .vsl-modal-footer {
+        margin-top: 16px;
       }
     }
 
