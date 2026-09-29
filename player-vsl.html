@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Player VSL Próprio (Estilo VTurb)</title>
+  <style>
+    :root {
+      --cor-fundo: #07090e;
+      --cor-borda: rgba(0, 210, 255, 0.25);
+      --cor-glow: rgba(0, 210, 255, 0.35);
+      --cor-barra: linear-gradient(90deg, #00d2ff, #7928ca);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--cor-fundo);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      color: #fff;
+    }
+
+    .vsl-container {
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .vsl-header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .vsl-badge {
+      display: inline-block;
+      padding: 6px 16px;
+      background: rgba(0, 210, 255, 0.1);
+      border: 1px solid rgba(0, 210, 255, 0.3);
+      color: #00d2ff;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .vsl-title {
+      font-size: clamp(1.4rem, 3vw, 2.2rem);
+      font-weight: 800;
+      line-height: 1.25;
+      color: #f8fafc;
+    }
+
+    /* MOLDURA DO PLAYER */
+    .vsl-frame {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: #000;
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.8), 0 0 40px -5px var(--cor-glow);
+      border: 1px solid var(--cor-borda);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .vsl-video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* OVERLAY / BANNER CLIQUE PARA ATIVAR O SOM */
+    .vsl-overlay {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(180deg, rgba(7, 9, 14, 0.45) 0%, rgba(7, 9, 14, 0.85) 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      z-index: 10;
+      transition: opacity 0.35s ease, visibility 0.35s ease;
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+    }
+
+    .vsl-frame.com-som .vsl-overlay {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .vsl-pulsar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: #00d2ff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 0 0 rgba(0, 210, 255, 0.7);
+      animation: pulsar 1.6s infinite cubic-bezier(0.66, 0, 0, 1);
+      transition: transform 0.2s ease;
+    }
+
+    .vsl-frame:hover .vsl-pulsar {
+      transform: scale(1.08);
+    }
+
+    .vsl-pulsar svg {
+      width: 36px;
+      height: 36px;
+      fill: #07090e;
+    }
+
+    @keyframes pulsar {
+      0% { box-shadow: 0 0 0 0 rgba(0, 210, 255, 0.7); }
+      70% { box-shadow: 0 0 0 24px rgba(0, 210, 255, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(0, 210, 255, 0); }
+    }
+
+    .vsl-aviso-txt {
+      font-size: clamp(0.95rem, 2vw, 1.25rem);
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #fff;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.9);
+      background: rgba(0, 210, 255, 0.15);
+      border: 1px solid rgba(0, 210, 255, 0.4);
+      padding: 8px 22px;
+      border-radius: 999px;
+    }
+
+    /* BARRA DE PROGRESSO COM FÓRMULA VTURB */
+    .vsl-progresso-wrap {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.15);
+      z-index: 12;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .vsl-frame.tocando .vsl-progresso-wrap {
+      opacity: 1;
+    }
+
+    .vsl-progresso-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--cor-barra);
+      box-shadow: 0 0 12px rgba(0, 210, 255, 0.8);
+      transition: width 0.1s linear;
+    }
+
+    /* BOTÃO MUDO FLUTUANTE (Canto superior direito após desmutar) */
+    .vsl-btn-som {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      z-index: 15;
+      background: rgba(7, 9, 14, 0.75);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      width: 42px;
+      height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.25s ease;
+    }
+
+    .vsl-frame.com-som .vsl-btn-som {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .vsl-btn-som:hover {
+      background: rgba(0, 210, 255, 0.2);
+      border-color: #00d2ff;
+      transform: scale(1.05);
+    }
+
+    .vsl-btn-som svg {
+      width: 20px;
+      height: 20px;
+      fill: #fff;
+    }
+
+    /* ÍCONE DE PAUSE / PLAY VISUAL AO CLICAR */
+    .vsl-indicador-pausa {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.85);
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: rgba(7, 9, 14, 0.75);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 8;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.25s ease;
+      pointer-events: none;
+    }
+
+    .vsl-frame.com-som.pausado .vsl-indicador-pausa {
+      opacity: 1;
+      visibility: visible;
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    .vsl-indicador-pausa svg {
+      width: 32px;
+      height: 32px;
+      fill: #fff;
+      margin-left: 4px;
+    }
+
+    /* CTA QUE REVELA NO PITCH */
+    .vsl-cta-box {
+      margin-top: 35px;
+      text-align: center;
+      display: none; /* Revelado por delay ou evento */
+      animation: fadeInCta 0.7s ease forwards;
+    }
+
+    @keyframes fadeInCta {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .vsl-btn-compra {
+      display: inline-block;
+      background: linear-gradient(135deg, #00d2ff, #0088ff);
+      color: #07090e;
+      font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+      font-weight: 800;
+      text-decoration: none;
+      padding: 18px 45px;
+      border-radius: 999px;
+      box-shadow: 0 10px 30px rgba(0, 210, 255, 0.4);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .vsl-btn-compra:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 15px 40px rgba(0, 210, 255, 0.6);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="vsl-container">
+    <div class="vsl-header">
+      <span class="vsl-badge">Apresentação Exclusiva</span>
+      <h1 class="vsl-title">Veja Como Funciona o Sistema</h1>
+    </div>
+
+    <!-- MOLDURA DO PLAYER -->
+    <div class="vsl-frame" id="vslFrame">
+      
+      <!-- VÍDEO -->
+      <video id="vslVideo" class="vsl-video"
+             src="vsl-otimizada.mp4"
+             poster="poster-vsl.webp"
+             muted playsinline webkit-playsinline preload="auto"
+             disablePictureInPicture
+             controlsList="nodownload noplaybackrate nofullscreen noremoteplayback">
+      </video>
+
+      <!-- BOTÃO TOGGLE DE SOM FLUTUANTE -->
+      <button class="vsl-btn-som" id="vslBtnSom" aria-label="Ligar / Desligar som" type="button">
+        <svg id="iconeSomOn" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4zM14 3.2v2.1a6.8 6.8 0 0 1 0 13.4v2.1a8.9 8.9 0 0 0 0-17.6z"/></svg>
+        <svg id="iconeSomOff" style="display:none;" viewBox="0 0 24 24"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
+      </button>
+
+      <!-- ÍCONE DE PLAY NO MEIO QUANDO PAUSADO -->
+      <div class="vsl-indicador-pausa">
+        <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+      </div>
+
+      <!-- OVERLAY "SEU VÍDEO JÁ COMEÇOU" -->
+      <div class="vsl-overlay" id="vslOverlay">
+        <div class="vsl-pulsar">
+          <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4zM14 3.2v2.1a6.8 6.8 0 0 1 0 13.4v2.1a8.9 8.9 0 0 0 0-17.6z"/></svg>
+        </div>
+        <span class="vsl-aviso-txt" id="vslAvisoTxt">Clique para ativar o som</span>
+      </div>
+
+      <!-- BARRA DE PROGRESSO COM ALGORITMO VTURB -->
+      <div class="vsl-progresso-wrap">
+        <div class="vsl-progresso-fill" id="vslBarraFill"></div>
+      </div>
+    </div>
+
+    <!-- BOTÃO DE CTA (Aparece no tempo do pitch) -->
+    <div class="vsl-cta-box" id="vslCtaBox">
+      <a href="#comprar" class="vsl-btn-compra">Quero Começar Agora</a>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      const video = document.getElementById('vslVideo');
+      const frame = document.getElementById('vslFrame');
+      const overlay = document.getElementById('vslOverlay');
+      const barraFill = document.getElementById('vslBarraFill');
+      const btnSom = document.getElementById('vslBtnSom');
+      const iconeSomOn = document.getElementById('iconeSomOn');
+      const iconeSomOff = document.getElementById('iconeSomOff');
+      const ctaBox = document.getElementById('vslCtaBox');
+      const avisoTxt = document.getElementById('vslAvisoTxt');
+
+      // TEMPO PARA REVELAR O BOTÃO (em segundos do vídeo)
+      // Ajuste para o segundo exato onde você faz o pitch / fala o preço
+      const TEMPO_REVELAR_CTA = 45; // Ex: 45 segundos
+
+      // FÓRMULA EXATA DO VTURB (Barra falsa acelerada)
+      // exibido = 100 * (x * (2 - x)) ^ (1 / alpha)
+      const BARRA_ALPHA = 2;
+      function calcularProgressoFalso(x) {
+        if (x <= 0) return 0;
+        if (x >= 1) return 100;
+        return 100 * Math.pow(x * (2 - x), 1 / BARRA_ALPHA);
+      }
+
+      // AUTOPLAY MUTADO AUTOMÁTICO
+      function iniciarAutoplay() {
+        video.muted = true;
+        const playPromise = video.play();
+        if (playPromise !== undefined) {
+          playPromise.then(() => {
+            frame.classList.add('tocando');
+          }).catch(() => {
+            // Em caso de bloqueio rígido do Safari/iOS
+            avisoTxt.textContent = 'Clique para assistir';
+          });
+        }
+      }
+
+      // Ao carregar a página, tenta autoplay
+      window.addEventListener('DOMContentLoaded', iniciarAutoplay);
+
+      // CLIQUE NO OVERLAY (Ativa o som, volta para o segundo 0 e destrava o vídeo)
+      overlay.addEventListener('click', function(e) {
+        e.stopPropagation();
+        video.currentTime = 0; // Volta para o início exato
+        video.muted = false;
+        frame.classList.add('com-som', 'tocando');
+        video.play().catch(() => {});
+      });
+
+      // CLIQUE NO PRÓPRIO VÍDEO (Pausa e despausa após ativar o som)
+      frame.addEventListener('click', function() {
+        if (!frame.classList.contains('com-som')) return;
+        if (video.paused) {
+          video.play();
+          frame.classList.remove('pausado');
+        } else {
+          video.pause();
+          frame.classList.add('pausado');
+        }
+      });
+
+      // BOTÃO DE LIGAR/DESLIGAR SOM NO CANTO
+      btnSom.addEventListener('click', function(e) {
+        e.stopPropagation();
+        video.muted = !video.muted;
+        if (video.muted) {
+          iconeSomOn.style.display = 'none';
+          iconeSomOff.style.display = 'block';
+        } else {
+          iconeSomOn.style.display = 'block';
+          iconeSomOff.style.display = 'none';
+        }
+      });
+
+      // ATUALIZAÇÃO DA BARRA E DO PITCH (Gatilho suave)
+      video.addEventListener('timeupdate', function() {
+        if (video.duration) {
+          const progresso = calcularProgressoFalso(video.currentTime / video.duration);
+          barraFill.style.width = progresso.toFixed(2) + '%';
+
+          // Revelação do botão de compra no momento certo
+          if (video.currentTime >= TEMPO_REVELAR_CTA && ctaBox.style.display !== 'block') {
+            ctaBox.style.display = 'block';
+          }
+        }
+      });
+
+      // AO TERMINAR O VÍDEO
+      video.addEventListener('ended', function() {
+        frame.classList.remove('tocando');
+        frame.classList.remove('com-som');
+        avisoTxt.textContent = 'Assistir novamente';
+        video.currentTime = 0;
+      });
+    })();
+  </script>
+</body>
+</html>
