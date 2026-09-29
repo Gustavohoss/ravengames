@@ -4429,20 +4429,15 @@
       margin-left: 3px;
     }
 
-    /* FOOTER DO MODAL (ESCONDIDO POR PADRÃO - SÓ REVELA EM 30 SEGUNDOS) */
+    /* FOOTER DO MODAL (VISÍVEL DE PRIMEIRA - SEM DELAY) */
     .vsl-modal-footer {
       margin-top: 22px;
-      display: none; /* Inicia oculto */
+      display: flex; /* Visível de primeira */
       flex-direction: column;
       align-items: center;
       gap: 10px;
       width: 100%;
       z-index: 10;
-    }
-
-    .vsl-modal-footer.revelado {
-      display: flex;
-      animation: vslCtaReveal 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
 
     @keyframes vslCtaReveal {
@@ -5687,10 +5682,6 @@
       const closeBtn = document.getElementById('vslModalCloseBtn');
       const footerCta = document.getElementById('modalVslFooter');
 
-      // TEMPO PARA REVELAR O BOTÃO (5 segundos após entrar na página da VSL)
-      const TEMPO_REVELAR_BOTAO = 5;
-      let timerRevelacaoCta = null;
-
       // FÓRMULA VTURB (Barra falsa acelerada: exibido = 100 * (x * (2 - x)) ^ (1/alpha))
       const BARRA_ALPHA = 2;
       function calcularProgressoFalso(x) {
@@ -5699,20 +5690,7 @@
         return 100 * Math.pow(x * (2 - x), 1 / BARRA_ALPHA);
       }
 
-      function verificarRevelacaoCta() {
-        if (!footerCta || !video) return;
-        if (video.currentTime >= TEMPO_REVELAR_BOTAO || video.ended) {
-          if (!footerCta.classList.contains('revelado')) {
-            footerCta.classList.add('revelado');
-          }
-        }
-      }
-
       function resetarPlayer() {
-        if (timerRevelacaoCta) {
-          clearTimeout(timerRevelacaoCta);
-          timerRevelacaoCta = null;
-        }
         if (video) {
           video.pause();
           video.currentTime = 0;
@@ -5720,9 +5698,6 @@
         }
         if (frame) {
           frame.classList.remove('com-som', 'pausado', 'tocando');
-        }
-        if (footerCta) {
-          footerCta.classList.remove('revelado');
         }
         if (barraFill) {
           barraFill.style.width = '0%';
@@ -5735,13 +5710,6 @@
         modal.classList.add('active');
         modal.setAttribute('aria-hidden', 'false');
         document.body.style.overflow = 'hidden';
-
-        // Revelar o botão exatamente 5 segundos após entrar na página/modal da VSL
-        timerRevelacaoCta = setTimeout(function() {
-          if (footerCta && modal.classList.contains('active')) {
-            footerCta.classList.add('revelado');
-          }
-        }, 5000);
 
         // Autoplay mutado imediato a partir do segundo 0
         if (video) {
@@ -5800,14 +5768,6 @@
         overlay.addEventListener('click', function(e) {
           e.stopPropagation();
           video.currentTime = 0; // Volta para o início do vídeo!
-          // Se ainda não revelou ou reiniciou, garante revelação em 5s
-          if (footerCta) footerCta.classList.remove('revelado');
-          if (timerRevelacaoCta) clearTimeout(timerRevelacaoCta);
-          timerRevelacaoCta = setTimeout(function() {
-            if (footerCta && modal.classList.contains('active')) {
-              footerCta.classList.add('revelado');
-            }
-          }, 5000);
           video.muted = false;
           frame.classList.add('com-som', 'tocando');
           frame.classList.remove('pausado');
@@ -5829,15 +5789,13 @@
         });
       }
 
-      // ATUALIZAÇÃO DA BARRA DE PROGRESSO COM ALGORITMO VTURB E CHECAGEM DOS 30s
+      // ATUALIZAÇÃO DA BARRA DE PROGRESSO COM ALGORITMO VTURB
       if (video) {
         video.addEventListener('timeupdate', function() {
           if (video.duration) {
             const progresso = calcularProgressoFalso(video.currentTime / video.duration);
             if (barraFill) barraFill.style.width = progresso.toFixed(2) + '%';
           }
-          // Checa se já atingiu 30 segundos para revelar o botão do Discord
-          verificarRevelacaoCta();
         });
 
         // AO TERMINAR
@@ -5845,7 +5803,6 @@
           frame.classList.remove('tocando');
           frame.classList.remove('com-som');
           if (avisoTxt) avisoTxt.textContent = 'Assistir novamente';
-          if (footerCta) footerCta.classList.add('revelado');
           video.currentTime = 0;
         });
       }
