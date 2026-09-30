@@ -291,7 +291,14 @@
       <video id="vslVideo" class="vsl-video"
              src="vsl-otimizada.mp4"
              poster="poster-vsl.webp"
-             muted playsinline webkit-playsinline preload="auto"
+             muted
+             playsinline="true"
+             webkit-playsinline="true"
+             x5-playsinline="true"
+             x5-video-player-type="h5"
+             x5-video-player-fullscreen="false"
+             x-webkit-airplay="allow"
+             preload="auto"
              disablePictureInPicture
              controlsList="nodownload noplaybackrate nofullscreen noremoteplayback">
       </video>
@@ -351,13 +358,68 @@
         return 100 * Math.pow(x * (2 - x), 1 / BARRA_ALPHA);
       }
 
+      function travarTotalmenteTelaCheia(v) {
+        if (!v) return;
+        v.playsInline = true;
+        v.webkitPlaysInline = true;
+        v.setAttribute('playsinline', 'true');
+        v.setAttribute('webkit-playsinline', 'true');
+        v.setAttribute('x5-playsinline', 'true');
+        v.setAttribute('x5-video-player-type', 'h5');
+        v.setAttribute('x5-video-player-fullscreen', 'false');
+        v.setAttribute('x-webkit-airplay', 'allow');
+        v.setAttribute('controlsList', 'nodownload noplaybackrate nofullscreen noremoteplayback');
+        try {
+          v.webkitEnterFullscreen = function() { return false; };
+          v.webkitEnterFullScreen = function() { return false; };
+          v.requestFullscreen = function() { return Promise.reject(new Error("Inline only")); };
+          v.webkitRequestFullscreen = function() { return false; };
+          v.webkitRequestFullScreen = function() { return false; };
+          v.msRequestFullscreen = function() { return false; };
+          v.mozRequestFullScreen = function() { return false; };
+        } catch (e) {}
+        ['webkitbeginfullscreen', 'webkitenterfullscreen'].forEach(function(evt) {
+          v.addEventListener(evt, function(e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            if (typeof v.webkitExitFullscreen === 'function') v.webkitExitFullscreen();
+            else if (typeof v.webkitExitFullScreen === 'function') v.webkitExitFullScreen();
+            return false;
+          }, true);
+        });
+        v.addEventListener('webkitpresentationmodechanged', function(e) {
+          if (v.webkitPresentationMode === 'fullscreen') {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            if (typeof v.webkitSetPresentationMode === 'function') v.webkitSetPresentationMode('inline');
+          }
+        }, true);
+        v.addEventListener('webkitfullscreenchange', function() {
+          if (document.webkitFullscreenElement || v.webkitDisplayingFullscreen) {
+            if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+            if (v.webkitExitFullscreen) v.webkitExitFullscreen();
+          }
+        }, true);
+        document.addEventListener('fullscreenchange', function() {
+          if (document.fullscreenElement === v || document.fullscreenElement) {
+            if (document.exitFullscreen) document.exitFullscreen().catch(function(){});
+          }
+        }, true);
+      }
+
+      travarTotalmenteTelaCheia(video);
+
       // AUTOPLAY MUTADO AUTOMÁTICO
       function iniciarAutoplay() {
+        travarTotalmenteTelaCheia(video);
         video.muted = true;
         const playPromise = video.play();
         if (playPromise !== undefined) {
           playPromise.then(() => {
             frame.classList.add('tocando');
+            if (video.webkitDisplayingFullscreen && video.webkitExitFullscreen) {
+              video.webkitExitFullscreen();
+            }
           }).catch(() => {
             // Em caso de bloqueio rígido do Safari/iOS
             avisoTxt.textContent = 'Clique para assistir';
