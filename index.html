@@ -5640,6 +5640,7 @@
           <video id="modalVslVideo" class="vsl-modal-video"
                  src="vsl-otimizada.mp4"
                  poster="poster-vsl.webp"
+                 loop
                  muted
                  playsinline
                  webkit-playsinline
@@ -5797,6 +5798,7 @@
           video.pause();
           video.currentTime = 0;
           video.muted = true;
+          video.loop = true;
         }
         if (frame) {
           frame.classList.remove('com-som', 'pausado', 'tocando');
@@ -5815,38 +5817,25 @@
 
         if (video) {
           travarTotalmenteTelaCheia(video);
+          video.muted = true;
+          video.defaultMuted = true;
 
-          const isTikTokOrInApp = /musical_ly|ByteLocale|ByteFullLocale|TikTok|BytedanceWebview|trill|FBAN|FBAV|Instagram/i.test(navigator.userAgent);
-
-          // No TikTok e em navegadores in-app de redes sociais, NUNCA disparar video.play() automaticamente!
-          // O WebView do TikTok detecta play automático após o clique e força o player nativo do celular em tela cheia.
-          if (isTikTokOrInApp) {
-            video.pause();
-            if (avisoTxt) avisoTxt.textContent = 'Clique para assistir com som';
-            return;
+          // Inicia o vídeo rodando no fundo mutado (efeito com overlay borrado por cima)
+          const p = video.play();
+          if (p !== undefined) {
+            p.then(function() {
+              frame.classList.add('tocando');
+              if (video.webkitDisplayingFullscreen && video.webkitExitFullscreen) {
+                video.webkitExitFullscreen();
+              }
+            }).catch(function() {
+              if (avisoTxt) avisoTxt.textContent = 'Clique para assistir';
+            });
           }
-
-          // Para desktop e navegadores comuns, autoplay suave mutado
-          setTimeout(function() {
-            if (!modal.classList.contains('active')) return;
-            video.muted = true;
-            travarTotalmenteTelaCheia(video);
-            const p = video.play();
-            if (p !== undefined) {
-              p.then(function() {
-                frame.classList.add('tocando');
-                if (video.webkitDisplayingFullscreen && video.webkitExitFullscreen) {
-                  video.webkitExitFullscreen();
-                }
-              }).catch(function() {
-                if (avisoTxt) avisoTxt.textContent = 'Clique para assistir';
-              });
-            }
-          }, 80);
         }
       }
 
-      // Vigilância contínua anti-fullscreen para o WebView do TikTok
+      // Vigilância contínua anti-fullscreen para forçar o player a ficar sempre inline
       setInterval(function() {
         if (modal && modal.classList.contains('active') && video) {
           if (video.webkitDisplayingFullscreen && video.webkitExitFullscreen) {
@@ -5856,7 +5845,7 @@
             document.exitFullscreen().catch(function(){});
           }
         }
-      }, 150);
+      }, 100);
 
       function fecharModal() {
         modal.classList.remove('active');
@@ -5902,6 +5891,7 @@
         overlay.addEventListener('click', function(e) {
           e.stopPropagation();
           travarTotalmenteTelaCheia(video);
+          video.loop = false;
           video.currentTime = 0; // Volta para o início do vídeo!
           video.muted = false;
           frame.classList.add('com-som', 'tocando');
