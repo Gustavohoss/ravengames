@@ -1759,7 +1759,7 @@
   <div id="telaPortaoAuth">
     <canvas id="portaoShaderCanvas" class="portao-shader-bg"></canvas>
     <div class="card-auth">
-      <img src="logo.png" alt="Raven Games Logo" class="auth-logo" />
+      <img src="logo.webp" alt="Raven Games Logo" class="auth-logo" />
       <h1 class="auth-title">RAVEN <span>GAMES</span></h1>
       <p class="auth-desc" id="portaoSub">Crie sua conta para acessar o catálogo de jogos.</p>
 
@@ -1806,7 +1806,7 @@
     <!-- Sidebar Desktop -->
     <aside class="sidebar">
       <a href="index.html" class="brand">
-        <img src="logo.png" alt="Raven Logo" />
+        <img src="logo.webp" alt="Raven Logo" />
         <div class="brand-name">RAVEN <span>GAMES</span></div>
       </a>
 
@@ -1891,7 +1891,7 @@
       <!-- Topbar Mobile -->
       <div class="mobile-bar">
         <a href="index.html" style="display: flex; align-items: center; gap: 8px; text-decoration: none;">
-          <img src="logo.png" alt="Raven Logo" style="width: 28px; height: 28px; border-radius: 6px;" />
+          <img src="logo.webp" alt="Raven Logo" style="width: 28px; height: 28px; border-radius: 6px;" />
           <span style="font-weight: 800; font-size: 0.95rem; color: #fff;">RAVEN <span style="color: var(--ciano);">GAMES</span></span>
         </a>
         <button class="btn-sair" onclick="deslogar()">Sair</button>
@@ -1949,19 +1949,16 @@
           </div>
         </div>
 
-        <div id="bannerAulasLiberadas" style="display: none; background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(0, 210, 255, 0.1)); border: 1px solid rgba(16, 185, 129, 0.4); border-radius: 14px; padding: 16px 20px; margin-bottom: 20px;">
-          <div style="display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap;">
-            <div>
-              <div style="display: flex; align-items: center; gap: 8px;">
-                <span style="font-size: 1.1rem;">👑</span>
-                <h3 style="font-size: 1rem; color: #fff; font-weight: 800;">Acesso VIP Liberado</h3>
-              </div>
-              <p style="font-size: 0.8rem; color: #cbd5e1; margin-top: 3px;">
-                Sua conta possui acesso ilimitado a todas as aulas, jogos e atualizações da plataforma.
-              </p>
+        <div id="bannerAulasLiberadas" style="display: none; position: relative; border-radius: 16px; overflow: hidden; border: 1px solid rgba(0, 210, 255, 0.35); box-shadow: 0 10px 30px rgba(0,0,0,0.6), 0 0 25px rgba(0, 210, 255, 0.12); margin-bottom: 22px; background: #0b0c10;">
+          <img src="imagens/aulas/banner-aulas-hero.jpg" alt="Academia VIP Raven Games" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 25%; filter: brightness(0.42) saturate(1.2);" onerror="this.style.display='none'">
+          <div style="position: relative; z-index: 2; padding: 22px 26px; max-width: 720px; background: linear-gradient(90deg, rgba(11, 12, 16, 0.94) 0%, rgba(11, 12, 16, 0.65) 70%, transparent 100%);">
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+              <span style="font-size: 0.72rem; font-weight: 800; color: #10b981; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.35); padding: 3px 10px; border-radius: 6px; text-transform: uppercase;">MEMBRO VIP • ACESSO LIBERADO</span>
             </div>
-            <button onclick="trocarAba('downloads')" class="btn-buy primary" style="width: auto; padding: 8px 16px; font-size: 0.8rem;">
-              ⬇️ Baixar Launcher
+            <h2 style="font-size: 1.35rem; font-weight: 900; color: #fff; margin: 4px 0 6px;">Academia de Criadores Raven Games 🎓</h2>
+            <p style="font-size: 0.82rem; color: #cbd5e1; line-height: 1.5; margin-bottom: 12px;">Treinamentos práticos e estratégias exclusivas para operar seus jogos, dominar o algoritmo e faturar no automático.</p>
+            <button onclick="trocarAba('downloads')" class="btn-buy primary" style="width: auto; padding: 8px 16px; font-size: 0.8rem; display: inline-flex;">
+              ⬇️ Baixar Launcher Raven Games
             </button>
           </div>
         </div>
@@ -2613,7 +2610,7 @@
         slug: "avatares-roblox",
         nome: "Avatares da Live",
         cat: "roblox",
-        capa: "capas/avatares-roblox-v.png",
+        capa: "capas/avatares-roblox-v.webp",
         tipo: "Roblox Live",
         desc: "Quem comenta o nick no chat dança na live com a skin real. Presentes furam a fila e deixam o avatar gigante!"
       },
@@ -2621,7 +2618,7 @@
         slug: "impressora",
         nome: "Impressora da Live",
         cat: "launcher",
-        capa: "capas/impressora-v.png",
+        capa: "capas/impressora-v.webp",
         tipo: "Launcher PC",
         desc: "Imprime fotos de perfil do chat em tempo real conforme enviam presentes e comandos."
       },
@@ -2629,7 +2626,7 @@
         slug: "boy-vs-girl",
         nome: "Boys vs Girls",
         cat: "estrategia",
-        capa: "capas/boy-vs-girl-v.png",
+        capa: "capas/boy-vs-girl-v.webp",
         tipo: "Launcher PC",
         desc: "Disputa em tempo real de curtidas e presentes entre equipes com ranking automático."
       },
@@ -2637,7 +2634,7 @@
         slug: "jogo-novo",
         nome: "Batalha pelo Brasil",
         cat: "estrategia",
-        capa: "capas/jogo-novo-v.png",
+        capa: "capas/jogo-novo-v.webp",
         tipo: "Launcher PC",
         desc: "A grande disputa dos 4 na sua live impulsionada pelo chat e presentes do TikTok."
       },
@@ -2645,7 +2642,7 @@
         slug: "tower-sky",
         nome: "Tower Sky 3D",
         cat: "launcher",
-        capa: "capas/tower-sky-v.png",
+        capa: "capas/tower-sky-v.webp",
         tipo: "Launcher PC",
         desc: "Empilhamento de blocos infinito acionado por presentes e interação do chat."
       },
@@ -2653,7 +2650,7 @@
         slug: "flappy-fly",
         nome: "Flappy Fly Live",
         cat: "launcher",
-        capa: "capas/flappy-fly-v.png",
+        capa: "capas/flappy-fly-v.webp",
         tipo: "Launcher PC",
         desc: "O clássico Flappy Bird controlado ao vivo pelos comentários e presentes do público."
       },
@@ -2661,7 +2658,7 @@
         slug: "torre-messi-cr7",
         nome: "Torre Messi vs CR7",
         cat: "estrategia",
-        capa: "capas/torre-messi-cr7-v.png",
+        capa: "capas/torre-messi-cr7-v.webp",
         tipo: "Launcher PC",
         desc: "Batalha dos maiores do futebol decidida pelos presentes enviados na live."
       }
@@ -2796,6 +2793,17 @@
 
         let dadosConta = { liberado: false, plano: "Sem plano ativo", vitalicio: false, valeAte: null };
 
+        // 0. Fallback prioritário: Custom Claims do Auth (sem depender da cota do Firestore!)
+        try {
+          const idTokenResult = await user.getIdTokenResult();
+          if (idTokenResult?.claims?.liberado === true) {
+            dadosConta.liberado = true;
+            dadosConta.plano = idTokenResult.claims.plano || "completo-mensal";
+            dadosConta.vitalicio = idTokenResult.claims.plano?.includes("vitalicio") || idTokenResult.claims.vitalicio === true;
+            dadosConta.valeAte = idTokenResult.claims.valeAte || null;
+          }
+        } catch (e) {}
+
         // 1. Tenta buscar por UID no Firestore
         try {
           const resUid = await fetch(`${FIRESTORE_URL}/usuarios/${encodeURIComponent(user.uid)}`);
@@ -2920,7 +2928,7 @@
         card.onclick = () => window.abrirDetalhesJogo(j.slug);
         card.innerHTML = `
           <div class="poster-wrap">
-            <img src="${j.capa}" alt="${j.nome}" class="poster-img" onerror="this.src='logo.png'" />
+            <img src="${j.capa}" alt="${j.nome}" class="poster-img" onerror="this.src='logo.webp'" />
             <span class="game-tag-badge ${j.cat === 'roblox' ? 'roblox' : ''}">${j.tipo}</span>
           </div>
           <div class="game-info">
@@ -3019,6 +3027,39 @@
         vaultKey: "BiB7FiU2FC4aMyQ=",
         thumb: "imagens/aulas/tutorial-04.jpg",
         desc: "Aprenda a melhor estratégia e o método passo a passo para aquecer sua conta e a sua live do TikTok, atrair mais público e reter espectadores desde o primeiro minuto!"
+      },
+      {
+        id: "aula-5",
+        numero: "05",
+        modulo: "RAVEN GAMES • Tutorial 05",
+        cat: "live",
+        tag: "Tutorial 05",
+        titulo: "⚙️ 5. OPÇÃO IMPORTANTE DE DESATIVAR",
+        vaultKey: "K2wdBxQPIHEVKGM=",
+        thumb: "imagens/aulas/tutorial-05.jpg",
+        desc: "Configuração essencial que você precisa desativar no seu TikTok LIVE Studio / sistema para garantir que sua transmissão rode 100% lisa, sem travamentos e sem quedas!"
+      },
+      {
+        id: "aula-6",
+        numero: "06",
+        modulo: "RAVEN GAMES • Tutorial 06",
+        cat: "estrategia",
+        tag: "Tutorial 06",
+        titulo: "🎁 6. COMO PEDIR PRESENTE EM LIVE",
+        vaultKey: "HTJvNjw0DBsPEQI=",
+        thumb: "imagens/aulas/tutorial-06.jpg",
+        desc: "Aprenda as melhores estratégias e técnicas práticas para incentivar o chat a interagir e mandar presentes, rosas e moedas sem parar durante a live, maximizando seus ganhos!"
+      },
+      {
+        id: "aula-7",
+        numero: "07",
+        modulo: "RAVEN GAMES • Tutorial 07",
+        cat: "estrategia",
+        tag: "Tutorial 07",
+        titulo: "🔊 7. ÁUDIOS PARA EVITAR RESTRIÇÃO",
+        vaultKey: "HDQ7HzQvBzlhJSA=",
+        thumb: "imagens/aulas/tutorial-07.jpg",
+        desc: "Descubra como utilizar áudios estratégicos e sons contínuos durante sua transmissão para driblar o algoritmo do TikTok, evitar quedas por inatividade e rodar 100% no automático!"
       }
     ];
 
@@ -3055,7 +3096,7 @@
         card.onclick = () => isVip ? window.abrirVideoAula(a.id) : window.abrirBloqueioVip(a);
         card.innerHTML = `
           <div class="video-thumb-wrap">
-            <img src="${a.thumb}" alt="${a.titulo}" class="video-thumb-img" onerror="this.src='capas/jogo-novo.png'" />
+            <img src="${a.thumb}" alt="${a.titulo}" class="video-thumb-img" onerror="this.src='capas/jogo-novo.webp'" />
             <div class="video-play-overlay">
               <div class="video-play-btn">
                 ${isVip ? `
@@ -3412,8 +3453,8 @@
         try {
           new Notification("Raven Games Live", {
             body: textoMensagem,
-            icon: "logo.png",
-            badge: "logo.png"
+            icon: "logo.webp",
+            badge: "logo.webp"
           });
         } catch (e) {}
       }
@@ -3436,7 +3477,7 @@
           }
           new Notification("Raven Games 🔔", {
             body: "Notificações da live ativadas no seu celular!",
-            icon: "logo.png"
+            icon: "logo.webp"
           });
         } else {
           alert("Permissão de notificação não foi concedida. Os alertas sonoros e o feed ao vivo continuarão funcionando na tela!");
