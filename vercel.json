@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    {
+      "source": "/licencas/:path*",
+      "destination": "/api/licencas"
+    },
+    {
+      "source": "/api/v1/:path*",
+      "destination": "/api/licencas"
+    }
+  ]
+}
