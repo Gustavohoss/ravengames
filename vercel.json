@@ -1,11 +1,12 @@
 {
+  "trailingSlash": true,
   "rewrites": [
     {
-      "source": "/licencas/:path*",
+      "source": "/licencas/:match*",
       "destination": "/api/licencas"
     },
     {
-      "source": "/api/v1/:path*",
+      "source": "/api/v1/:match*",
       "destination": "/api/licencas"
     }
   ]
