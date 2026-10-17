@@ -1,13 +1,9 @@
 {
-  "trailingSlash": true,
-  "rewrites": [
+  "version": 2,
+  "routes": [
     {
-      "source": "/licencas/:match*",
-      "destination": "/api/licencas"
-    },
-    {
-      "source": "/api/v1/:match*",
-      "destination": "/api/licencas"
+      "src": "^/licencas(/.*)?$",
+      "dest": "/api/licencas.js"
     }
   ]
 }
